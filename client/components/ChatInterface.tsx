@@ -720,10 +720,13 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  onFocus={handleInputFocus}
                   className="border-none shadow-none focus-visible:ring-0 pr-10"
                   autoComplete="off"
                   autoCorrect="off"
                   autoCapitalize="sentences"
+                  inputMode="text"
+                  enterKeyHint="send"
                 />
                 {newMessage && (
                   <Button
