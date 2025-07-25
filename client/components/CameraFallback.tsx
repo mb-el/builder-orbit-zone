@@ -3,35 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import ImageUpload from "./ImageUpload";
 import VideoUpload from "./VideoUpload";
-import { 
-  Camera, 
-  Upload, 
-  AlertTriangle, 
-  X,
-  Image,
-  Video
-} from "lucide-react";
+import { Camera, Upload, AlertTriangle, X, Image, Video } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface CameraFallbackProps {
-  onCapture?: (blob: Blob, type: 'photo' | 'video') => void;
+  onCapture?: (blob: Blob, type: "photo" | "video") => void;
   onClose?: () => void;
   className?: string;
   errorMessage?: string;
 }
 
-const CameraFallback = ({ 
+const CameraFallback = ({
   onCapture,
   onClose,
   className = "",
-  errorMessage = "Camera not available"
+  errorMessage = "Camera not available",
 }: CameraFallbackProps) => {
   const { t } = useTranslation();
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [showVideoUpload, setShowVideoUpload] = useState(false);
 
-  const handleFileSelect = (files: File[], type: 'photo' | 'video') => {
+  const handleFileSelect = (files: File[], type: "photo" | "video") => {
     if (files.length > 0) {
       const file = files[0];
       const blob = new Blob([file], { type: file.type });
@@ -44,7 +37,7 @@ const CameraFallback = ({
       <Card className={className}>
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">{t('upload_photo')}</h3>
+            <h3 className="text-lg font-semibold">{t("upload_photo")}</h3>
             <Button
               variant="ghost"
               size="icon"
@@ -53,11 +46,11 @@ const CameraFallback = ({
               <X className="w-4 h-4" />
             </Button>
           </div>
-          
+
           <ImageUpload
             multiple={false}
             onImageSelect={(files) => {
-              handleFileSelect(files, 'photo');
+              handleFileSelect(files, "photo");
               setShowImageUpload(false);
             }}
           />
@@ -71,7 +64,7 @@ const CameraFallback = ({
       <Card className={className}>
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">{t('upload_video')}</h3>
+            <h3 className="text-lg font-semibold">{t("upload_video")}</h3>
             <Button
               variant="ghost"
               size="icon"
@@ -80,10 +73,10 @@ const CameraFallback = ({
               <X className="w-4 h-4" />
             </Button>
           </div>
-          
+
           <VideoUpload
             onVideoSelect={(file) => {
-              handleFileSelect([file], 'video');
+              handleFileSelect([file], "video");
               setShowVideoUpload(false);
             }}
           />
@@ -98,11 +91,7 @@ const CameraFallback = ({
         <div className="text-center space-y-6">
           {/* Close Button */}
           <div className="flex justify-end">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-            >
+            <Button variant="ghost" size="icon" onClick={onClose}>
               <X className="w-4 h-4" />
             </Button>
           </div>
@@ -126,14 +115,15 @@ const CameraFallback = ({
           <div className="space-y-2">
             <h2 className="text-2xl font-bold">Camera Not Available</h2>
             <p className="text-muted-foreground max-w-md mx-auto">
-              Your device camera is not accessible. You can still upload photos and videos from your device storage.
+              Your device camera is not accessible. You can still upload photos
+              and videos from your device storage.
             </p>
           </div>
 
           {/* Alternative Options */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold">Alternative Options:</h3>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Button
                 variant="outline"
@@ -141,16 +131,16 @@ const CameraFallback = ({
                 onClick={() => setShowImageUpload(true)}
               >
                 <Image className="w-8 h-8" />
-                <span>{t('upload_photo')}</span>
+                <span>{t("upload_photo")}</span>
               </Button>
-              
+
               <Button
                 variant="outline"
                 className="h-24 flex flex-col gap-2"
                 onClick={() => setShowVideoUpload(true)}
               >
                 <Video className="w-8 h-8" />
-                <span>{t('upload_video')}</span>
+                <span>{t("upload_video")}</span>
               </Button>
             </div>
           </div>
@@ -168,10 +158,7 @@ const CameraFallback = ({
           </div>
 
           {/* Retry Button */}
-          <Button
-            onClick={() => window.location.reload()}
-            className="gap-2"
-          >
+          <Button onClick={() => window.location.reload()} className="gap-2">
             <Camera className="w-4 h-4" />
             Reload & Try Again
           </Button>

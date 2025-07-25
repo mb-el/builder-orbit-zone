@@ -30,7 +30,7 @@ const firebaseConfig = {
   projectId: "your-project-id",
   storageBucket: "your-project-id.appspot.com",
   messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef123456"
+  appId: "1:123456789:web:abcdef123456",
 };
 ```
 
@@ -47,7 +47,7 @@ service cloud.firestore {
       allow read: if true; // Public read
       allow write: if request.auth != null; // Authenticated users can write
     }
-    
+
     // Users collection (if needed)
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
@@ -67,15 +67,15 @@ service firebase.storage {
     // Images folder
     match /images/{allPaths=**} {
       allow read: if true; // Public read
-      allow write: if request.auth != null 
+      allow write: if request.auth != null
         && request.resource.size < 10 * 1024 * 1024 // 10MB limit
         && request.resource.contentType.matches('image/.*');
     }
-    
+
     // Videos folder
     match /videos/{allPaths=**} {
       allow read: if true; // Public read
-      allow write: if request.auth != null 
+      allow write: if request.auth != null
         && request.resource.size < 100 * 1024 * 1024 // 100MB limit
         && request.resource.contentType.matches('video/.*');
     }
@@ -105,36 +105,41 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 ```
 
 ## Features Implemented
 
 ### ✅ File Validation
+
 - **Images**: Max 10MB, JPEG/PNG/WebP/GIF formats, up to 10 files
 - **Videos**: Max 100MB, MP4/WebM/OGG formats, 1 file
 - Real-time validation with user-friendly error messages
 
 ### ✅ Media Upload
+
 - **Firebase Storage**: Automatic upload with progress tracking
 - **Image Compression**: Automatic compression to reduce file size
 - **Video Thumbnails**: Auto-generated thumbnails for videos
 - **Unique Filenames**: UUID-based naming to prevent conflicts
 
 ### ✅ Post Creation
+
 - **Firestore Integration**: Posts saved with metadata
 - **Multi-language Support**: Full i18n implementation
 - **Rich Metadata**: Feelings, location, tagged friends, privacy settings
 - **Real-time Progress**: Upload progress with stage indicators
 
 ### ✅ Enhanced UX
+
 - **Live Previews**: Image and video previews before upload
 - **Error Handling**: Comprehensive error states and recovery
 - **Loading States**: Progress indicators and disabled states
 - **Toast Notifications**: Real-time feedback for all actions
 
 ### ✅ Camera Integration
+
 - **Photo Capture**: Direct camera photo capture
 - **Video Recording**: Camera video recording
 - **Multiple Cameras**: Front/back camera switching
@@ -167,11 +172,13 @@ Posts are stored in Firestore with this structure:
 ### Common Issues
 
 1. **Storage Upload Fails**
+
    - Check storage rules
    - Verify file size limits
    - Ensure user is authenticated
 
 2. **Firestore Write Fails**
+
    - Check Firestore rules
    - Verify user authentication
    - Check network connectivity

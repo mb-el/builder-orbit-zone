@@ -7,8 +7,8 @@ export default function Search() {
 
   return (
     <PlaceholderPage
-      title={`${t('search')} & Discover`}
-      description={t('search_discover_desc')}
+      title={`${t("search")} & Discover`}
+      description={t("search_discover_desc")}
       icon={<SearchIcon className="w-12 h-12 text-blue-500" />}
     />
   );

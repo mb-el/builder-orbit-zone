@@ -21,32 +21,34 @@ export default function Index() {
       avatar: "/placeholder.svg",
       location: "New York, NY",
       timeAgo: "2h",
-      content: "Just discovered this amazing coffee shop in Brooklyn! The latte art is incredible ☕️✨ #CoffeeLovers #Brooklyn",
+      content:
+        "Just discovered this amazing coffee shop in Brooklyn! The latte art is incredible ☕️✨ #CoffeeLovers #Brooklyn",
       media: {
-        type: 'image' as const,
+        type: "image" as const,
         url: "/placeholder.svg",
-        aspectRatio: "4/3"
+        aspectRatio: "4/3",
       },
       likes: 1234,
       comments: 89,
       isLiked: false,
-      isSaved: false
+      isSaved: false,
     },
     {
       id: 2,
       username: "bob_creator",
       avatar: "/placeholder.svg",
       timeAgo: "4h",
-      content: "Behind the scenes of my latest project! Can't wait to share the final result with you all 🎬🔥",
+      content:
+        "Behind the scenes of my latest project! Can't wait to share the final result with you all 🎬🔥",
       media: {
-        type: 'video' as const,
+        type: "video" as const,
         url: "/placeholder.svg",
-        aspectRatio: "16/9"
+        aspectRatio: "16/9",
       },
       likes: 2156,
       comments: 134,
       isLiked: true,
-      isSaved: true
+      isSaved: true,
     },
     {
       id: 3,
@@ -54,17 +56,18 @@ export default function Index() {
       avatar: "/placeholder.svg",
       location: "Santorini, Greece",
       timeAgo: "1d",
-      content: "Sunset in Santorini never gets old 🌅 This place is pure magic! Already planning my next visit.",
+      content:
+        "Sunset in Santorini never gets old 🌅 This place is pure magic! Already planning my next visit.",
       media: {
-        type: 'image' as const,
+        type: "image" as const,
         url: "/placeholder.svg",
-        aspectRatio: "1/1"
+        aspectRatio: "1/1",
       },
       likes: 3420,
       comments: 256,
       isLiked: false,
-      isSaved: false
-    }
+      isSaved: false,
+    },
   ];
 
   const suggestedUsers = [
@@ -104,7 +107,7 @@ export default function Index() {
             {/* Load More */}
             <div className="flex justify-center mt-8">
               <Button variant="outline" className="px-8">
-                {t('load_more_posts')}
+                {t("load_more_posts")}
               </Button>
             </div>
           </div>
@@ -120,7 +123,7 @@ export default function Index() {
                   className="gap-2"
                 >
                   <Bell className="w-4 h-4" />
-                  {t('notifications')}
+                  {t("notifications")}
                 </Button>
               </div>
               {showNotifications && (
@@ -131,22 +134,38 @@ export default function Index() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-foreground">{t('suggested_for_you')}</h3>
-                  <Button variant="link" size="sm" className="text-xs p-0 h-auto">
-                    {t('see_all')}
+                  <h3 className="font-semibold text-foreground">
+                    {t("suggested_for_you")}
+                  </h3>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-xs p-0 h-auto"
+                  >
+                    {t("see_all")}
                   </Button>
                 </div>
                 <div className="space-y-3">
                   {suggestedUsers.map((user) => (
-                    <div key={user.username} className="flex items-center justify-between">
+                    <div
+                      key={user.username}
+                      className="flex items-center justify-between"
+                    >
                       <div className="flex items-center gap-3">
                         <Avatar className="w-10 h-10">
                           <AvatarImage src="/placeholder.svg" />
-                          <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                          <AvatarFallback>
+                            {user.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-medium text-sm">{user.name}</p>
-                          <p className="text-xs text-muted-foreground">@{user.username}</p>
+                          <p className="text-xs text-muted-foreground">
+                            @{user.username}
+                          </p>
                         </div>
                       </div>
                       <Button
@@ -154,7 +173,7 @@ export default function Index() {
                         variant={user.isFollowing ? "outline" : "default"}
                         className="text-xs px-4"
                       >
-                        {user.isFollowing ? t('following') : t('follow')}
+                        {user.isFollowing ? t("following") : t("follow")}
                       </Button>
                     </div>
                   ))}
@@ -167,13 +186,22 @@ export default function Index() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <TrendingUp className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-foreground">{t('trending')}</h3>
+                  <h3 className="font-semibold text-foreground">
+                    {t("trending")}
+                  </h3>
                 </div>
                 <div className="space-y-3">
                   {trendingTopics.map((topic) => (
-                    <div key={topic.tag} className="cursor-pointer hover:bg-accent rounded-lg p-2 -m-2 transition-all hover:scale-105 hover:shadow-sm">
-                      <p className="font-medium text-sm text-primary hover:underline">{topic.tag}</p>
-                      <p className="text-xs text-muted-foreground">{topic.posts}</p>
+                    <div
+                      key={topic.tag}
+                      className="cursor-pointer hover:bg-accent rounded-lg p-2 -m-2 transition-all hover:scale-105 hover:shadow-sm"
+                    >
+                      <p className="font-medium text-sm text-primary hover:underline">
+                        {topic.tag}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {topic.posts}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -183,23 +211,33 @@ export default function Index() {
             {/* Quick Stats */}
             <Card>
               <CardContent className="p-4">
-                <h3 className="font-semibold text-foreground mb-4">{t('your_activity')}</h3>
+                <h3 className="font-semibold text-foreground mb-4">
+                  {t("your_activity")}
+                </h3>
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">127</p>
-                    <p className="text-xs text-muted-foreground">{t('posts')}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("posts")}
+                    </p>
                   </div>
                   <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">2.4k</p>
-                    <p className="text-xs text-muted-foreground">{t('followers')}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("followers")}
+                    </p>
                   </div>
                   <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">1.8k</p>
-                    <p className="text-xs text-muted-foreground">{t('following_stat')}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("following_stat")}
+                    </p>
                   </div>
                   <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">12.5k</p>
-                    <p className="text-xs text-muted-foreground">{t('likes')}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("likes")}
+                    </p>
                   </div>
                 </div>
               </CardContent>

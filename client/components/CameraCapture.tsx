@@ -2,11 +2,11 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Camera, 
-  Video, 
-  X, 
-  RotateCcw, 
+import {
+  Camera,
+  Video,
+  X,
+  RotateCcw,
   Download,
   Play,
   Square,
@@ -14,12 +14,12 @@ import {
   Zap,
   ZapOff,
   AlertTriangle,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface CameraCaptureProps {
-  onCapture?: (blob: Blob, type: 'photo' | 'video') => void;
+  onCapture?: (blob: Blob, type: "photo" | "video") => void;
   onClose?: () => void;
   className?: string;
 }
@@ -31,31 +31,37 @@ interface MediaDeviceInfo {
   label: string;
 }
 
-const CameraCapture = ({ 
+const CameraCapture = ({
   onCapture,
   onClose,
-  className = ""
+  className = "",
 }: CameraCaptureProps) => {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  
+
   const [isStreaming, setIsStreaming] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [capturedMedia, setCapturedMedia] = useState<{
     blob: Blob;
     url: string;
-    type: 'photo' | 'video';
+    type: "photo" | "video";
   } | null>(null);
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const [facingMode, setFacingMode] = useState<"user" | "environment">(
+    "environment",
+  );
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [availableDevices, setAvailableDevices] = useState<MediaDeviceInfo[]>([]);
+  const [availableDevices, setAvailableDevices] = useState<MediaDeviceInfo[]>(
+    [],
+  );
   const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
-  const [permissionStatus, setPermissionStatus] = useState<'prompt' | 'granted' | 'denied' | 'unknown'>('unknown');
+  const [permissionStatus, setPermissionStatus] = useState<
+    "prompt" | "granted" | "denied" | "unknown"
+  >("unknown");
 
   // Check for available media devices and permissions
   useEffect(() => {
@@ -69,147 +75,162 @@ const CameraCapture = ({
     try {
       // Check if getUserMedia is supported
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setError('Camera is not supported in this browser. Please use a modern browser like Chrome, Firefox, or Safari.');
+        setError(
+          "Camera is not supported in this browser. Please use a modern browser like Chrome, Firefox, or Safari.",
+        );
         return;
       }
 
       // Check permission status
-      if ('permissions' in navigator) {
+      if ("permissions" in navigator) {
         try {
-          const permission = await navigator.permissions.query({ name: 'camera' as PermissionName });
+          const permission = await navigator.permissions.query({
+            name: "camera" as PermissionName,
+          });
           setPermissionStatus(permission.state);
-          
-          permission.addEventListener('change', () => {
+
+          permission.addEventListener("change", () => {
             setPermissionStatus(permission.state);
           });
         } catch (err) {
-          console.log('Permission API not fully supported');
+          console.log("Permission API not fully supported");
         }
       }
 
       // Get available devices
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+        const videoDevices = devices.filter(
+          (device) => device.kind === "videoinput",
+        );
         setAvailableDevices(videoDevices as MediaDeviceInfo[]);
         setHasMultipleCameras(videoDevices.length > 1);
       } catch (err) {
-        console.log('Could not enumerate devices');
+        console.log("Could not enumerate devices");
       }
     } catch (err) {
-      console.error('Media support check failed:', err);
+      console.error("Media support check failed:", err);
     }
   };
 
   const getErrorMessage = (error: any) => {
-    const errorName = error.name || error.message || '';
-    
+    const errorName = error.name || error.message || "";
+
     switch (errorName) {
-      case 'NotFoundError':
-      case 'DevicesNotFoundError':
-        return 'No camera found. Please make sure a camera is connected to your device.';
-      case 'NotReadableError':
-      case 'TrackStartError':
-        return 'Camera is already in use by another application. Please close other apps using the camera.';
-      case 'OverconstrainedError':
-      case 'ConstraintNotSatisfiedError':
-        return 'Camera does not support the requested settings. Trying with basic settings...';
-      case 'NotAllowedError':
-      case 'PermissionDeniedError':
-        return 'Camera access denied. Please allow camera permissions in your browser settings.';
-      case 'SecurityError':
-        return 'Camera access blocked due to security restrictions. Please use HTTPS.';
-      case 'TypeError':
-        return 'Camera is not supported in this browser.';
+      case "NotFoundError":
+      case "DevicesNotFoundError":
+        return "No camera found. Please make sure a camera is connected to your device.";
+      case "NotReadableError":
+      case "TrackStartError":
+        return "Camera is already in use by another application. Please close other apps using the camera.";
+      case "OverconstrainedError":
+      case "ConstraintNotSatisfiedError":
+        return "Camera does not support the requested settings. Trying with basic settings...";
+      case "NotAllowedError":
+      case "PermissionDeniedError":
+        return "Camera access denied. Please allow camera permissions in your browser settings.";
+      case "SecurityError":
+        return "Camera access blocked due to security restrictions. Please use HTTPS.";
+      case "TypeError":
+        return "Camera is not supported in this browser.";
       default:
-        return `Camera error: ${error.message || 'Unknown error occurred'}`;
+        return `Camera error: ${error.message || "Unknown error occurred"}`;
     }
   };
 
-  const startCamera = useCallback(async (retryWithBasicConstraints = false) => {
-    try {
-      setError(null);
-      setIsLoading(true);
-      
-      // Progressive fallback constraints
-      let constraints;
-      
-      if (retryWithBasicConstraints) {
-        // Basic constraints as fallback
-        constraints = {
-          video: true,
-          audio: true
-        };
-      } else {
-        // Try advanced constraints first
-        constraints = {
-          video: {
-            facingMode: { ideal: facingMode },
-            width: { ideal: 1280, min: 640 },
-            height: { ideal: 720, min: 480 }
-          },
-          audio: true
-        };
-      }
+  const startCamera = useCallback(
+    async (retryWithBasicConstraints = false) => {
+      try {
+        setError(null);
+        setIsLoading(true);
 
-      console.log('Requesting camera with constraints:', constraints);
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      streamRef.current = stream;
-      
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        
-        // Wait for video to load and play
-        await new Promise((resolve, reject) => {
-          if (!videoRef.current) {
-            reject(new Error('Video element not available'));
-            return;
-          }
+        // Progressive fallback constraints
+        let constraints;
 
-          const video = videoRef.current;
-          
-          const onLoadedMetadata = () => {
-            video.removeEventListener('loadedmetadata', onLoadedMetadata);
-            video.removeEventListener('error', onError);
-            resolve(void 0);
+        if (retryWithBasicConstraints) {
+          // Basic constraints as fallback
+          constraints = {
+            video: true,
+            audio: true,
           };
-          
-          const onError = (e: Event) => {
-            video.removeEventListener('loadedmetadata', onLoadedMetadata);
-            video.removeEventListener('error', onError);
-            reject(new Error('Video failed to load'));
+        } else {
+          // Try advanced constraints first
+          constraints = {
+            video: {
+              facingMode: { ideal: facingMode },
+              width: { ideal: 1280, min: 640 },
+              height: { ideal: 720, min: 480 },
+            },
+            audio: true,
           };
+        }
 
-          video.addEventListener('loadedmetadata', onLoadedMetadata);
-          video.addEventListener('error', onError);
-          
-          video.play().catch(reject);
-        });
-        
-        setIsStreaming(true);
-        setPermissionStatus('granted');
+        console.log("Requesting camera with constraints:", constraints);
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        streamRef.current = stream;
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+
+          // Wait for video to load and play
+          await new Promise((resolve, reject) => {
+            if (!videoRef.current) {
+              reject(new Error("Video element not available"));
+              return;
+            }
+
+            const video = videoRef.current;
+
+            const onLoadedMetadata = () => {
+              video.removeEventListener("loadedmetadata", onLoadedMetadata);
+              video.removeEventListener("error", onError);
+              resolve(void 0);
+            };
+
+            const onError = (e: Event) => {
+              video.removeEventListener("loadedmetadata", onLoadedMetadata);
+              video.removeEventListener("error", onError);
+              reject(new Error("Video failed to load"));
+            };
+
+            video.addEventListener("loadedmetadata", onLoadedMetadata);
+            video.addEventListener("error", onError);
+
+            video.play().catch(reject);
+          });
+
+          setIsStreaming(true);
+          setPermissionStatus("granted");
+        }
+      } catch (err: any) {
+        console.error("Camera error:", err);
+        const errorMessage = getErrorMessage(err);
+
+        // Try fallback with basic constraints if advanced constraints failed
+        if (
+          !retryWithBasicConstraints &&
+          (err.name === "OverconstrainedError" ||
+            err.name === "ConstraintNotSatisfiedError")
+        ) {
+          console.log("Retrying with basic constraints...");
+          setTimeout(() => startCamera(true), 1000);
+          return;
+        }
+
+        setError(errorMessage);
+        setPermissionStatus(
+          err.name === "NotAllowedError" ? "denied" : "unknown",
+        );
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err: any) {
-      console.error('Camera error:', err);
-      const errorMessage = getErrorMessage(err);
-      
-      // Try fallback with basic constraints if advanced constraints failed
-      if (!retryWithBasicConstraints && (err.name === 'OverconstrainedError' || err.name === 'ConstraintNotSatisfiedError')) {
-        console.log('Retrying with basic constraints...');
-        setTimeout(() => startCamera(true), 1000);
-        return;
-      }
-      
-      setError(errorMessage);
-      setPermissionStatus(err.name === 'NotAllowedError' ? 'denied' : 'unknown');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [facingMode]);
+    },
+    [facingMode],
+  );
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => {
+      streamRef.current.getTracks().forEach((track) => {
         track.stop();
         console.log(`Stopped ${track.kind} track`);
       });
@@ -218,8 +239,11 @@ const CameraCapture = ({
     setIsStreaming(false);
     setIsRecording(false);
     setRecordingTime(0);
-    
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
       mediaRecorderRef.current.stop();
     }
   }, []);
@@ -229,28 +253,32 @@ const CameraCapture = ({
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    
+    const context = canvas.getContext("2d");
+
     if (!context) return;
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    
+
     // Flip horizontally if using front camera
-    if (facingMode === 'user') {
+    if (facingMode === "user") {
       context.scale(-1, 1);
       context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
     } else {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
     }
 
-    canvas.toBlob((blob) => {
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        setCapturedMedia({ blob, url, type: 'photo' });
-        onCapture?.(blob, 'photo');
-      }
-    }, 'image/jpeg', 0.9);
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          setCapturedMedia({ blob, url, type: "photo" });
+          onCapture?.(blob, "photo");
+        }
+      },
+      "image/jpeg",
+      0.9,
+    );
   }, [facingMode, onCapture]);
 
   const startVideoRecording = useCallback(() => {
@@ -259,14 +287,14 @@ const CameraCapture = ({
     try {
       // Try different mime types for better compatibility
       const mimeTypes = [
-        'video/webm;codecs=vp9',
-        'video/webm;codecs=vp8',
-        'video/webm',
-        'video/mp4'
+        "video/webm;codecs=vp9",
+        "video/webm;codecs=vp8",
+        "video/webm",
+        "video/mp4",
       ];
 
       let mediaRecorder;
-      let selectedMimeType = '';
+      let selectedMimeType = "";
 
       for (const mimeType of mimeTypes) {
         if (MediaRecorder.isTypeSupported(mimeType)) {
@@ -276,20 +304,20 @@ const CameraCapture = ({
       }
 
       if (!selectedMimeType) {
-        setError('Video recording is not supported in this browser.');
+        setError("Video recording is not supported in this browser.");
         return;
       }
 
       const options = {
         mimeType: selectedMimeType,
-        videoBitsPerSecond: 2500000
+        videoBitsPerSecond: 2500000,
       };
 
       mediaRecorder = new MediaRecorder(streamRef.current, options);
       mediaRecorderRef.current = mediaRecorder;
-      
+
       const chunks: Blob[] = [];
-      
+
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           chunks.push(event.data);
@@ -299,8 +327,8 @@ const CameraCapture = ({
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunks, { type: selectedMimeType });
         const url = URL.createObjectURL(blob);
-        setCapturedMedia({ blob, url, type: 'video' });
-        onCapture?.(blob, 'video');
+        setCapturedMedia({ blob, url, type: "video" });
+        onCapture?.(blob, "video");
       };
 
       mediaRecorder.start();
@@ -309,20 +337,19 @@ const CameraCapture = ({
 
       // Start recording timer
       const timer = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
 
       mediaRecorder.onstop = () => {
         clearInterval(timer);
         const blob = new Blob(chunks, { type: selectedMimeType });
         const url = URL.createObjectURL(blob);
-        setCapturedMedia({ blob, url, type: 'video' });
-        onCapture?.(blob, 'video');
+        setCapturedMedia({ blob, url, type: "video" });
+        onCapture?.(blob, "video");
       };
-
     } catch (err) {
-      setError('Failed to start video recording');
-      console.error('Recording error:', err);
+      setError("Failed to start video recording");
+      console.error("Recording error:", err);
     }
   }, [onCapture]);
 
@@ -335,11 +362,11 @@ const CameraCapture = ({
 
   const toggleFacingMode = useCallback(() => {
     if (!hasMultipleCameras) {
-      setError('Only one camera detected. Cannot switch cameras.');
+      setError("Only one camera detected. Cannot switch cameras.");
       return;
     }
-    
-    setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
+
+    setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
     if (isStreaming) {
       stopCamera();
       setTimeout(() => {
@@ -351,7 +378,7 @@ const CameraCapture = ({
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleClose = () => {
@@ -364,10 +391,10 @@ const CameraCapture = ({
 
   const downloadCapturedMedia = () => {
     if (!capturedMedia) return;
-    
-    const link = document.createElement('a');
+
+    const link = document.createElement("a");
     link.href = capturedMedia.url;
-    link.download = `capture_${Date.now()}.${capturedMedia.type === 'photo' ? 'jpg' : 'webm'}`;
+    link.download = `capture_${Date.now()}.${capturedMedia.type === "photo" ? "jpg" : "webm"}`;
     link.click();
   };
 
@@ -392,7 +419,7 @@ const CameraCapture = ({
               <X className="w-5 h-5" />
             </Button>
 
-            {capturedMedia.type === 'photo' ? (
+            {capturedMedia.type === "photo" ? (
               <img
                 src={capturedMedia.url}
                 alt="Captured"
@@ -479,7 +506,7 @@ const CameraCapture = ({
               autoPlay
               playsInline
               muted
-              className={`w-full h-[70vh] object-cover ${facingMode === 'user' ? 'scale-x-[-1]' : ''}`}
+              className={`w-full h-[70vh] object-cover ${facingMode === "user" ? "scale-x-[-1]" : ""}`}
             />
           ) : (
             <div className="w-full h-[70vh] flex items-center justify-center bg-gray-900">
@@ -500,13 +527,17 @@ const CameraCapture = ({
                       </AlertDescription>
                     </Alert>
                     <div className="flex gap-2 justify-center">
-                      <Button onClick={retryCamera} className="gap-2" variant="outline">
+                      <Button
+                        onClick={retryCamera}
+                        className="gap-2"
+                        variant="outline"
+                      >
                         <RefreshCw className="w-4 h-4" />
                         Try Again
                       </Button>
-                      {permissionStatus === 'denied' && (
-                        <Button 
-                          onClick={() => window.location.reload()} 
+                      {permissionStatus === "denied" && (
+                        <Button
+                          onClick={() => window.location.reload()}
                           className="gap-2"
                         >
                           Reload Page
@@ -547,9 +578,9 @@ const CameraCapture = ({
                 variant="ghost"
                 size="icon"
                 className={`w-20 h-20 rounded-full ${
-                  isRecording 
-                    ? 'bg-red-500 hover:bg-red-600' 
-                    : 'bg-white/20 hover:bg-white/30'
+                  isRecording
+                    ? "bg-red-500 hover:bg-red-600"
+                    : "bg-white/20 hover:bg-white/30"
                 } text-white`}
                 onClick={isRecording ? stopVideoRecording : startVideoRecording}
               >

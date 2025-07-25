@@ -7,8 +7,8 @@ export default function Notifications() {
 
   return (
     <PlaceholderPage
-      title={t('notifications')}
-      description={t('notifications_desc')}
+      title={t("notifications")}
+      description={t("notifications_desc")}
       icon={<Heart className="w-12 h-12 text-pink-500" />}
     />
   );

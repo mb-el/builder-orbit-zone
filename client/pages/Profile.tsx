@@ -7,8 +7,8 @@ export default function Profile() {
 
   return (
     <PlaceholderPage
-      title={`Your ${t('profile')}`}
-      description={t('profile_desc')}
+      title={`Your ${t("profile")}`}
+      description={t("profile_desc")}
       icon={<User className="w-12 h-12 text-orange-500" />}
     />
   );

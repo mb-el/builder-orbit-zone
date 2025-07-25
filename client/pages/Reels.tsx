@@ -7,8 +7,8 @@ export default function Reels() {
 
   return (
     <PlaceholderPage
-      title={`${t('reels')} & Short Videos`}
-      description={t('reels_videos_desc')}
+      title={`${t("reels")} & Short Videos`}
+      description={t("reels_videos_desc")}
       icon={<Video className="w-12 h-12 text-red-500" />}
     />
   );

@@ -32,10 +32,14 @@ import {
   Download,
   Flag,
   Trash2,
-  Edit3
+  Edit3,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useMobileKeyboard, useMessageInteractions, useMobileInputFocus } from "@/hooks/useMobileInteractions";
+import {
+  useMobileKeyboard,
+  useMessageInteractions,
+  useMobileInputFocus,
+} from "@/hooks/useMobileInteractions";
 import { useLongPress } from "@/lib/reactExtensions";
 
 interface Message {
@@ -45,7 +49,7 @@ interface Message {
   senderAvatar: string;
   content: string;
   timestamp: Date;
-  type: 'text' | 'image' | 'video' | 'audio' | 'file';
+  type: "text" | "image" | "video" | "audio" | "file";
   mediaUrl?: string;
   isRead: boolean;
   isDelivered: boolean;
@@ -88,68 +92,68 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messageInputRef = useRef<HTMLInputElement>(null);
 
-  const emojis = ['❤️', '👍', '😂', '😮', '😢', '😡', '👏', '🔥'];
+  const emojis = ["❤️", "👍", "😂", "😮", "😢", "😡", "👏", "🔥"];
 
   const chats: Chat[] = [
     {
-      id: '1',
-      name: 'Alice Wonder',
-      avatar: '/placeholder.svg',
+      id: "1",
+      name: "Alice Wonder",
+      avatar: "/placeholder.svg",
       isOnline: true,
       unreadCount: 3,
       isTyping: false,
       lastMessage: {
-        id: '1',
-        senderId: '1',
-        senderName: 'Alice Wonder',
-        senderAvatar: '/placeholder.svg',
-        content: 'Hey! How are you doing?',
+        id: "1",
+        senderId: "1",
+        senderName: "Alice Wonder",
+        senderAvatar: "/placeholder.svg",
+        content: "Hey! How are you doing?",
         timestamp: new Date(Date.now() - 5 * 60 * 1000),
-        type: 'text',
+        type: "text",
         isRead: false,
-        isDelivered: true
-      }
+        isDelivered: true,
+      },
     },
     {
-      id: '2',
-      name: 'Bob Creator',
-      avatar: '/placeholder.svg',
+      id: "2",
+      name: "Bob Creator",
+      avatar: "/placeholder.svg",
       isOnline: false,
       lastSeen: new Date(Date.now() - 30 * 60 * 1000),
       unreadCount: 0,
       isTyping: false,
       lastMessage: {
-        id: '2',
-        senderId: 'me',
-        senderName: 'Me',
-        senderAvatar: '/placeholder.svg',
-        content: 'Thanks for sharing that video!',
+        id: "2",
+        senderId: "me",
+        senderName: "Me",
+        senderAvatar: "/placeholder.svg",
+        content: "Thanks for sharing that video!",
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        type: 'text',
+        type: "text",
         isRead: true,
-        isDelivered: true
-      }
+        isDelivered: true,
+      },
     },
     {
-      id: '3',
-      name: 'Emma Travels',
-      avatar: '/placeholder.svg',
+      id: "3",
+      name: "Emma Travels",
+      avatar: "/placeholder.svg",
       isOnline: true,
       unreadCount: 1,
       isTyping: true,
       lastMessage: {
-        id: '3',
-        senderId: '3',
-        senderName: 'Emma Travels',
-        senderAvatar: '/placeholder.svg',
-        content: '📸 Sent a photo',
+        id: "3",
+        senderId: "3",
+        senderName: "Emma Travels",
+        senderAvatar: "/placeholder.svg",
+        content: "📸 Sent a photo",
         timestamp: new Date(Date.now() - 10 * 60 * 1000),
-        type: 'image',
-        mediaUrl: '/placeholder.svg',
+        type: "image",
+        mediaUrl: "/placeholder.svg",
         isRead: false,
-        isDelivered: true
-      }
-    }
+        isDelivered: true,
+      },
+    },
   ];
 
   useEffect(() => {
@@ -157,85 +161,88 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
       // Mock messages for selected chat
       const mockMessages: Message[] = [
         {
-          id: '1',
+          id: "1",
           senderId: selectedChat.id,
           senderName: selectedChat.name,
           senderAvatar: selectedChat.avatar,
-          content: 'Hey! How are you doing today?',
+          content: "Hey! How are you doing today?",
           timestamp: new Date(Date.now() - 60 * 60 * 1000),
-          type: 'text',
+          type: "text",
           isRead: true,
           isDelivered: true,
-          reactions: { '❤️': ['me'], '👍': [selectedChat.id] }
+          reactions: { "❤️": ["me"], "👍": [selectedChat.id] },
         },
         {
-          id: '2',
-          senderId: 'me',
-          senderName: 'Me',
-          senderAvatar: '/placeholder.svg',
-          content: 'I\'m doing great! Just working on some new features.',
+          id: "2",
+          senderId: "me",
+          senderName: "Me",
+          senderAvatar: "/placeholder.svg",
+          content: "I'm doing great! Just working on some new features.",
           timestamp: new Date(Date.now() - 55 * 60 * 1000),
-          type: 'text',
+          type: "text",
           isRead: true,
-          isDelivered: true
+          isDelivered: true,
         },
         {
-          id: '3',
+          id: "3",
           senderId: selectedChat.id,
           senderName: selectedChat.name,
           senderAvatar: selectedChat.avatar,
-          content: 'That sounds awesome! Can you share a screenshot?',
+          content: "That sounds awesome! Can you share a screenshot?",
           timestamp: new Date(Date.now() - 50 * 60 * 1000),
-          type: 'text',
+          type: "text",
           isRead: true,
-          isDelivered: true
+          isDelivered: true,
         },
         {
-          id: '4',
-          senderId: 'me',
-          senderName: 'Me',
-          senderAvatar: '/placeholder.svg',
-          content: 'Sure! Here\'s what I\'m working on.',
+          id: "4",
+          senderId: "me",
+          senderName: "Me",
+          senderAvatar: "/placeholder.svg",
+          content: "Sure! Here's what I'm working on.",
           timestamp: new Date(Date.now() - 45 * 60 * 1000),
-          type: 'text',
+          type: "text",
           isRead: false,
           isDelivered: true,
           isEdited: true,
-          editedAt: new Date(Date.now() - 44 * 60 * 1000)
+          editedAt: new Date(Date.now() - 44 * 60 * 1000),
         },
         {
-          id: '5',
-          senderId: 'me',
-          senderName: 'Me',
-          senderAvatar: '/placeholder.svg',
-          content: '',
+          id: "5",
+          senderId: "me",
+          senderName: "Me",
+          senderAvatar: "/placeholder.svg",
+          content: "",
           timestamp: new Date(Date.now() - 40 * 60 * 1000),
-          type: 'image',
-          mediaUrl: '/placeholder.svg',
+          type: "image",
+          mediaUrl: "/placeholder.svg",
           isRead: false,
-          isDelivered: true
-        }
+          isDelivered: true,
+        },
       ];
       setMessages(mockMessages);
     }
   }, [selectedChat]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   // Enhanced mobile keyboard support
   useEffect(() => {
     const handleResize = () => {
-      if (messageInputRef.current && document.activeElement === messageInputRef.current) {
+      if (
+        messageInputRef.current &&
+        document.activeElement === messageInputRef.current
+      ) {
         setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const sendMessage = () => {
@@ -243,29 +250,29 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
 
     const message: Message = {
       id: Date.now().toString(),
-      senderId: 'me',
-      senderName: 'Me',
-      senderAvatar: '/placeholder.svg',
+      senderId: "me",
+      senderName: "Me",
+      senderAvatar: "/placeholder.svg",
       content: newMessage,
       timestamp: new Date(),
-      type: 'text',
+      type: "text",
       isRead: false,
       isDelivered: true,
-      replyTo: replyingTo?.id
+      replyTo: replyingTo?.id,
     };
 
-    setMessages(prev => [...prev, message]);
+    setMessages((prev) => [...prev, message]);
     setNewMessage("");
     setReplyingTo(null);
 
     // Haptic feedback on mobile
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate(50);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -274,34 +281,38 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
   const handleCopyMessage = async (content: string) => {
     const success = await copyMessage(content);
     toast({
-      description: success ? "Message copied to clipboard! 📋" : "Failed to copy message",
+      description: success
+        ? "Message copied to clipboard! 📋"
+        : "Failed to copy message",
       duration: 2000,
     });
   };
 
   const addReaction = (messageId: string, emoji: string) => {
-    setMessages(prev => prev.map(msg => {
-      if (msg.id === messageId) {
-        const reactions = { ...msg.reactions };
-        if (reactions[emoji]) {
-          if (reactions[emoji].includes('me')) {
-            reactions[emoji] = reactions[emoji].filter(id => id !== 'me');
-            if (reactions[emoji].length === 0) {
-              delete reactions[emoji];
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (msg.id === messageId) {
+          const reactions = { ...msg.reactions };
+          if (reactions[emoji]) {
+            if (reactions[emoji].includes("me")) {
+              reactions[emoji] = reactions[emoji].filter((id) => id !== "me");
+              if (reactions[emoji].length === 0) {
+                delete reactions[emoji];
+              }
+            } else {
+              reactions[emoji] = [...reactions[emoji], "me"];
             }
           } else {
-            reactions[emoji] = [...reactions[emoji], 'me'];
+            reactions[emoji] = ["me"];
           }
-        } else {
-          reactions[emoji] = ['me'];
+          return { ...msg, reactions };
         }
-        return { ...msg, reactions };
-      }
-      return msg;
-    }));
+        return msg;
+      }),
+    );
 
     // Haptic feedback
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate(30);
     }
   };
@@ -312,8 +323,8 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
   };
 
   const editMessage = (messageId: string) => {
-    const message = messages.find(m => m.id === messageId);
-    if (message && message.senderId === 'me') {
+    const message = messages.find((m) => m.id === messageId);
+    if (message && message.senderId === "me") {
       setEditingMessage(messageId);
       setNewMessage(message.content);
       messageInputRef.current?.focus();
@@ -323,24 +334,26 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
   const saveEditedMessage = () => {
     if (!editingMessage || !newMessage.trim()) return;
 
-    setMessages(prev => prev.map(msg => {
-      if (msg.id === editingMessage) {
-        return {
-          ...msg,
-          content: newMessage,
-          isEdited: true,
-          editedAt: new Date()
-        };
-      }
-      return msg;
-    }));
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (msg.id === editingMessage) {
+          return {
+            ...msg,
+            content: newMessage,
+            isEdited: true,
+            editedAt: new Date(),
+          };
+        }
+        return msg;
+      }),
+    );
 
     setEditingMessage(null);
     setNewMessage("");
   };
 
   const deleteMessage = (messageId: string) => {
-    setMessages(prev => prev.filter(msg => msg.id !== messageId));
+    setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
     toast({
       description: "Message deleted",
       duration: 2000,
@@ -348,9 +361,9 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
   };
 
   const formatTime = (date: Date) => {
-    return new Intl.DateTimeFormat('en', {
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Intl.DateTimeFormat("en", {
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
   };
 
@@ -361,7 +374,7 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (minutes < 1) return 'Just now';
+    if (minutes < 1) return "Just now";
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     return `${days}d ago`;
@@ -372,15 +385,15 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
       {/* Chat List */}
       <div className="w-80 border-r border-border max-md:hidden">
         <div className="p-4 border-b border-border">
-          <h2 className="text-xl font-semibold">{t('messages')}</h2>
+          <h2 className="text-xl font-semibold">{t("messages")}</h2>
         </div>
-        
+
         <div className="overflow-y-auto h-full">
-          {chats.map(chat => (
+          {chats.map((chat) => (
             <div
               key={chat.id}
               className={`p-4 cursor-pointer hover:bg-accent transition-colors ${
-                selectedChat?.id === chat.id ? 'bg-accent' : ''
+                selectedChat?.id === chat.id ? "bg-accent" : ""
               }`}
               onClick={() => setSelectedChat(chat)}
             >
@@ -388,13 +401,18 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                 <div className="relative">
                   <Avatar className="w-12 h-12">
                     <AvatarImage src={chat.avatar} />
-                    <AvatarFallback>{chat.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    <AvatarFallback>
+                      {chat.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </AvatarFallback>
                   </Avatar>
                   {chat.isOnline && (
                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
                   )}
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <h3 className="font-medium truncate">{chat.name}</h3>
@@ -411,25 +429,31 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       {chat.isTyping ? (
                         <div className="flex items-center gap-1 text-primary">
                           <div className="flex gap-1">
                             <div className="w-1 h-1 bg-primary rounded-full animate-pulse"></div>
-                            <div className="w-1 h-1 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                            <div className="w-1 h-1 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                            <div
+                              className="w-1 h-1 bg-primary rounded-full animate-pulse"
+                              style={{ animationDelay: "0.2s" }}
+                            ></div>
+                            <div
+                              className="w-1 h-1 bg-primary rounded-full animate-pulse"
+                              style={{ animationDelay: "0.4s" }}
+                            ></div>
                           </div>
                           <span className="text-sm">typing...</span>
                         </div>
                       ) : (
                         <p className="text-sm text-muted-foreground truncate">
-                          {chat.lastMessage?.content || 'No messages yet'}
+                          {chat.lastMessage?.content || "No messages yet"}
                         </p>
                       )}
                     </div>
-                    {chat.lastMessage?.senderId === 'me' && (
+                    {chat.lastMessage?.senderId === "me" && (
                       <div className="flex items-center ml-2">
                         {chat.lastMessage.isRead ? (
                           <CheckCheck className="w-4 h-4 text-blue-500" />
@@ -441,7 +465,7 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                       </div>
                     )}
                   </div>
-                  
+
                   {!chat.isOnline && chat.lastSeen && (
                     <p className="text-xs text-muted-foreground">
                       Last seen {formatLastSeen(chat.lastSeen)}
@@ -460,35 +484,42 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
           {/* Chat Header */}
           <div className="p-4 border-b border-border flex items-center justify-between bg-card">
             <div className="flex items-center gap-3">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="md:hidden"
                 onClick={() => setSelectedChat(null)}
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              
+
               <div className="relative">
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={selectedChat.avatar} />
-                  <AvatarFallback>{selectedChat.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  <AvatarFallback>
+                    {selectedChat.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
                 </Avatar>
                 {selectedChat.isOnline && (
                   <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
                 )}
               </div>
-              
+
               <div>
                 <h3 className="font-medium">{selectedChat.name}</h3>
                 <p className="text-sm text-muted-foreground">
-                  {selectedChat.isTyping ? 'typing...' :
-                   selectedChat.isOnline ? 'Online' : 
-                   `Last seen ${selectedChat.lastSeen ? formatLastSeen(selectedChat.lastSeen) : 'recently'}`}
+                  {selectedChat.isTyping
+                    ? "typing..."
+                    : selectedChat.isOnline
+                      ? "Online"
+                      : `Last seen ${selectedChat.lastSeen ? formatLastSeen(selectedChat.lastSeen) : "recently"}`}
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon">
                 <Phone className="w-5 h-5" />
@@ -508,7 +539,9 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Reply className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-medium">Replying to {replyingTo.senderName}</span>
+                  <span className="text-sm font-medium">
+                    Replying to {replyingTo.senderName}
+                  </span>
                 </div>
                 <Button
                   variant="ghost"
@@ -527,19 +560,26 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map(message => (
+            {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${message.senderId === 'me' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-3 ${message.senderId === "me" ? "justify-end" : "justify-start"}`}
               >
-                {message.senderId !== 'me' && (
+                {message.senderId !== "me" && (
                   <Avatar className="w-8 h-8">
                     <AvatarImage src={message.senderAvatar} />
-                    <AvatarFallback>{message.senderName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    <AvatarFallback>
+                      {message.senderName
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </AvatarFallback>
                   </Avatar>
                 )}
-                
-                <div className={`max-w-[70%] ${message.senderId === 'me' ? 'order-first' : ''}`}>
+
+                <div
+                  className={`max-w-[70%] ${message.senderId === "me" ? "order-first" : ""}`}
+                >
                   {/* Reply indicator */}
                   {message.replyTo && (
                     <div className="mb-1 pl-2 border-l-2 border-primary">
@@ -551,19 +591,25 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
 
                   <div
                     className={`rounded-2xl px-4 py-2 relative group ${
-                      message.senderId === 'me'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
+                      message.senderId === "me"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
                     }`}
-                    {...useLongPress(() => setSelectedMessage(message.id), { threshold: 500 })}
+                    {...useLongPress(() => setSelectedMessage(message.id), {
+                      threshold: 500,
+                    })}
                   >
-                    {message.type === 'text' && (
+                    {message.type === "text" && (
                       <p className="text-sm select-text">{message.content}</p>
                     )}
-                    
-                    {message.type === 'image' && message.mediaUrl && (
+
+                    {message.type === "image" && message.mediaUrl && (
                       <div className="space-y-2">
-                        {message.content && <p className="text-sm select-text">{message.content}</p>}
+                        {message.content && (
+                          <p className="text-sm select-text">
+                            {message.content}
+                          </p>
+                        )}
                         <img
                           src={message.mediaUrl}
                           alt="Shared image"
@@ -571,10 +617,14 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                         />
                       </div>
                     )}
-                    
-                    {message.type === 'video' && message.mediaUrl && (
+
+                    {message.type === "video" && message.mediaUrl && (
                       <div className="space-y-2">
-                        {message.content && <p className="text-sm select-text">{message.content}</p>}
+                        {message.content && (
+                          <p className="text-sm select-text">
+                            {message.content}
+                          </p>
+                        )}
                         <VideoPlayer
                           src={message.mediaUrl}
                           className="max-w-full"
@@ -590,18 +640,24 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                           variant="ghost"
                           size="icon"
                           className={`absolute top-1 right-1 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity ${
-                            message.senderId === 'me' ? 'text-primary-foreground/70' : 'text-foreground/70'
+                            message.senderId === "me"
+                              ? "text-primary-foreground/70"
+                              : "text-foreground/70"
                           }`}
                         >
                           <MoreVertical className="w-3 h-3" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleCopyMessage(message.content)}>
+                        <DropdownMenuItem
+                          onClick={() => handleCopyMessage(message.content)}
+                        >
                           <Copy className="w-4 h-4 mr-2" />
                           Copy
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => replyToMessage(message)}>
+                        <DropdownMenuItem
+                          onClick={() => replyToMessage(message)}
+                        >
                           <Reply className="w-4 h-4 mr-2" />
                           Reply
                         </DropdownMenuItem>
@@ -609,8 +665,10 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                           <Forward className="w-4 h-4 mr-2" />
                           Forward
                         </DropdownMenuItem>
-                        {message.senderId === 'me' && (
-                          <DropdownMenuItem onClick={() => editMessage(message.id)}>
+                        {message.senderId === "me" && (
+                          <DropdownMenuItem
+                            onClick={() => editMessage(message.id)}
+                          >
                             <Edit3 className="w-4 h-4 mr-2" />
                             Edit
                           </DropdownMenuItem>
@@ -625,8 +683,8 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                           <Flag className="w-4 h-4 mr-2" />
                           Report
                         </DropdownMenuItem>
-                        {message.senderId === 'me' && (
-                          <DropdownMenuItem 
+                        {message.senderId === "me" && (
+                          <DropdownMenuItem
                             onClick={() => deleteMessage(message.id)}
                             className="text-red-600"
                           >
@@ -639,28 +697,31 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                   </div>
 
                   {/* Reactions */}
-                  {message.reactions && Object.keys(message.reactions).length > 0 && (
-                    <div className="flex gap-1 mt-1 flex-wrap">
-                      {Object.entries(message.reactions).map(([emoji, userIds]) => (
-                        <button
-                          key={emoji}
-                          className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-colors ${
-                            userIds.includes('me')
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-muted hover:bg-accent'
-                          }`}
-                          onClick={() => addReaction(message.id, emoji)}
-                        >
-                          <span>{emoji}</span>
-                          <span>{userIds.length}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  {message.reactions &&
+                    Object.keys(message.reactions).length > 0 && (
+                      <div className="flex gap-1 mt-1 flex-wrap">
+                        {Object.entries(message.reactions).map(
+                          ([emoji, userIds]) => (
+                            <button
+                              key={emoji}
+                              className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-colors ${
+                                userIds.includes("me")
+                                  ? "bg-primary text-primary-foreground"
+                                  : "bg-muted hover:bg-accent"
+                              }`}
+                              onClick={() => addReaction(message.id, emoji)}
+                            >
+                              <span>{emoji}</span>
+                              <span>{userIds.length}</span>
+                            </button>
+                          ),
+                        )}
+                      </div>
+                    )}
 
                   {/* Quick reactions */}
                   <div className="flex gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {emojis.slice(0, 4).map(emoji => (
+                    {emojis.slice(0, 4).map((emoji) => (
                       <button
                         key={emoji}
                         className="w-6 h-6 rounded-full bg-background/80 hover:bg-background flex items-center justify-center text-xs transition-all hover:scale-110"
@@ -670,8 +731,10 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                       </button>
                     ))}
                   </div>
-                  
-                  <div className={`flex items-center gap-1 mt-1 ${message.senderId === 'me' ? 'justify-end' : 'justify-start'}`}>
+
+                  <div
+                    className={`flex items-center gap-1 mt-1 ${message.senderId === "me" ? "justify-end" : "justify-start"}`}
+                  >
                     <span className="text-xs text-muted-foreground">
                       {formatTime(message.timestamp)}
                     </span>
@@ -680,7 +743,7 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                         (edited)
                       </span>
                     )}
-                    {message.senderId === 'me' && (
+                    {message.senderId === "me" && (
                       <div className="flex items-center">
                         {message.isRead ? (
                           <CheckCheck className="w-3 h-3 text-blue-500" />
@@ -708,15 +771,19 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
               >
                 <Paperclip className="w-5 h-5" />
               </Button>
-              
+
               <Button variant="ghost" size="icon">
                 <Camera className="w-5 h-5" />
               </Button>
-              
+
               <div className="flex-1 relative">
                 <Input
                   ref={messageInputRef}
-                  placeholder={editingMessage ? "Edit message..." : `Message ${selectedChat.name}...`}
+                  placeholder={
+                    editingMessage
+                      ? "Edit message..."
+                      : `Message ${selectedChat.name}...`
+                  }
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -739,18 +806,26 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                   </Button>
                 )}
               </div>
-              
-              <Button variant="ghost" size="icon" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
                 <Smile className="w-5 h-5" />
               </Button>
-              
+
               {newMessage.trim() ? (
-                <Button 
-                  size="icon" 
+                <Button
+                  size="icon"
                   onClick={editingMessage ? saveEditedMessage : sendMessage}
                   className="bg-primary hover:bg-primary/90"
                 >
-                  {editingMessage ? <Check className="w-5 h-5" /> : <Send className="w-5 h-5" />}
+                  {editingMessage ? (
+                    <Check className="w-5 h-5" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
                 </Button>
               ) : (
                 <Button
@@ -761,23 +836,27 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                   onMouseLeave={() => setIsRecording(false)}
                   onTouchStart={() => setIsRecording(true)}
                   onTouchEnd={() => setIsRecording(false)}
-                  className={isRecording ? 'bg-red-500 text-white' : ''}
+                  className={isRecording ? "bg-red-500 text-white" : ""}
                 >
-                  {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                  {isRecording ? (
+                    <MicOff className="w-5 h-5" />
+                  ) : (
+                    <Mic className="w-5 h-5" />
+                  )}
                 </Button>
               )}
             </div>
-            
+
             {/* Emoji Picker */}
             {showEmojiPicker && (
               <div className="mt-2 p-2 bg-background border rounded-lg shadow-lg">
                 <div className="grid grid-cols-8 gap-2">
-                  {emojis.map(emoji => (
+                  {emojis.map((emoji) => (
                     <button
                       key={emoji}
                       className="p-2 hover:bg-accent rounded text-lg transition-colors"
                       onClick={() => {
-                        setNewMessage(prev => prev + emoji);
+                        setNewMessage((prev) => prev + emoji);
                         setShowEmojiPicker(false);
                       }}
                     >
@@ -787,7 +866,7 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                 </div>
               </div>
             )}
-            
+
             {isRecording && (
               <div className="mt-2 text-sm text-red-500 text-center flex items-center justify-center gap-2">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
@@ -801,7 +880,7 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
               </div>
             )}
           </div>
-          
+
           <input
             ref={fileInputRef}
             type="file"
@@ -816,7 +895,9 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
               <Send className="w-8 h-8 text-primary" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Select a chat</h3>
-            <p className="text-muted-foreground">Choose a conversation to start messaging</p>
+            <p className="text-muted-foreground">
+              Choose a conversation to start messaging
+            </p>
           </div>
         </div>
       )}

@@ -2,13 +2,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Upload, 
-  Image as ImageIcon, 
-  X, 
-  Camera,
-  Grid3X3
-} from "lucide-react";
+import { Upload, Image as ImageIcon, X, Camera, Grid3X3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface ImageUploadProps {
@@ -21,14 +15,14 @@ interface ImageUploadProps {
   multiple?: boolean;
 }
 
-const ImageUpload = ({ 
+const ImageUpload = ({
   onImageSelect,
   onImageRemove,
   maxSizeMB = 10,
   maxImages = 10,
-  acceptedFormats = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+  acceptedFormats = ["image/jpeg", "image/png", "image/webp", "image/gif"],
   className = "",
-  multiple = true
+  multiple = true,
 }: ImageUploadProps) => {
   const { t } = useTranslation();
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -51,10 +45,12 @@ const ImageUpload = ({
     const validFiles: File[] = [];
     const newPreviews: string[] = [];
 
-    files.forEach(file => {
+    files.forEach((file) => {
       // Validate file type
       if (!acceptedFormats.includes(file.type)) {
-        setError(`Please select valid image formats: ${acceptedFormats.join(', ')}`);
+        setError(
+          `Please select valid image formats: ${acceptedFormats.join(", ")}`,
+        );
         return;
       }
 
@@ -74,16 +70,16 @@ const ImageUpload = ({
     setError(null);
     const updatedImages = [...selectedImages, ...validFiles];
     const updatedPreviews = [...imagePreviews, ...newPreviews];
-    
+
     setSelectedImages(updatedImages);
     setImagePreviews(updatedPreviews);
-    
+
     // Simulate upload progress
     setIsUploading(true);
     setUploadProgress(0);
-    
+
     const interval = setInterval(() => {
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsUploading(false);
@@ -98,19 +94,19 @@ const ImageUpload = ({
   const handleRemoveImage = (index: number) => {
     const updatedImages = selectedImages.filter((_, i) => i !== index);
     const updatedPreviews = imagePreviews.filter((_, i) => i !== index);
-    
+
     // Revoke object URL to prevent memory leaks
     URL.revokeObjectURL(imagePreviews[index]);
-    
+
     setSelectedImages(updatedImages);
     setImagePreviews(updatedPreviews);
     onImageRemove?.(index);
-    
+
     if (updatedImages.length === 0) {
       setUploadProgress(0);
       setIsUploading(false);
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -120,11 +116,11 @@ const ImageUpload = ({
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   if (selectedImages.length > 0) {
@@ -133,11 +129,15 @@ const ImageUpload = ({
         <CardContent className="p-4">
           <div className="space-y-4">
             {/* Image Grid */}
-            <div className={`grid gap-3 ${
-              selectedImages.length === 1 ? 'grid-cols-1' : 
-              selectedImages.length === 2 ? 'grid-cols-2' : 
-              'grid-cols-3'
-            }`}>
+            <div
+              className={`grid gap-3 ${
+                selectedImages.length === 1
+                  ? "grid-cols-1"
+                  : selectedImages.length === 2
+                    ? "grid-cols-2"
+                    : "grid-cols-3"
+              }`}
+            >
               {imagePreviews.map((preview, index) => (
                 <div key={index} className="relative group">
                   <div className="aspect-square bg-muted rounded-lg overflow-hidden">
@@ -147,7 +147,7 @@ const ImageUpload = ({
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  
+
                   {/* Remove Button */}
                   <Button
                     variant="destructive"
@@ -157,22 +157,24 @@ const ImageUpload = ({
                   >
                     <X className="w-3 h-3" />
                   </Button>
-                  
+
                   {/* File Size */}
                   <div className="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
                     {formatFileSize(selectedImages[index].size)}
                   </div>
                 </div>
               ))}
-              
+
               {/* Add More Button */}
               {selectedImages.length < maxImages && (
-                <div 
+                <div
                   className="aspect-square border-2 border-dashed border-muted-foreground/25 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 transition-colors"
                   onClick={openFileDialog}
                 >
                   <ImageIcon className="w-6 h-6 text-muted-foreground mb-2" />
-                  <span className="text-xs text-muted-foreground">Add More</span>
+                  <span className="text-xs text-muted-foreground">
+                    Add More
+                  </span>
                 </div>
               )}
             </div>
@@ -187,7 +189,7 @@ const ImageUpload = ({
                 <Progress value={uploadProgress} className="h-2" />
               </div>
             )}
-            
+
             {uploadProgress === 100 && !isUploading && (
               <div className="text-sm text-green-600 font-medium">
                 ✓ {selectedImages.length} image(s) uploaded successfully
@@ -207,7 +209,7 @@ const ImageUpload = ({
   return (
     <Card className={className}>
       <CardContent className="p-6">
-        <div 
+        <div
           className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
           onClick={openFileDialog}
         >
@@ -217,26 +219,28 @@ const ImageUpload = ({
                 <ImageIcon className="w-8 h-8 text-primary" />
               </div>
             </div>
-            
+
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">{t('upload_photo')}</h3>
+              <h3 className="text-lg font-semibold">{t("upload_photo")}</h3>
               <p className="text-muted-foreground text-sm">
-                {multiple ? 'Drag and drop images here, or click to browse' : 'Drag and drop an image here, or click to browse'}
+                {multiple
+                  ? "Drag and drop images here, or click to browse"
+                  : "Drag and drop an image here, or click to browse"}
               </p>
               <p className="text-xs text-muted-foreground">
                 Supports JPEG, PNG, WebP, GIF up to {maxSizeMB}MB each
                 {multiple && ` (max ${maxImages} images)`}
               </p>
             </div>
-            
+
             <div className="flex gap-2 justify-center">
               <Button variant="outline" size="sm" className="gap-2">
                 <Upload className="w-4 h-4" />
-                Choose {multiple ? 'Files' : 'File'}
+                Choose {multiple ? "Files" : "File"}
               </Button>
               <Button variant="outline" size="sm" className="gap-2">
                 <Camera className="w-4 h-4" />
-                {t('take_photo')}
+                {t("take_photo")}
               </Button>
             </div>
           </div>
@@ -251,7 +255,7 @@ const ImageUpload = ({
         <input
           ref={fileInputRef}
           type="file"
-          accept={acceptedFormats.join(',')}
+          accept={acceptedFormats.join(",")}
           onChange={handleFileSelect}
           multiple={multiple}
           className="hidden"

@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Heart, 
-  MessageCircle, 
-  UserPlus, 
-  Share, 
+import {
+  Heart,
+  MessageCircle,
+  UserPlus,
+  Share,
   Video,
   Camera,
   Gift,
@@ -15,13 +15,13 @@ import {
   BellRing,
   Check,
   X,
-  MoreHorizontal
+  MoreHorizontal,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface Notification {
   id: string;
-  type: 'like' | 'comment' | 'follow' | 'share' | 'mention' | 'live' | 'gift';
+  type: "like" | "comment" | "follow" | "share" | "mention" | "live" | "gift";
   user: {
     username: string;
     avatar: string;
@@ -42,76 +42,84 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
   const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([
     {
-      id: '1',
-      type: 'like',
-      user: { username: 'alice_wonder', avatar: '/placeholder.svg', isVerified: true },
-      content: 'liked your photo',
+      id: "1",
+      type: "like",
+      user: {
+        username: "alice_wonder",
+        avatar: "/placeholder.svg",
+        isVerified: true,
+      },
+      content: "liked your photo",
       timestamp: new Date(Date.now() - 5 * 60 * 1000),
       isRead: false,
-      postImage: '/placeholder.svg'
+      postImage: "/placeholder.svg",
     },
     {
-      id: '2',
-      type: 'comment',
-      user: { username: 'bob_creator', avatar: '/placeholder.svg' },
+      id: "2",
+      type: "comment",
+      user: { username: "bob_creator", avatar: "/placeholder.svg" },
       content: 'commented on your post: "Amazing content! 🔥"',
       timestamp: new Date(Date.now() - 15 * 60 * 1000),
       isRead: false,
-      postImage: '/placeholder.svg'
+      postImage: "/placeholder.svg",
     },
     {
-      id: '3',
-      type: 'follow',
-      user: { username: 'emma_travels', avatar: '/placeholder.svg', isVerified: true },
-      content: 'started following you',
+      id: "3",
+      type: "follow",
+      user: {
+        username: "emma_travels",
+        avatar: "/placeholder.svg",
+        isVerified: true,
+      },
+      content: "started following you",
       timestamp: new Date(Date.now() - 30 * 60 * 1000),
-      isRead: true
+      isRead: true,
     },
     {
-      id: '4',
-      type: 'share',
-      user: { username: 'mike_fitness', avatar: '/placeholder.svg' },
-      content: 'shared your post to their story',
+      id: "4",
+      type: "share",
+      user: { username: "mike_fitness", avatar: "/placeholder.svg" },
+      content: "shared your post to their story",
       timestamp: new Date(Date.now() - 60 * 60 * 1000),
       isRead: true,
-      postImage: '/placeholder.svg'
+      postImage: "/placeholder.svg",
     },
     {
-      id: '5',
-      type: 'live',
-      user: { username: 'sarah_cook', avatar: '/placeholder.svg' },
-      content: 'is live now! Join the stream',
+      id: "5",
+      type: "live",
+      user: { username: "sarah_cook", avatar: "/placeholder.svg" },
+      content: "is live now! Join the stream",
       timestamp: new Date(Date.now() - 2 * 60 * 1000),
-      isRead: false
+      isRead: false,
     },
     {
-      id: '6',
-      type: 'mention',
-      user: { username: 'alex_photos', avatar: '/placeholder.svg' },
-      content: 'mentioned you in a comment',
+      id: "6",
+      type: "mention",
+      user: { username: "alex_photos", avatar: "/placeholder.svg" },
+      content: "mentioned you in a comment",
       timestamp: new Date(Date.now() - 45 * 60 * 1000),
       isRead: false,
-      postImage: '/placeholder.svg'
-    }
+      postImage: "/placeholder.svg",
+    },
   ]);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'like':
+      case "like":
         return <Heart className="w-4 h-4 text-red-500 fill-current" />;
-      case 'comment':
+      case "comment":
         return <MessageCircle className="w-4 h-4 text-blue-500" />;
-      case 'follow':
+      case "follow":
         return <UserPlus className="w-4 h-4 text-green-500" />;
-      case 'share':
+      case "share":
         return <Share className="w-4 h-4 text-purple-500" />;
-      case 'live':
+      case "live":
         return <Video className="w-4 h-4 text-red-500" />;
-      case 'mention':
+      case "mention":
         return <MessageCircle className="w-4 h-4 text-orange-500" />;
-      case 'gift':
+      case "gift":
         return <Gift className="w-4 h-4 text-pink-500" />;
       default:
         return <Bell className="w-4 h-4 text-gray-500" />;
@@ -125,26 +133,24 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (minutes < 1) return 'now';
+    if (minutes < 1) return "now";
     if (minutes < 60) return `${minutes}m`;
     if (hours < 24) return `${hours}h`;
     return `${days}d`;
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, isRead: true } : n)
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(n => ({ ...n, isRead: true }))
-    );
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
   };
 
   const removeNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
   return (
@@ -153,14 +159,14 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BellRing className="w-5 h-5" />
-            <h3 className="font-semibold">{t('notifications')}</h3>
+            <h3 className="font-semibold">{t("notifications")}</h3>
             {unreadCount > 0 && (
               <Badge variant="destructive" className="text-xs">
                 {unreadCount}
               </Badge>
             )}
           </div>
-          
+
           <div className="flex items-center gap-2">
             {unreadCount > 0 && (
               <Button
@@ -178,7 +184,7 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="p-0">
         <div className="max-h-96 overflow-y-auto">
           {notifications.length === 0 ? (
@@ -192,7 +198,7 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
                 <div
                   key={notification.id}
                   className={`flex items-start gap-3 p-4 hover:bg-accent/50 cursor-pointer transition-colors border-b border-border/50 last:border-b-0 ${
-                    !notification.isRead ? 'bg-primary/5' : ''
+                    !notification.isRead ? "bg-primary/5" : ""
                   }`}
                   onClick={() => markAsRead(notification.id)}
                 >
@@ -226,7 +232,7 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
                           {formatTimeAgo(notification.timestamp)}
                         </p>
                       </div>
-                      
+
                       {/* Post thumbnail if available */}
                       {notification.postImage && (
                         <div className="ml-3">
@@ -240,7 +246,7 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
                     </div>
 
                     {/* Action buttons for certain notification types */}
-                    {notification.type === 'follow' && (
+                    {notification.type === "follow" && (
                       <div className="flex gap-2 mt-2">
                         <Button size="sm" className="text-xs">
                           Follow Back
@@ -251,7 +257,7 @@ const NotificationPanel = ({ className = "" }: NotificationPanelProps) => {
                       </div>
                     )}
 
-                    {notification.type === 'live' && (
+                    {notification.type === "live" && (
                       <div className="mt-2">
                         <Button size="sm" className="text-xs gap-1">
                           <Video className="w-3 h-3" />

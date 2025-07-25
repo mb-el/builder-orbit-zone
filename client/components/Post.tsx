@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
 import VideoPlayer from "./VideoPlayer";
-import { 
-  Heart, 
-  MessageCircle, 
-  Share, 
-  Bookmark, 
+import {
+  Heart,
+  MessageCircle,
+  Share,
+  Bookmark,
   MoreHorizontal,
   Play,
   Flag,
@@ -24,7 +24,7 @@ import {
   Download,
   Eye,
   EyeOff,
-  UserPlus
+  UserPlus,
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,7 +37,7 @@ interface PostProps {
   timeAgo: string;
   content: string;
   media?: {
-    type: 'image' | 'video';
+    type: "image" | "video";
     url: string;
     aspectRatio?: string;
   };
@@ -47,17 +47,17 @@ interface PostProps {
   isSaved?: boolean;
 }
 
-const Post = ({ 
-  username, 
-  avatar, 
-  location, 
-  timeAgo, 
-  content, 
-  media, 
-  likes, 
-  comments, 
-  isLiked = false, 
-  isSaved = false 
+const Post = ({
+  username,
+  avatar,
+  location,
+  timeAgo,
+  content,
+  media,
+  likes,
+  comments,
+  isLiked = false,
+  isSaved = false,
 }: PostProps) => {
   const { t } = useTranslation();
   const [liked, setLiked] = useState(isLiked);
@@ -69,7 +69,7 @@ const Post = ({
   const handleLike = () => {
     setLiked(!liked);
     setLikesCount(liked ? likesCount - 1 : likesCount + 1);
-    
+
     // Show toast feedback with animation
     toast({
       description: liked ? "Removed from likes ❤️" : "Added to likes! ❤️",
@@ -103,7 +103,7 @@ const Post = ({
         });
       }
     } catch (error) {
-      console.log('Sharing failed:', error);
+      console.log("Sharing failed:", error);
     }
   };
 
@@ -118,21 +118,25 @@ const Post = ({
   const handleFollow = () => {
     setIsFollowing(!isFollowing);
     toast({
-      description: isFollowing ? `Unfollowed ${username}` : `Following ${username}! 👥`,
+      description: isFollowing
+        ? `Unfollowed ${username}`
+        : `Following ${username}! 👥`,
       duration: 2000,
     });
   };
 
   const handleReport = () => {
     toast({
-      description: "Post reported. Thank you for helping keep our community safe! 🛡️",
+      description:
+        "Post reported. Thank you for helping keep our community safe! 🛡️",
       duration: 3000,
     });
   };
 
   const handleHidePost = () => {
     toast({
-      description: "Post hidden. You won't see posts like this in your feed. 👁️",
+      description:
+        "Post hidden. You won't see posts like this in your feed. 👁️",
       duration: 3000,
     });
   };
@@ -154,11 +158,11 @@ const Post = ({
 
   const handleDownload = () => {
     if (media?.url) {
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = media.url;
-      link.download = `${username}-post-${Date.now()}.${media.type === 'image' ? 'jpg' : 'mp4'}`;
+      link.download = `${username}-post-${Date.now()}.${media.type === "image" ? "jpg" : "mp4"}`;
       link.click();
-      
+
       toast({
         description: "Download started! 📥",
         duration: 2000,
@@ -174,7 +178,9 @@ const Post = ({
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10 cursor-pointer hover:opacity-80 transition-opacity">
               <AvatarImage src={avatar} />
-              <AvatarFallback>{username.slice(0, 2).toUpperCase()}</AvatarFallback>
+              <AvatarFallback>
+                {username.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <div>
               <div className="flex items-center gap-1">
@@ -193,23 +199,35 @@ const Post = ({
               <span className="text-xs text-muted-foreground">{timeAgo}</span>
             </div>
           </div>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="w-8 h-8 hover:bg-accent">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="w-8 h-8 hover:bg-accent"
+              >
                 <MoreHorizontal className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={handleFollow} className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={handleFollow}
+                className="cursor-pointer"
+              >
                 {isFollowing ? (
                   <UserMinus className="w-4 h-4 mr-2" />
                 ) : (
                   <UserPlus className="w-4 h-4 mr-2" />
                 )}
-                <span>{isFollowing ? `Unfollow ${username}` : `Follow ${username}`}</span>
+                <span>
+                  {isFollowing ? `Unfollow ${username}` : `Follow ${username}`}
+                </span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleCopyLink} className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={handleCopyLink}
+                className="cursor-pointer"
+              >
                 <Copy className="w-4 h-4 mr-2" />
                 <span>Copy link</span>
               </DropdownMenuItem>
@@ -218,17 +236,26 @@ const Post = ({
                 <span>Go to post</span>
               </DropdownMenuItem>
               {media && (
-                <DropdownMenuItem onClick={handleDownload} className="cursor-pointer">
+                <DropdownMenuItem
+                  onClick={handleDownload}
+                  className="cursor-pointer"
+                >
                   <Download className="w-4 h-4 mr-2" />
                   <span>Download {media.type}</span>
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleHidePost} className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={handleHidePost}
+                className="cursor-pointer"
+              >
                 <EyeOff className="w-4 h-4 mr-2" />
                 <span>Hide post</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleReport} className="text-red-600 cursor-pointer">
+              <DropdownMenuItem
+                onClick={handleReport}
+                className="text-red-600 cursor-pointer"
+              >
                 <Flag className="w-4 h-4 mr-2" />
                 <span>Report post</span>
               </DropdownMenuItem>
@@ -239,12 +266,12 @@ const Post = ({
         {/* Post Media */}
         {media && (
           <div className="relative bg-muted group">
-            {media.type === 'image' ? (
+            {media.type === "image" ? (
               <img
                 src={media.url}
                 alt="Post content"
                 className="w-full h-auto max-h-[600px] object-cover cursor-pointer hover:opacity-95 transition-opacity"
-                style={{ aspectRatio: media.aspectRatio || 'auto' }}
+                style={{ aspectRatio: media.aspectRatio || "auto" }}
                 onDoubleClick={handleLike}
               />
             ) : (
@@ -257,7 +284,7 @@ const Post = ({
                 muted={true}
               />
             )}
-            
+
             {/* Double-tap like animation overlay */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               {/* This would show a heart animation on double-tap */}
@@ -269,45 +296,47 @@ const Post = ({
         <div className="p-4 pt-3">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className={`w-8 h-8 p-0 transition-all hover:scale-110 ${liked ? 'text-red-500' : 'hover:text-red-500'}`}
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`w-8 h-8 p-0 transition-all hover:scale-110 ${liked ? "text-red-500" : "hover:text-red-500"}`}
                 onClick={handleLike}
               >
-                <Heart 
+                <Heart
                   className={`w-6 h-6 transition-all ${
-                    liked ? 'fill-red-500 text-red-500 animate-pulse' : 'text-foreground'
-                  }`} 
+                    liked
+                      ? "fill-red-500 text-red-500 animate-pulse"
+                      : "text-foreground"
+                  }`}
                 />
               </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="w-8 h-8 p-0 transition-all hover:scale-110 hover:text-blue-500"
                 onClick={handleComment}
               >
                 <MessageCircle className="w-6 h-6" />
               </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="w-8 h-8 p-0 transition-all hover:scale-110 hover:text-green-500"
                 onClick={handleShare}
               >
                 <Share className="w-6 h-6" />
               </Button>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className={`w-8 h-8 p-0 transition-all hover:scale-110 ${saved ? 'text-blue-500' : 'hover:text-blue-500'}`}
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`w-8 h-8 p-0 transition-all hover:scale-110 ${saved ? "text-blue-500" : "hover:text-blue-500"}`}
               onClick={handleSave}
             >
-              <Bookmark 
+              <Bookmark
                 className={`w-6 h-6 transition-all ${
-                  saved ? 'fill-current text-blue-500' : 'text-foreground'
-                }`} 
+                  saved ? "fill-current text-blue-500" : "text-foreground"
+                }`}
               />
             </Button>
           </div>
@@ -315,9 +344,9 @@ const Post = ({
           {/* Post Stats */}
           <div className="space-y-2">
             <div className="text-sm font-semibold hover:text-primary cursor-pointer transition-colors">
-              {likesCount.toLocaleString()} {t('likes')}
+              {likesCount.toLocaleString()} {t("likes")}
             </div>
-            
+
             {/* Post Content */}
             <div className="text-sm">
               <span className="font-semibold mr-2 hover:underline cursor-pointer transition-all hover:text-primary">
@@ -325,22 +354,22 @@ const Post = ({
               </span>
               <span>{content}</span>
             </div>
-            
+
             {/* Comments Link */}
-            <button 
+            <button
               className="text-sm text-muted-foreground hover:text-primary hover:underline transition-colors"
               onClick={handleComment}
             >
-              {t('view_all_comments', { count: comments })}
+              {t("view_all_comments", { count: comments })}
             </button>
-            
+
             {/* Comments Section */}
             {showComments && (
               <div className="mt-4 space-y-3 p-4 bg-muted/30 rounded-lg border border-border/50 animate-in slide-in-from-top-2 duration-200">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-medium">Comments</div>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
                     onClick={() => setShowComments(false)}
                     className="text-xs"
@@ -348,7 +377,7 @@ const Post = ({
                     Hide
                   </Button>
                 </div>
-                
+
                 <div className="space-y-3">
                   {/* Sample comments */}
                   <div className="flex items-start gap-3">
@@ -358,13 +387,17 @@ const Post = ({
                     </Avatar>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium hover:underline cursor-pointer">alice_wonder</span>
-                        <span className="text-xs text-muted-foreground">2h</span>
+                        <span className="text-sm font-medium hover:underline cursor-pointer">
+                          alice_wonder
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          2h
+                        </span>
                       </div>
                       <p className="text-sm">Amazing content! Love this! 🔥</p>
                       <div className="flex items-center gap-3 mt-1">
                         <button className="text-xs text-muted-foreground hover:text-primary transition-colors">
-                          {t('like')}
+                          {t("like")}
                         </button>
                         <button className="text-xs text-muted-foreground hover:text-primary transition-colors">
                           Reply
@@ -372,7 +405,7 @@ const Post = ({
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-3">
                     <Avatar className="w-6 h-6">
                       <AvatarImage src="/placeholder.svg" />
@@ -380,13 +413,19 @@ const Post = ({
                     </Avatar>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium hover:underline cursor-pointer">bob_creator</span>
-                        <span className="text-xs text-muted-foreground">1h</span>
+                        <span className="text-sm font-medium hover:underline cursor-pointer">
+                          bob_creator
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          1h
+                        </span>
                       </div>
-                      <p className="text-sm">Thanks for sharing this! Really helpful.</p>
+                      <p className="text-sm">
+                        Thanks for sharing this! Really helpful.
+                      </p>
                       <div className="flex items-center gap-3 mt-1">
                         <button className="text-xs text-muted-foreground hover:text-primary transition-colors">
-                          {t('like')}
+                          {t("like")}
                         </button>
                         <button className="text-xs text-muted-foreground hover:text-primary transition-colors">
                           Reply
@@ -395,7 +434,7 @@ const Post = ({
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Add Comment */}
                 <div className="flex gap-3 mt-4 pt-3 border-t border-border/50">
                   <Avatar className="w-8 h-8">
@@ -408,7 +447,10 @@ const Post = ({
                       placeholder="Add a comment..."
                       className="flex-1 px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background transition-all"
                     />
-                    <Button size="sm" className="transition-all hover:scale-105">
+                    <Button
+                      size="sm"
+                      className="transition-all hover:scale-105"
+                    >
                       Post
                     </Button>
                   </div>

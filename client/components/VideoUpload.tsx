@@ -2,14 +2,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Upload, 
-  Video, 
-  X, 
-  Play, 
-  FileVideo,
-  Camera
-} from "lucide-react";
+import { Upload, Video, X, Play, FileVideo, Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface VideoUploadProps {
@@ -20,12 +13,12 @@ interface VideoUploadProps {
   className?: string;
 }
 
-const VideoUpload = ({ 
+const VideoUpload = ({
   onVideoSelect,
   onVideoRemove,
   maxSizeMB = 100,
-  acceptedFormats = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'],
-  className = ""
+  acceptedFormats = ["video/mp4", "video/webm", "video/ogg", "video/quicktime"],
+  className = "",
 }: VideoUploadProps) => {
   const { t } = useTranslation();
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
@@ -41,7 +34,9 @@ const VideoUpload = ({
 
     // Validate file type
     if (!acceptedFormats.includes(file.type)) {
-      setError(`Please select a valid video format: ${acceptedFormats.join(', ')}`);
+      setError(
+        `Please select a valid video format: ${acceptedFormats.join(", ")}`,
+      );
       return;
     }
 
@@ -54,17 +49,17 @@ const VideoUpload = ({
 
     setError(null);
     setSelectedVideo(file);
-    
+
     // Create preview URL
     const url = URL.createObjectURL(file);
     setVideoPreview(url);
-    
+
     // Simulate upload progress
     setIsUploading(true);
     setUploadProgress(0);
-    
+
     const interval = setInterval(() => {
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsUploading(false);
@@ -86,10 +81,10 @@ const VideoUpload = ({
     setIsUploading(false);
     setError(null);
     onVideoRemove?.();
-    
+
     // Reset file input
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -98,11 +93,11 @@ const VideoUpload = ({
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   if (selectedVideo && videoPreview) {
@@ -120,7 +115,7 @@ const VideoUpload = ({
               >
                 Your browser does not support the video tag.
               </video>
-              
+
               {/* Remove Button */}
               <Button
                 variant="destructive"
@@ -140,7 +135,7 @@ const VideoUpload = ({
                   {formatFileSize(selectedVideo.size)}
                 </span>
               </div>
-              
+
               {/* Upload Progress */}
               {isUploading && (
                 <div className="space-y-2">
@@ -151,7 +146,7 @@ const VideoUpload = ({
                   <Progress value={uploadProgress} className="h-2" />
                 </div>
               )}
-              
+
               {uploadProgress === 100 && !isUploading && (
                 <div className="text-sm text-green-600 font-medium">
                   ✓ Upload complete
@@ -167,7 +162,7 @@ const VideoUpload = ({
   return (
     <Card className={className}>
       <CardContent className="p-6">
-        <div 
+        <div
           className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
           onClick={openFileDialog}
         >
@@ -177,9 +172,9 @@ const VideoUpload = ({
                 <Video className="w-8 h-8 text-primary" />
               </div>
             </div>
-            
+
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">{t('upload_video')}</h3>
+              <h3 className="text-lg font-semibold">{t("upload_video")}</h3>
               <p className="text-muted-foreground text-sm">
                 Drag and drop a video file here, or click to browse
               </p>
@@ -187,7 +182,7 @@ const VideoUpload = ({
                 Supports MP4, WebM, OGV up to {maxSizeMB}MB
               </p>
             </div>
-            
+
             <div className="flex gap-2 justify-center">
               <Button variant="outline" size="sm" className="gap-2">
                 <Upload className="w-4 h-4" />
@@ -195,7 +190,7 @@ const VideoUpload = ({
               </Button>
               <Button variant="outline" size="sm" className="gap-2">
                 <Camera className="w-4 h-4" />
-                {t('record_video')}
+                {t("record_video")}
               </Button>
             </div>
           </div>
@@ -210,7 +205,7 @@ const VideoUpload = ({
         <input
           ref={fileInputRef}
           type="file"
-          accept={acceptedFormats.join(',')}
+          accept={acceptedFormats.join(",")}
           onChange={handleFileSelect}
           className="hidden"
         />

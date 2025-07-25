@@ -29,7 +29,7 @@ import {
   BookmarkPlus,
   Archive,
   HelpCircle,
-  Shield
+  Shield,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -44,25 +44,35 @@ const Navigation = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains('dark');
+    const isDarkMode = document.documentElement.classList.contains("dark");
     setIsDark(isDarkMode);
   }, []);
 
   const toggleDarkMode = () => {
-    document.documentElement.classList.toggle('dark');
+    document.documentElement.classList.toggle("dark");
     setIsDark(!isDark);
   };
 
   const navItems = [
-    { name: t('home'), icon: Home, path: "/", mobile: true },
-    { name: t('search'), icon: Search, path: "/search", mobile: true },
-    { name: t('reels'), icon: Video, path: "/reels", mobile: true },
-    { name: t('messages'), icon: MessageCircle, path: "/messages", mobile: true },
-    { name: t('notifications'), icon: Heart, path: "/notifications", mobile: false },
-    { name: t('create'), icon: PlusSquare, path: "/create", mobile: false },
-    { name: t('camera'), icon: Camera, path: "/camera", mobile: false },
-    { name: t('settings'), icon: Settings, path: "/settings", mobile: false },
-    { name: t('profile'), icon: User, path: "/profile", mobile: true }
+    { name: t("home"), icon: Home, path: "/", mobile: true },
+    { name: t("search"), icon: Search, path: "/search", mobile: true },
+    { name: t("reels"), icon: Video, path: "/reels", mobile: true },
+    {
+      name: t("messages"),
+      icon: MessageCircle,
+      path: "/messages",
+      mobile: true,
+    },
+    {
+      name: t("notifications"),
+      icon: Heart,
+      path: "/notifications",
+      mobile: false,
+    },
+    { name: t("create"), icon: PlusSquare, path: "/create", mobile: false },
+    { name: t("camera"), icon: Camera, path: "/camera", mobile: false },
+    { name: t("settings"), icon: Settings, path: "/settings", mobile: false },
+    { name: t("profile"), icon: User, path: "/profile", mobile: true },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -74,12 +84,16 @@ const Navigation = () => {
         <div className="p-6">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">S</span>
+              <span className="text-primary-foreground font-bold text-sm">
+                S
+              </span>
             </div>
-            <span className="text-xl font-bold text-foreground">SocialFusion</span>
+            <span className="text-xl font-bold text-foreground">
+              SocialFusion
+            </span>
           </Link>
         </div>
-        
+
         <nav className="flex-1 px-3">
           {navItems.map((item) => (
             <Link
@@ -114,7 +128,11 @@ const Navigation = () => {
               onClick={toggleDarkMode}
               className="w-8 h-8"
             >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {isDark ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
             </Button>
           </div>
         </div>
@@ -125,18 +143,22 @@ const Navigation = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">S</span>
+              <span className="text-primary-foreground font-bold text-sm">
+                S
+              </span>
             </div>
-            <span className="text-xl font-bold text-foreground">SocialFusion</span>
+            <span className="text-xl font-bold text-foreground">
+              SocialFusion
+            </span>
           </Link>
-          
+
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
               className="w-8 h-8"
-              onClick={() => navigate('/camera')}
-              title={t('camera')}
+              onClick={() => navigate("/camera")}
+              title={t("camera")}
             >
               <Camera className="w-4 h-4" />
             </Button>
@@ -144,13 +166,15 @@ const Navigation = () => {
               variant="ghost"
               size="icon"
               className="w-8 h-8 relative"
-              onClick={() => navigate('/messages')}
-              title={t('send')}
+              onClick={() => navigate("/messages")}
+              title={t("send")}
             >
               <Send className="w-4 h-4" />
               {notificationCount > 0 && (
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-bold">{notificationCount}</span>
+                  <span className="text-xs text-white font-bold">
+                    {notificationCount}
+                  </span>
                 </div>
               )}
             </Button>
@@ -161,7 +185,11 @@ const Navigation = () => {
               onClick={toggleDarkMode}
               className="w-8 h-8"
             >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {isDark ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -170,11 +198,15 @@ const Navigation = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem onClick={() => navigate('/notifications')}>
+                <DropdownMenuItem onClick={() => navigate("/notifications")}>
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
-                      {hasNotifications ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
-                      <span>{t('notifications')}</span>
+                      {hasNotifications ? (
+                        <BellRing className="w-4 h-4" />
+                      ) : (
+                        <Bell className="w-4 h-4" />
+                      )}
+                      <span>{t("notifications")}</span>
                     </div>
                     {notificationCount > 0 && (
                       <span className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
@@ -183,13 +215,13 @@ const Navigation = () => {
                     )}
                   </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/create')}>
+                <DropdownMenuItem onClick={() => navigate("/create")}>
                   <PlusSquare className="w-4 h-4 mr-2" />
-                  <span>{t('create')}</span>
+                  <span>{t("create")}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <User className="w-4 h-4 mr-2" />
-                  <span>{t('profile')}</span>
+                  <span>{t("profile")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
@@ -205,9 +237,9 @@ const Navigation = () => {
                   <span>Archive</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate('/settings')}>
+                <DropdownMenuItem onClick={() => navigate("/settings")}>
                   <Settings className="w-4 h-4 mr-2" />
-                  <span>{t('settings')}</span>
+                  <span>{t("settings")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <HelpCircle className="w-4 h-4 mr-2" />
@@ -231,20 +263,20 @@ const Navigation = () => {
       {/* Mobile Bottom Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
         <div className="flex items-center justify-around py-2">
-          {navItems.filter(item => item.mobile).map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
-                isActive(item.path)
-                  ? "text-primary"
-                  : "text-muted-foreground"
-              }`}
-            >
-              <item.icon className="w-6 h-6" />
-              <span className="text-xs font-medium">{item.name}</span>
-            </Link>
-          ))}
+          {navItems
+            .filter((item) => item.mobile)
+            .map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+                  isActive(item.path) ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                <item.icon className="w-6 h-6" />
+                <span className="text-xs font-medium">{item.name}</span>
+              </Link>
+            ))}
         </div>
       </div>
     </>

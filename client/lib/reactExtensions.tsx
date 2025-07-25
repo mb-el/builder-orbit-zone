@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 // Extend React component props to include mobile-specific events
-declare module 'react' {
+declare module "react" {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
     onLongPress?: () => void;
     onDoubleTab?: () => void;
@@ -16,7 +16,7 @@ export const useLongPress = (
     onStart?: () => void;
     onFinish?: () => void;
     onCancel?: () => void;
-  } = {}
+  } = {},
 ) => {
   const { threshold = 400, onStart, onFinish, onCancel } = options;
   const timeout = React.useRef<NodeJS.Timeout>();
@@ -31,15 +31,18 @@ export const useLongPress = (
         if (onFinish) onFinish();
       }, threshold);
     },
-    [callback, threshold, onStart, onFinish]
+    [callback, threshold, onStart, onFinish],
   );
 
   const clear = React.useCallback(
-    (event: React.MouseEvent | React.TouchEvent, shouldTriggerOnCancel = true) => {
+    (
+      event: React.MouseEvent | React.TouchEvent,
+      shouldTriggerOnCancel = true,
+    ) => {
       timeout.current && clearTimeout(timeout.current);
       shouldTriggerOnCancel && onCancel && onCancel();
     },
-    [onCancel]
+    [onCancel],
   );
 
   return {
@@ -52,7 +55,8 @@ export const useLongPress = (
 };
 
 // Enhanced Button component with mobile interactions
-interface MobileButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface MobileButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   onLongPress?: () => void;
   onDoubleTab?: () => void;
   hapticFeedback?: boolean;
@@ -71,19 +75,19 @@ export const MobileButton: React.FC<MobileButtonProps> = ({
     () => {
       if (onLongPress) {
         onLongPress();
-        if (hapticFeedback && 'vibrate' in navigator) {
+        if (hapticFeedback && "vibrate" in navigator) {
           navigator.vibrate(100);
         }
       }
     },
-    { threshold: 500 }
+    { threshold: 500 },
   );
 
   const lastTap = React.useRef<number>(0);
 
   const handleClick = React.useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (hapticFeedback && 'vibrate' in navigator) {
+      if (hapticFeedback && "vibrate" in navigator) {
         navigator.vibrate(30);
       }
 
@@ -92,7 +96,7 @@ export const MobileButton: React.FC<MobileButtonProps> = ({
         const tapLength = currentTime - lastTap.current;
         if (tapLength < 300 && tapLength > 0) {
           onDoubleTab();
-          if (hapticFeedback && 'vibrate' in navigator) {
+          if (hapticFeedback && "vibrate" in navigator) {
             navigator.vibrate([50, 50, 50]);
           }
           return;
@@ -104,15 +108,11 @@ export const MobileButton: React.FC<MobileButtonProps> = ({
         onClick(e);
       }
     },
-    [onClick, onDoubleTab, hapticFeedback]
+    [onClick, onDoubleTab, hapticFeedback],
   );
 
   return (
-    <button
-      {...props}
-      {...longPressEvents}
-      onClick={handleClick}
-    >
+    <button {...props} {...longPressEvents} onClick={handleClick}>
       {children}
     </button>
   );
@@ -137,12 +137,12 @@ export const MobileInput: React.FC<MobileInputProps> = ({
       if (onMobileFocus) onMobileFocus();
 
       // Auto-scroll to input on mobile when keyboard opens
-      if (autoScrollOnFocus && 'ontouchstart' in window) {
+      if (autoScrollOnFocus && "ontouchstart" in window) {
         setTimeout(() => {
           if (inputRef.current) {
             inputRef.current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center'
+              behavior: "smooth",
+              block: "center",
             });
           }
         }, 300);
@@ -150,7 +150,7 @@ export const MobileInput: React.FC<MobileInputProps> = ({
 
       if (onFocus) onFocus(e);
     },
-    [onFocus, onMobileFocus, autoScrollOnFocus]
+    [onFocus, onMobileFocus, autoScrollOnFocus],
   );
 
   return (
@@ -186,7 +186,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   onReply,
   onLongPress,
   children,
-  className = ''
+  className = "",
 }) => {
   const longPressEvents = useLongPress(
     () => {
@@ -194,33 +194,33 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         onLongPress();
       }
     },
-    { threshold: 500 }
+    { threshold: 500 },
   );
 
   const copyToClipboard = React.useCallback(async () => {
     try {
       await navigator.clipboard.writeText(message);
-      if ('vibrate' in navigator) {
+      if ("vibrate" in navigator) {
         navigator.vibrate([50, 50, 50]);
       }
       if (onCopy) onCopy();
     } catch (err) {
       // Fallback for older browsers
-      const textArea = document.createElement('textarea');
+      const textArea = document.createElement("textarea");
       textArea.value = message;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
       document.body.appendChild(textArea);
       textArea.focus();
       textArea.select();
-      
+
       try {
-        document.execCommand('copy');
+        document.execCommand("copy");
         if (onCopy) onCopy();
       } catch (err) {
-        console.error('Failed to copy message');
+        console.error("Failed to copy message");
       }
-      
+
       document.body.removeChild(textArea);
     }
   }, [message, onCopy]);
@@ -252,7 +252,7 @@ const MobileContext = React.createContext<MobileContextValue>({
   hapticFeedback: true,
   autoScroll: true,
   keyboardHeight: 0,
-  isKeyboardOpen: false
+  isKeyboardOpen: false,
 });
 
 export const useMobileContext = () => React.useContext(MobileContext);
@@ -262,11 +262,7 @@ export const MobileProvider: React.FC<{
   children: React.ReactNode;
   hapticFeedback?: boolean;
   autoScroll?: boolean;
-}> = ({ 
-  children, 
-  hapticFeedback = true, 
-  autoScroll = true 
-}) => {
+}> = ({ children, hapticFeedback = true, autoScroll = true }) => {
   const [keyboardHeight, setKeyboardHeight] = React.useState(0);
   const [isKeyboardOpen, setIsKeyboardOpen] = React.useState(false);
 
@@ -276,23 +272,30 @@ export const MobileProvider: React.FC<{
       setKeyboardHeight(e.detail.height || 0);
     };
 
-    window.addEventListener('keyboardToggle', handleKeyboardToggle as EventListener);
-    
+    window.addEventListener(
+      "keyboardToggle",
+      handleKeyboardToggle as EventListener,
+    );
+
     return () => {
-      window.removeEventListener('keyboardToggle', handleKeyboardToggle as EventListener);
+      window.removeEventListener(
+        "keyboardToggle",
+        handleKeyboardToggle as EventListener,
+      );
     };
   }, []);
 
-  const value = React.useMemo(() => ({
-    hapticFeedback,
-    autoScroll,
-    keyboardHeight,
-    isKeyboardOpen
-  }), [hapticFeedback, autoScroll, keyboardHeight, isKeyboardOpen]);
+  const value = React.useMemo(
+    () => ({
+      hapticFeedback,
+      autoScroll,
+      keyboardHeight,
+      isKeyboardOpen,
+    }),
+    [hapticFeedback, autoScroll, keyboardHeight, isKeyboardOpen],
+  );
 
   return (
-    <MobileContext.Provider value={value}>
-      {children}
-    </MobileContext.Provider>
+    <MobileContext.Provider value={value}>{children}</MobileContext.Provider>
   );
 };

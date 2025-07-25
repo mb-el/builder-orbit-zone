@@ -14,7 +14,7 @@ interface PlaceholderPageProps {
 const PlaceholderPage = ({
   title,
   description,
-  icon = <Construction className="w-12 h-12 text-muted-foreground" />
+  icon = <Construction className="w-12 h-12 text-muted-foreground" />,
 }: PlaceholderPageProps) => {
   const { t } = useTranslation();
   return (
@@ -22,9 +22,7 @@ const PlaceholderPage = ({
       <div className="max-w-2xl mx-auto px-4 py-12">
         <Card>
           <CardContent className="p-12 text-center">
-            <div className="mb-6 flex justify-center">
-              {icon}
-            </div>
+            <div className="mb-6 flex justify-center">{icon}</div>
             <h1 className="text-2xl font-bold mb-4">{title}</h1>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
               {description}
@@ -33,12 +31,10 @@ const PlaceholderPage = ({
               <Link to="/">
                 <Button variant="outline" className="gap-2">
                   <ArrowLeft className="w-4 h-4" />
-                  {t('back_to_home')}
+                  {t("back_to_home")}
                 </Button>
               </Link>
-              <Button>
-                {t('continue_building')}
-              </Button>
+              <Button>{t("continue_building")}</Button>
             </div>
           </CardContent>
         </Card>
