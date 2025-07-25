@@ -587,7 +587,7 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted'
                     }`}
-                    onLongPress={() => setSelectedMessage(message.id)}
+                    {...useLongPress(() => setSelectedMessage(message.id), { threshold: 500 })}
                   >
                     {message.type === 'text' && (
                       <p className="text-sm select-text">{message.content}</p>
