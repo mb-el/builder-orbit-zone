@@ -1,12 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { 
-  Home, 
-  Search, 
-  MessageCircle, 
-  Heart, 
-  PlusSquare, 
+import {
+  Home,
+  Search,
+  MessageCircle,
+  Heart,
+  PlusSquare,
   User,
   Video,
   Menu,
@@ -14,15 +21,26 @@ import {
   Sun,
   Camera,
   Send,
-  Settings
+  Settings,
+  LogOut,
+  Bell,
+  BellRing,
+  Users,
+  BookmarkPlus,
+  Archive,
+  HelpCircle,
+  Shield
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 const Navigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
+  const [hasNotifications, setHasNotifications] = useState(true);
+  const [notificationCount, setNotificationCount] = useState(3);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -113,11 +131,28 @@ const Navigation = () => {
           </Link>
           
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="w-8 h-8">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-8 h-8"
+              onClick={() => navigate('/camera')}
+              title={t('camera')}
+            >
               <Camera className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="w-8 h-8">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-8 h-8 relative"
+              onClick={() => navigate('/messages')}
+              title={t('send')}
+            >
               <Send className="w-4 h-4" />
+              {notificationCount > 0 && (
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-xs text-white font-bold">{notificationCount}</span>
+                </div>
+              )}
             </Button>
             <LanguageSwitcher />
             <Button
@@ -128,9 +163,67 @@ const Navigation = () => {
             >
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </Button>
-            <Button variant="ghost" size="icon" className="w-8 h-8">
-              <Menu className="w-4 h-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="w-8 h-8">
+                  <Menu className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => navigate('/notifications')}>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                      {hasNotifications ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+                      <span>{t('notifications')}</span>
+                    </div>
+                    {notificationCount > 0 && (
+                      <span className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                        {notificationCount}
+                      </span>
+                    )}
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/create')}>
+                  <PlusSquare className="w-4 h-4 mr-2" />
+                  <span>{t('create')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                  <User className="w-4 h-4 mr-2" />
+                  <span>{t('profile')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <BookmarkPlus className="w-4 h-4 mr-2" />
+                  <span>Saved Posts</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Users className="w-4 h-4 mr-2" />
+                  <span>Friends</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Archive className="w-4 h-4 mr-2" />
+                  <span>Archive</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/settings')}>
+                  <Settings className="w-4 h-4 mr-2" />
+                  <span>{t('settings')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <HelpCircle className="w-4 h-4 mr-2" />
+                  <span>Help & Support</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Shield className="w-4 h-4 mr-2" />
+                  <span>Privacy & Safety</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-red-600">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  <span>Log Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
