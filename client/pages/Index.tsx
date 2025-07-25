@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Dot, Users, TrendingUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Index() {
+  const { t } = useTranslation();
   const samplePosts = [
     {
       id: 1,
@@ -99,7 +101,7 @@ export default function Index() {
             {/* Load More */}
             <div className="flex justify-center mt-8">
               <Button variant="outline" className="px-8">
-                Load More Posts
+                {t('load_more_posts')}
               </Button>
             </div>
           </div>
@@ -110,9 +112,9 @@ export default function Index() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-foreground">Suggested for you</h3>
+                  <h3 className="font-semibold text-foreground">{t('suggested_for_you')}</h3>
                   <Button variant="link" size="sm" className="text-xs p-0 h-auto">
-                    See All
+                    {t('see_all')}
                   </Button>
                 </div>
                 <div className="space-y-3">
@@ -133,7 +135,7 @@ export default function Index() {
                         variant={user.isFollowing ? "outline" : "default"}
                         className="text-xs px-4"
                       >
-                        {user.isFollowing ? "Following" : "Follow"}
+                        {user.isFollowing ? t('following') : t('follow')}
                       </Button>
                     </div>
                   ))}
@@ -146,7 +148,7 @@ export default function Index() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <TrendingUp className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-foreground">Trending</h3>
+                  <h3 className="font-semibold text-foreground">{t('trending')}</h3>
                 </div>
                 <div className="space-y-3">
                   {trendingTopics.map((topic) => (
@@ -162,23 +164,23 @@ export default function Index() {
             {/* Quick Stats */}
             <Card>
               <CardContent className="p-4">
-                <h3 className="font-semibold text-foreground mb-4">Your Activity</h3>
+                <h3 className="font-semibold text-foreground mb-4">{t('your_activity')}</h3>
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
                     <p className="text-2xl font-bold text-primary">127</p>
-                    <p className="text-xs text-muted-foreground">Posts</p>
+                    <p className="text-xs text-muted-foreground">{t('posts')}</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-primary">2.4k</p>
-                    <p className="text-xs text-muted-foreground">Followers</p>
+                    <p className="text-xs text-muted-foreground">{t('followers')}</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-primary">1.8k</p>
-                    <p className="text-xs text-muted-foreground">Following</p>
+                    <p className="text-xs text-muted-foreground">{t('following_stat')}</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-primary">12.5k</p>
-                    <p className="text-xs text-muted-foreground">Likes</p>
+                    <p className="text-xs text-muted-foreground">{t('likes')}</p>
                   </div>
                 </div>
               </CardContent>
