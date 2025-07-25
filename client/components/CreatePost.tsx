@@ -30,13 +30,14 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { 
-  uploadPostWithMedia, 
-  MediaFile, 
+import {
+  uploadPostWithMedia,
+  MediaFile,
   validateFiles,
   compressImage,
   generateVideoThumbnail
 } from "@/lib/firebaseService";
+import { useAuthState, getCurrentUser } from "@/hooks/useAuth";
 
 interface CreatePostProps {
   onPostCreated?: (postId: string) => void;
