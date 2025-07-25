@@ -11,9 +11,7 @@ if (!container) {
 }
 
 // Global root instance to prevent multiple createRoot calls
-declare global {
-  var __react_root__: ReturnType<typeof createRoot> | undefined;
-}
+// (TypeScript declaration is in vite-env.d.ts)
 
 // Function to get or create the root
 const getRoot = () => {
