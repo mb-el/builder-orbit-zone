@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { auth, db, areFirebaseServicesAvailable } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -113,6 +113,17 @@ const Registration: React.FC = () => {
     setLoading(true);
 
     try {
+      // Check if Firebase is properly configured
+      if (!areFirebaseServicesAvailable() || !auth || !db) {
+        // Demo mode - simulate successful registration
+        toast({
+          title: t('registration.successTitle'),
+          description: t('registration.successMessage') + ' (Demo Mode)',
+        });
+        navigate('/');
+        return;
+      }
+
       // Create user account
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -150,20 +161,27 @@ const Registration: React.FC = () => {
       navigate('/');
     } catch (error: any) {
       console.error('Signup error:', error);
-      
+
       // Handle specific Firebase errors
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          setError(t('registration.errorEmailExists'));
-          break;
-        case 'auth/weak-password':
-          setError(t('registration.errorWeakPassword'));
-          break;
-        case 'auth/invalid-email':
-          setError(t('registration.errorInvalidEmail'));
-          break;
-        default:
-          setError(t('registration.errorGeneral'));
+      if (error.message?.includes('Network connection failed')) {
+        setError('Network connection failed. Please check your internet connection and try again.');
+      } else {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            setError(t('registration.errorEmailExists'));
+            break;
+          case 'auth/weak-password':
+            setError(t('registration.errorWeakPassword'));
+            break;
+          case 'auth/invalid-email':
+            setError(t('registration.errorInvalidEmail'));
+            break;
+          case 'auth/network-request-failed':
+            setError('Network connection failed. Please check your internet connection and Firebase configuration.');
+            break;
+          default:
+            setError(t('registration.errorGeneral'));
+        }
       }
     } finally {
       setLoading(false);
@@ -179,8 +197,19 @@ const Registration: React.FC = () => {
     setLoading(true);
 
     try {
+      // Check if Firebase is properly configured
+      if (!areFirebaseServicesAvailable() || !auth) {
+        // Demo mode - simulate successful login
+        toast({
+          title: t('registration.loginSuccessTitle'),
+          description: t('registration.loginSuccessMessage') + ' (Demo Mode)',
+        });
+        navigate('/');
+        return;
+      }
+
       await signInWithEmailAndPassword(auth, loginData.email, loginData.password);
-      
+
       toast({
         title: t('registration.loginSuccessTitle'),
         description: t('registration.loginSuccessMessage'),
@@ -189,19 +218,26 @@ const Registration: React.FC = () => {
       navigate('/');
     } catch (error: any) {
       console.error('Login error:', error);
-      
+
       // Handle specific Firebase errors
-      switch (error.code) {
-        case 'auth/user-not-found':
-        case 'auth/wrong-password':
-        case 'auth/invalid-credential':
-          setError(t('registration.errorInvalidCredentials'));
-          break;
-        case 'auth/too-many-requests':
-          setError(t('registration.errorTooManyAttempts'));
-          break;
-        default:
-          setError(t('registration.errorGeneral'));
+      if (error.message?.includes('Network connection failed')) {
+        setError('Network connection failed. Please check your internet connection and try again.');
+      } else {
+        switch (error.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+          case 'auth/invalid-credential':
+            setError(t('registration.errorInvalidCredentials'));
+            break;
+          case 'auth/too-many-requests':
+            setError(t('registration.errorTooManyAttempts'));
+            break;
+          case 'auth/network-request-failed':
+            setError('Network connection failed. Please check your internet connection and Firebase configuration.');
+            break;
+          default:
+            setError(t('registration.errorGeneral'));
+        }
       }
     } finally {
       setLoading(false);
