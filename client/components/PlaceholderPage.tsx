@@ -28,4 +28,21 @@ const PlaceholderPage = ({
               {description}
             </p>
             <div className="flex gap-4 justify-center">
-              <Link to="/">\n                <Button variant="outline" className="gap-2">\n                  <ArrowLeft className="w-4 h-4" />\n                  Back to Home\n                </Button>\n              </Link>\n              <Button>\n                Continue Building\n              </Button>\n            </div>\n          </CardContent>\n        </Card>\n      </div>\n    </Layout>\n  );\n};\n\nexport default PlaceholderPage;
+              <Link to="/">
+                <Button variant="outline" className="gap-2">
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to Home
+                </Button>
+              </Link>
+              <Button>
+                Continue Building
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </Layout>
+  );
+};
+
+export default PlaceholderPage;
