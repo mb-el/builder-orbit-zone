@@ -34,6 +34,8 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useAuthState } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 
 const Navigation = () => {
   const location = useLocation();
@@ -42,6 +44,7 @@ const Navigation = () => {
   const [hasNotifications, setHasNotifications] = useState(true);
   const [notificationCount, setNotificationCount] = useState(3);
   const { t } = useTranslation();
+  const { user, signOut } = useAuthState();
 
   useEffect(() => {
     const isDarkMode = document.documentElement.classList.contains("dark");
@@ -250,9 +253,28 @@ const Navigation = () => {
                   <span>Privacy & Safety</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem
+                  className="text-red-600 cursor-pointer"
+                  onClick={async () => {
+                    try {
+                      await signOut();
+                      toast({
+                        title: t('registration.logout'),
+                        description: "You have been signed out successfully.",
+                      });
+                      navigate('/auth');
+                    } catch (error) {
+                      console.error('Logout error:', error);
+                      toast({
+                        title: "Error",
+                        description: "Failed to sign out. Please try again.",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                >
                   <LogOut className="w-4 h-4 mr-2" />
-                  <span>Log Out</span>
+                  <span>{t('registration.logout')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
