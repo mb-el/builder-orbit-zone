@@ -12,12 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import VideoPlayer from "./VideoPlayer";
-import { 
-  Send, 
-  Smile, 
-  Paperclip, 
-  Camera, 
-  Mic, 
+import {
+  Send,
+  Smile,
+  Paperclip,
+  Camera,
+  Mic,
   MicOff,
   Phone,
   Video,
@@ -35,6 +35,8 @@ import {
   Edit3
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useMobileKeyboard, useMessageInteractions, useMobileInputFocus } from "@/hooks/useMobileInteractions";
+import { useLongPress } from "@/lib/reactExtensions";
 
 interface Message {
   id: string;
