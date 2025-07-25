@@ -1,1 +1,7 @@
 /// <reference types="vite/client" />
+VITE_FIREBASE_API_KEY=أدخل_مفتاح_API_هنا
+VITE_FIREBASE_AUTH_DOMAIN=xxxx.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=xxxx
+VITE_FIREBASE_STORAGE_BUCKET=xxxx.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=xxxx
+VITE_FIREBASE_APP_ID=xxxx
