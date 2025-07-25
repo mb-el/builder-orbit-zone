@@ -151,8 +151,8 @@ const resources = {
       'search_discover_desc': 'ابحث عن الأصدقاء والمحتوى الرائج والهاشتاغات واكتشف منشئي محتوى جدد. ستساعدك ميزة البحث القوية هذه في استكشاف كل ما يقدمه SocialFusion.',
       'messages_chat_desc': 'المراسلة الفورية مع دعم النصوص والرسائل الصوتية والصور ومقاطع الفيديو والمكالمات الصوتية/المرئية. تواصل مع الأصدقاء والعائلة فوراً.',
       'reels_videos_desc': 'أنشئ واكتشف مقاطع فيديو قصيرة باستخدام أدوات تحرير قوية وتأثيرات وفلاتر. شارك إبداعك مع العالم من خلال محتوى فيديو جذاب.',
-      'notifications_desc': 'ابق على اطلاع بالإعجابات والتعليقات والمتابعات والإشارات وجميع أنشطتك الاجتماعية. لا تفوت أي تفاعل مهم مع إشعارات الدف��.',
-      'create_content_desc': 'شارك لحظاتك بالمنشورات والقصص والريلز والبث المباشر. استخدم أدوات التحرير القوية والفلاتر والتأثيرات لإحياء محتواك.',
+      'notifications_desc': 'ابق على اطلاع بالإعجابات والتعليقات والمتابعات والإشارات وجميع أنشطتك الاجتماعية. لا تفوت أي تفاعل مهم مع إشعارات الدفع.',
+      'create_content_desc': 'شارك لحظاتك بالمنشورات والقصص والريلز وا��بث المباشر. استخدم أدوات التحرير القوية والفلاتر والتأثيرات لإحياء محتواك.',
       'profile_desc': 'أدر ملفك الشخصي واعرض منشوراتك ونشاطك وخصص إعداداتك واطلع على تحليلات متابعيك. مساحتك الشخصية على SocialFusion.',
       
       // Camera & Media
@@ -259,6 +259,40 @@ const resources = {
       'upload_video': 'Télécharger une vidéo',
       'camera': 'Appareil photo',
       'gallery': 'Galerie',
+      'photo': 'Photo',
+      'video': 'Vidéo',
+      'close': 'Fermer',
+
+      // Feelings
+      'feeling': 'Sentiment',
+      'feeling_happy': 'Heureux',
+      'feeling_laughing': 'Rieur',
+      'feeling_in_love': 'Amoureux',
+      'feeling_cool': 'Cool',
+      'feeling_grateful': 'Reconnaissant',
+      'feeling_sleepy': 'Endormi',
+      'feeling_celebrating': 'En fête',
+      'feeling_strong': 'Fort',
+      'feeling_added': 'Sentiment {{feeling}} ajouté à votre publication!',
+
+      // Location & Friends
+      'location': 'Lieu',
+      'location_added': 'Lieu ajouté à votre publication!',
+      'tag_friends': 'Identifier des amis',
+      'friends': 'amis',
+      'friend_tagged': '{{name}} identifié dans votre publication!',
+
+      // Privacy
+      'public': 'Public',
+      'friends_only': 'Amis seulement',
+      'only_me': 'Moi seulement',
+      'privacy_set': 'Confidentialité définie sur {{privacy}}',
+
+      // Post submission
+      'posting': 'Publication...',
+      'post_empty_error': 'Veuillez ajouter du contenu ou des médias à votre publication',
+      'post_created_success': 'Publication créée avec succès!',
+      'post_creation_error': 'Échec de la création de la publication. Veuillez réessayer.',
     }
   }
 };
