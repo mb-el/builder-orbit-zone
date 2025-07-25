@@ -65,6 +65,40 @@ const resources = {
       'upload_video': 'Upload Video',
       'camera': 'Camera',
       'gallery': 'Gallery',
+      'photo': 'Photo',
+      'video': 'Video',
+      'close': 'Close',
+
+      // Feelings
+      'feeling': 'Feeling',
+      'feeling_happy': 'Happy',
+      'feeling_laughing': 'Laughing',
+      'feeling_in_love': 'In love',
+      'feeling_cool': 'Cool',
+      'feeling_grateful': 'Grateful',
+      'feeling_sleepy': 'Sleepy',
+      'feeling_celebrating': 'Celebrating',
+      'feeling_strong': 'Strong',
+      'feeling_added': 'Feeling {{feeling}} added to your post!',
+
+      // Location & Friends
+      'location': 'Location',
+      'location_added': 'Location added to your post!',
+      'tag_friends': 'Tag Friends',
+      'friends': 'friends',
+      'friend_tagged': '{{name}} tagged in your post!',
+
+      // Privacy
+      'public': 'Public',
+      'friends_only': 'Friends only',
+      'only_me': 'Only me',
+      'privacy_set': 'Privacy set to {{privacy}}',
+
+      // Post submission
+      'posting': 'Posting...',
+      'post_empty_error': 'Please add some content or media to your post',
+      'post_created_success': 'Post created successfully!',
+      'post_creation_error': 'Failed to create post. Please try again.',
     }
   },
   ar: {
@@ -119,7 +153,7 @@ const resources = {
       'reels_videos_desc': 'أنشئ واكتشف مقاطع فيديو قصيرة باستخدام أدوات تحرير قوية وتأثيرات وفلاتر. شارك إبداعك مع العالم من خلال محتوى فيديو جذاب.',
       'notifications_desc': 'ابق على اطلاع بالإعجابات والتعليقات والمتابعات والإشارات وجميع أنشطتك الاجتماعية. لا تفوت أي تفاعل مهم مع إشعارات الدفع.',
       'create_content_desc': 'شارك لحظاتك بالمنشورات والقصص والريلز والبث المباشر. استخدم أدوات التحرير القوية والفلاتر والتأثيرات لإحياء محتواك.',
-      'profile_desc': 'أدر ملفك الشخصي واعرض منشوراتك ونشاطك وخصص إعداداتك واطلع على تحليلات متابعيك. مساحتك الشخصية على SocialFusion.',
+      'profile_desc': 'أدر ملفك الشخصي واعرض من��وراتك ونشاطك وخصص إعداداتك واطلع على تحليلات متابعيك. مساحتك الشخصية على SocialFusion.',
       
       // Camera & Media
       'take_photo': 'التقاط صورة',
