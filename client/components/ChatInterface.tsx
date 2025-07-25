@@ -72,6 +72,9 @@ interface ChatInterfaceProps {
 
 const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
   const { t } = useTranslation();
+  const { copyMessage } = useMessageInteractions();
+  const { handleInputFocus } = useMobileInputFocus();
+  useMobileKeyboard();
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
