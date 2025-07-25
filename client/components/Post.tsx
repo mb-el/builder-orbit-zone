@@ -1,15 +1,17 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Heart, 
-  MessageCircle, 
-  Share, 
-  Bookmark, 
+import VideoPlayer from "./VideoPlayer";
+import {
+  Heart,
+  MessageCircle,
+  Share,
+  Bookmark,
   MoreHorizontal,
   Play
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface PostProps {
   id: number;
@@ -29,18 +31,19 @@ interface PostProps {
   isSaved?: boolean;
 }
 
-const Post = ({ 
-  username, 
-  avatar, 
-  location, 
-  timeAgo, 
-  content, 
-  media, 
-  likes, 
-  comments, 
-  isLiked = false, 
-  isSaved = false 
+const Post = ({
+  username,
+  avatar,
+  location,
+  timeAgo,
+  content,
+  media,
+  likes,
+  comments,
+  isLiked = false,
+  isSaved = false
 }: PostProps) => {
+  const { t } = useTranslation();
   const [liked, setLiked] = useState(isLiked);
   const [saved, setSaved] = useState(isSaved);
   const [likesCount, setLikesCount] = useState(likes);
@@ -84,27 +87,21 @@ const Post = ({
         {media && (
           <div className="relative bg-muted">
             {media.type === 'image' ? (
-              <img 
-                src={media.url} 
+              <img
+                src={media.url}
                 alt="Post content"
                 className="w-full h-auto max-h-[600px] object-cover"
                 style={{ aspectRatio: media.aspectRatio || 'auto' }}
               />
             ) : (
-              <div className="relative">
-                <video 
-                  className="w-full h-auto max-h-[600px] object-cover"
-                  poster={media.url}
-                  style={{ aspectRatio: media.aspectRatio || '16/9' }}
-                >
-                  <source src={media.url} type="video/mp4" />
-                </video>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 bg-black/50 rounded-full flex items-center justify-center">
-                    <Play className="w-8 h-8 text-white ml-1" />
-                  </div>
-                </div>
-              </div>
+              <VideoPlayer
+                src={media.url}
+                poster={media.url}
+                className="w-full"
+                showControls={true}
+                autoPlay={false}
+                muted={true}
+              />
             )}
           </div>
         )}
@@ -145,7 +142,7 @@ const Post = ({
           {/* Post Stats */}
           <div className="space-y-2">
             <div className="text-sm font-semibold">
-              {likesCount.toLocaleString()} likes
+              {likesCount.toLocaleString()} {t('likes')}
             </div>
             
             {/* Post Content */}
@@ -156,7 +153,7 @@ const Post = ({
             
             {/* Comments Link */}
             <button className="text-sm text-muted-foreground hover:underline">
-              View all {comments} comments
+              {t('view_all_comments', { count: comments })}
             </button>
           </div>
         </div>
