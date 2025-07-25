@@ -5,15 +5,23 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "./ImageUpload";
 import VideoUpload from "./VideoUpload";
 import CameraCapture from "./CameraCapture";
-import { 
-  Image, 
-  Video, 
-  Smile, 
-  MapPin, 
+import {
+  Image,
+  Video,
+  Smile,
+  MapPin,
   Users,
   Camera,
-  X
+  X,
+  Globe
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -26,6 +34,61 @@ const CreatePost = () => {
   const [showCamera, setShowCamera] = useState(false);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
+  const [selectedFeeling, setSelectedFeeling] = useState<string | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [taggedFriends, setTaggedFriends] = useState<string[]>([]);
+  const [privacySetting, setPrivacySetting] = useState<'public' | 'friends' | 'private'>('public');
+
+  const feelings = [
+    { icon: '😊', label: 'Happy' },
+    { icon: '😂', label: 'Laughing' },
+    { icon: '😍', label: 'In love' },
+    { icon: '😎', label: 'Cool' },
+    { icon: '🤗', label: 'Grateful' },
+    { icon: '😴', label: 'Sleepy' },
+    { icon: '🎉', label: 'Celebrating' },
+    { icon: '💪', label: 'Strong' },
+  ];
+
+  const handleFeelingSelect = (feeling: string) => {
+    setSelectedFeeling(feeling);
+    toast({
+      description: `Feeling ${feeling} added to your post! 😊`,
+      duration: 2000,
+    });
+  };
+
+  const handleLocationSelect = () => {
+    // Simulate location selection
+    const locations = ['New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Miami, FL'];
+    const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+    setSelectedLocation(randomLocation);
+    toast({
+      description: `Location "${randomLocation}" added to your post! 📍`,
+      duration: 2000,
+    });
+  };
+
+  const handleTagFriends = () => {
+    // Simulate friend tagging
+    const friends = ['Alice Wonder', 'Bob Creator', 'Emma Travels'];
+    const randomFriend = friends[Math.floor(Math.random() * friends.length)];
+    if (!taggedFriends.includes(randomFriend)) {
+      setTaggedFriends([...taggedFriends, randomFriend]);
+      toast({
+        description: `${randomFriend} tagged in your post! 👥`,
+        duration: 2000,
+      });
+    }
+  };
+
+  const handlePrivacyChange = (privacy: 'public' | 'friends' | 'private') => {
+    setPrivacySetting(privacy);
+    toast({
+      description: `Privacy set to ${privacy}`,
+      duration: 1500,
+    });
+  };
 
   return (
     <Card className="mb-6">
@@ -76,17 +139,45 @@ const CreatePost = () => {
                     <Camera className="w-5 h-5 mr-2" />
                     {t('camera')}
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-yellow-600 hover:text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-950">
-                    <Smile className="w-5 h-5 mr-2" />
-                    Feeling
-                  </Button>
-                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="text-yellow-600 hover:text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-950">
+                        <Smile className="w-5 h-5 mr-2" />
+                        {selectedFeeling ? `Feeling ${selectedFeeling}` : 'Feeling'}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-48">
+                      {feelings.map((feeling) => (
+                        <DropdownMenuItem
+                          key={feeling.label}
+                          onClick={() => handleFeelingSelect(feeling.label)}
+                          className="cursor-pointer"
+                        >
+                          <span className="text-lg mr-2">{feeling.icon}</span>
+                          <span>{feeling.label}</span>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                    onClick={handleLocationSelect}
+                  >
                     <MapPin className="w-5 h-5 mr-2" />
-                    Location
+                    {selectedLocation || 'Location'}
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950">
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-purple-600 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950"
+                    onClick={handleTagFriends}
+                  >
                     <Users className="w-5 h-5 mr-2" />
-                    Tag Friends
+                    {taggedFriends.length > 0 ? `${taggedFriends.length} friend(s)` : 'Tag Friends'}
                   </Button>
                 </div>
 
@@ -144,11 +235,87 @@ const CreatePost = () => {
                 )}
                 
                 {/* Post Actions */}
-                <div className="flex items-center justify-between pt-2 border-t">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-muted-foreground">Public</span>
+                {/* Post Meta Info */}
+                {(selectedFeeling || selectedLocation || taggedFriends.length > 0) && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {selectedFeeling && (
+                      <div className="flex items-center gap-1 bg-yellow-100 dark:bg-yellow-900/20 px-2 py-1 rounded-full text-xs">
+                        <Smile className="w-3 h-3" />
+                        <span>Feeling {selectedFeeling}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="w-4 h-4 p-0 hover:bg-transparent"
+                          onClick={() => setSelectedFeeling(null)}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    )}
+                    {selectedLocation && (
+                      <div className="flex items-center gap-1 bg-red-100 dark:bg-red-900/20 px-2 py-1 rounded-full text-xs">
+                        <MapPin className="w-3 h-3" />
+                        <span>{selectedLocation}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="w-4 h-4 p-0 hover:bg-transparent"
+                          onClick={() => setSelectedLocation(null)}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    )}
+                    {taggedFriends.map((friend) => (
+                      <div key={friend} className="flex items-center gap-1 bg-purple-100 dark:bg-purple-900/20 px-2 py-1 rounded-full text-xs">
+                        <Users className="w-3 h-3" />
+                        <span>{friend}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="w-4 h-4 p-0 hover:bg-transparent"
+                          onClick={() => setTaggedFriends(taggedFriends.filter(f => f !== friend))}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    ))}
                   </div>
+                )}
+
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${
+                          privacySetting === 'public' ? 'bg-green-500' :
+                          privacySetting === 'friends' ? 'bg-blue-500' : 'bg-gray-500'
+                        }`}></div>
+                        <span className="text-sm text-muted-foreground capitalize">{privacySetting}</span>
+                        <Globe className="w-3 h-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => handlePrivacyChange('public')} className="cursor-pointer">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span>Public</span>
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handlePrivacyChange('friends')} className="cursor-pointer">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          <span>Friends only</span>
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handlePrivacyChange('private')} className="cursor-pointer">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+                          <span>Only me</span>
+                        </div>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <div className="flex gap-2">
                     <Button 
                       variant="outline" 
@@ -158,6 +325,9 @@ const CreatePost = () => {
                         setContent("");
                         setSelectedImages([]);
                         setSelectedVideo(null);
+                        setSelectedFeeling(null);
+                        setSelectedLocation(null);
+                        setTaggedFriends([]);
                       }}
                     >
                       {t('cancel')}
