@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Construction, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface PlaceholderPageProps {
   title: string;
@@ -10,11 +11,12 @@ interface PlaceholderPageProps {
   icon?: React.ReactNode;
 }
 
-const PlaceholderPage = ({ 
-  title, 
-  description, 
-  icon = <Construction className="w-12 h-12 text-muted-foreground" /> 
+const PlaceholderPage = ({
+  title,
+  description,
+  icon = <Construction className="w-12 h-12 text-muted-foreground" />
 }: PlaceholderPageProps) => {
+  const { t } = useTranslation();
   return (
     <Layout>
       <div className="max-w-2xl mx-auto px-4 py-12">
@@ -31,11 +33,11 @@ const PlaceholderPage = ({
               <Link to="/">
                 <Button variant="outline" className="gap-2">
                   <ArrowLeft className="w-4 h-4" />
-                  Back to Home
+                  {t('back_to_home')}
                 </Button>
               </Link>
               <Button>
-                Continue Building
+                {t('continue_building')}
               </Button>
             </div>
           </CardContent>
