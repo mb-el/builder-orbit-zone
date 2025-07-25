@@ -4,6 +4,8 @@ import {
   User,
   onAuthStateChanged,
   signInAnonymously,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
 } from "firebase/auth";
 
@@ -11,6 +13,8 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInAnonymous: () => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string) => Promise<User>;
   signOut: () => Promise<void>;
 }
 
@@ -18,6 +22,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   signInAnonymous: async () => {},
+  signInWithEmail: async () => {},
+  signUpWithEmail: async () => ({} as User),
   signOut: async () => {},
 });
 
@@ -51,6 +57,25 @@ export const useAuthState = () => {
     }
   };
 
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error("Email sign-in failed:", error);
+      throw error;
+    }
+  };
+
+  const signUpWithEmail = async (email: string, password: string) => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      return result.user;
+    } catch (error) {
+      console.error("Email sign-up failed:", error);
+      throw error;
+    }
+  };
+
   const signOut = async () => {
     try {
       await firebaseSignOut(auth);
@@ -64,6 +89,8 @@ export const useAuthState = () => {
     user,
     loading,
     signInAnonymous,
+    signInWithEmail,
+    signUpWithEmail,
     signOut,
   };
 };
