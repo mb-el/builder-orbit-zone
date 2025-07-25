@@ -144,37 +144,37 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-card border-b border-border z-50">
-        <div className="flex items-center justify-between px-3 py-2.5">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-card border-b border-border z-50 no-scroll-x">
+        <div className="flex items-center justify-between px-2 mobile-xs:px-3 py-2 mobile-sm:py-2.5">
           {/* Logo - Optimized for small screens */}
-          <Link to="/" className="flex items-center gap-1.5 min-w-0 flex-shrink">
-            <div className="w-7 h-7 bg-primary rounded-md flex items-center justify-center flex-shrink-0">
-              <span className="text-primary-foreground font-bold text-xs">
+          <Link to="/" className="flex items-center gap-1 mobile-sm:gap-1.5 min-w-0 flex-shrink">
+            <div className="w-6 h-6 mobile-sm:w-7 mobile-sm:h-7 bg-primary rounded-md flex items-center justify-center flex-shrink-0">
+              <span className="text-primary-foreground font-bold text-[10px] mobile-sm:text-xs">
                 S
               </span>
             </div>
-            <span className="text-lg font-bold text-foreground truncate hidden xs:block">
+            <span className="text-base mobile-sm:text-lg font-bold text-foreground truncate hidden mobile-md:block">
               SocialFusion
             </span>
-            <span className="text-lg font-bold text-foreground truncate xs:hidden">
+            <span className="text-base mobile-sm:text-lg font-bold text-foreground truncate mobile-md:hidden hidden mobile-xs:block">
               SF
             </span>
           </Link>
 
           {/* Action Icons - Essential actions visible */}
-          <div className="flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-0.5 mobile-sm:gap-1 flex-shrink-0">
             {/* Messages with notification badge */}
             <Button
               variant="ghost"
               size="icon"
-              className="w-9 h-9 relative"
+              className="w-8 h-8 mobile-sm:w-9 mobile-sm:h-9 relative touch-target-optimized"
               onClick={() => navigate("/messages")}
               title={t("messages")}
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="w-3.5 h-3.5 mobile-sm:w-4 mobile-sm:h-4" />
               {notificationCount > 0 && (
-                <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-[10px] text-white font-bold">
+                <div className="absolute -top-0.5 -right-0.5 w-3 h-3 mobile-sm:w-3.5 mobile-sm:h-3.5 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-[8px] mobile-sm:text-[10px] text-white font-bold leading-none">
                     {notificationCount > 9 ? '9+' : notificationCount}
                   </span>
                 </div>
@@ -185,32 +185,32 @@ const Navigation = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="w-9 h-9"
+              className="w-8 h-8 mobile-sm:w-9 mobile-sm:h-9 touch-target-optimized"
               onClick={() => navigate("/camera")}
               title={t("camera")}
             >
-              <Camera className="w-4 h-4" />
+              <Camera className="w-3.5 h-3.5 mobile-sm:w-4 mobile-sm:h-4" />
             </Button>
 
             {/* Profile with Avatar */}
             <Button
               variant="ghost"
               size="icon"
-              className="w-9 h-9 p-0"
+              className="w-8 h-8 mobile-sm:w-9 mobile-sm:h-9 p-0 touch-target-optimized"
               onClick={() => navigate("/profile")}
               title={t("profile")}
             >
-              <Avatar className="w-6 h-6">
+              <Avatar className="w-5 h-5 mobile-sm:w-6 mobile-sm:h-6">
                 <AvatarImage src="/placeholder.svg" />
-                <AvatarFallback className="text-xs">JD</AvatarFallback>
+                <AvatarFallback className="text-[10px] mobile-sm:text-xs">JD</AvatarFallback>
               </Avatar>
             </Button>
 
             {/* More Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="w-9 h-9">
-                  <Menu className="w-4 h-4" />
+                <Button variant="ghost" size="icon" className="w-8 h-8 mobile-sm:w-9 mobile-sm:h-9 touch-target-optimized">
+                  <Menu className="w-3.5 h-3.5 mobile-sm:w-4 mobile-sm:h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
@@ -302,8 +302,8 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Bottom Bar - Enhanced with all essential navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
-        <div className="flex items-center justify-around py-1.5 px-1">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 no-scroll-x landscape-compact">
+        <div className="flex items-center justify-around py-1 mobile-sm:py-1.5 px-0.5 mobile-sm:px-1">
           {navItems
             .filter((item) => item.mobile)
             .sort((a, b) => a.priority - b.priority)
@@ -313,26 +313,26 @@ const Navigation = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg transition-all duration-200 relative min-w-0 flex-1 ${
+                  className={`flex flex-col items-center gap-0.5 px-1 mobile-sm:px-2 py-1 mobile-sm:py-1.5 rounded-lg transition-all duration-200 relative min-w-0 flex-1 touch-target-optimized ${
                     isItemActive
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                   }`}
                 >
                   <div className="relative">
-                    <item.icon className={`w-5 h-5 transition-transform ${
+                    <item.icon className={`w-4 h-4 mobile-sm:w-5 mobile-sm:h-5 transition-transform ${
                       isItemActive ? "scale-110" : ""
                     }`} />
                     {/* Notification badge for notifications tab */}
                     {item.path === '/notifications' && hasNotifications && (
-                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                      <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 mobile-sm:w-2 mobile-sm:h-2 bg-red-500 rounded-full"></div>
                     )}
                     {/* Active indicator */}
                     {isItemActive && (
-                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
+                      <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-0.5 mobile-sm:h-1 bg-primary rounded-full"></div>
                     )}
                   </div>
-                  <span className={`text-[10px] font-medium truncate max-w-full ${
+                  <span className={`text-[9px] mobile-sm:text-[10px] font-medium truncate max-w-full leading-tight ${
                     isItemActive ? "text-primary" : ""
                   }`}>
                     {item.name}
@@ -342,7 +342,7 @@ const Navigation = () => {
             })}
         </div>
         {/* Safe area for devices with home indicator */}
-        <div className="h-safe-area-inset-bottom bg-card"></div>
+        <div className="h-safe-area-inset-bottom bg-card min-h-[8px]"></div>
       </div>
     </>
   );
