@@ -597,7 +597,7 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => copyMessage(message.content)}>
+                        <DropdownMenuItem onClick={() => handleCopyMessage(message.content)}>
                           <Copy className="w-4 h-4 mr-2" />
                           Copy
                         </DropdownMenuItem>
