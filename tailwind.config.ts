@@ -12,6 +12,18 @@ export default {
         "2xl": "1400px",
       },
     },
+    screens: {
+      'xs': '375px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+      // Custom breakpoints for mobile navigation
+      'mobile-xs': '320px',
+      'mobile-sm': '360px',
+      'mobile-md': '414px',
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -74,6 +86,12 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      spacing: {
+        'safe-area-inset-bottom': 'env(safe-area-inset-bottom)',
+        'safe-area-inset-top': 'env(safe-area-inset-top)',
+        'safe-area-inset-left': 'env(safe-area-inset-left)',
+        'safe-area-inset-right': 'env(safe-area-inset-right)',
       },
       keyframes: {
         "accordion-down": {
