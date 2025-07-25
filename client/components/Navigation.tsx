@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { 
   Home, 
   Search, 
@@ -10,14 +11,19 @@ import {
   Video,
   Menu,
   Moon,
-  Sun
+  Sun,
+  Camera,
+  Send,
+  Settings
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Navigation = () => {
   const location = useLocation();
   const [isDark, setIsDark] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const isDarkMode = document.documentElement.classList.contains('dark');
@@ -30,13 +36,15 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { name: "Home", icon: Home, path: "/", mobile: true },
-    { name: "Search", icon: Search, path: "/search", mobile: true },
-    { name: "Reels", icon: Video, path: "/reels", mobile: true },
-    { name: "Messages", icon: MessageCircle, path: "/messages", mobile: true },
-    { name: "Notifications", icon: Heart, path: "/notifications", mobile: false },
-    { name: "Create", icon: PlusSquare, path: "/create", mobile: false },
-    { name: "Profile", icon: User, path: "/profile", mobile: true }
+    { name: t('home'), icon: Home, path: "/", mobile: true },
+    { name: t('search'), icon: Search, path: "/search", mobile: true },
+    { name: t('reels'), icon: Video, path: "/reels", mobile: true },
+    { name: t('messages'), icon: MessageCircle, path: "/messages", mobile: true },
+    { name: t('notifications'), icon: Heart, path: "/notifications", mobile: false },
+    { name: t('create'), icon: PlusSquare, path: "/create", mobile: false },
+    { name: t('camera'), icon: Camera, path: "/camera", mobile: false },
+    { name: t('settings'), icon: Settings, path: "/settings", mobile: false },
+    { name: t('profile'), icon: User, path: "/profile", mobile: true }
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -81,6 +89,7 @@ const Navigation = () => {
               <p className="text-sm font-medium">John Doe</p>
               <p className="text-xs text-muted-foreground">@johndoe</p>
             </div>
+            <LanguageSwitcher />
             <Button
               variant="ghost"
               size="icon"
@@ -104,6 +113,13 @@ const Navigation = () => {
           </Link>
           
           <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="w-8 h-8">
+              <Camera className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="w-8 h-8">
+              <Send className="w-4 h-4" />
+            </Button>
+            <LanguageSwitcher />
             <Button
               variant="ghost"
               size="icon"
