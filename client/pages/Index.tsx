@@ -1,62 +1,191 @@
-import { DemoResponse } from "@shared/api";
-import { useEffect, useState } from "react";
+import Layout from "@/components/Layout";
+import Stories from "@/components/Stories";
+import CreatePost from "@/components/CreatePost";
+import Post from "@/components/Post";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Dot, Users, TrendingUp } from "lucide-react";
 
 export default function Index() {
-  const [exampleFromServer, setExampleFromServer] = useState("");
-  // Fetch users on component mount
-  useEffect(() => {
-    fetchDemo();
-  }, []);
-
-  // Example of how to fetch data from the server (if needed)
-  const fetchDemo = async () => {
-    try {
-      const response = await fetch("/api/demo");
-      const data = (await response.json()) as DemoResponse;
-      setExampleFromServer(data.message);
-    } catch (error) {
-      console.error("Error fetching hello:", error);
+  const samplePosts = [
+    {
+      id: 1,
+      username: "alice_wonder",
+      avatar: "/placeholder.svg",
+      location: "New York, NY",
+      timeAgo: "2h",
+      content: "Just discovered this amazing coffee shop in Brooklyn! The latte art is incredible ☕️✨ #CoffeeLovers #Brooklyn",
+      media: {
+        type: 'image' as const,
+        url: "/placeholder.svg",
+        aspectRatio: "4/3"
+      },
+      likes: 1234,
+      comments: 89,
+      isLiked: false,
+      isSaved: false
+    },
+    {
+      id: 2,
+      username: "bob_creator",
+      avatar: "/placeholder.svg",
+      timeAgo: "4h",
+      content: "Behind the scenes of my latest project! Can't wait to share the final result with you all 🎬🔥",
+      media: {
+        type: 'video' as const,
+        url: "/placeholder.svg",
+        aspectRatio: "16/9"
+      },
+      likes: 2156,
+      comments: 134,
+      isLiked: true,
+      isSaved: true
+    },
+    {
+      id: 3,
+      username: "emma_travels",
+      avatar: "/placeholder.svg",
+      location: "Santorini, Greece",
+      timeAgo: "1d",
+      content: "Sunset in Santorini never gets old 🌅 This place is pure magic! Already planning my next visit.",
+      media: {
+        type: 'image' as const,
+        url: "/placeholder.svg",
+        aspectRatio: "1/1"
+      },
+      likes: 3420,
+      comments: 256,
+      isLiked: false,
+      isSaved: false
     }
-  };
+  ];
+
+  const suggestedUsers = [
+    { username: "mike_fitness", name: "Mike Johnson", isFollowing: false },
+    { username: "sarah_cook", name: "Sarah Miller", isFollowing: false },
+    { username: "alex_photos", name: "Alex Chen", isFollowing: true },
+  ];
+
+  const trendingTopics = [
+    { tag: "#TechNews", posts: "125k posts" },
+    { tag: "#Travel2024", posts: "89k posts" },
+    { tag: "#Photography", posts: "234k posts" },
+    { tag: "#Fitness", posts: "167k posts" },
+  ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="text-center">
-        {/* TODO: FUSION_GENERATION_APP_PLACEHOLDER replace everything here with the actual app! */}
-        <h1 className="text-2xl font-semibold text-slate-800 flex items-center justify-center gap-3">
-          <svg
-            className="animate-spin h-8 w-8 text-slate-400"
-            viewBox="0 0 50 50"
-          >
-            <circle
-              className="opacity-30"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-            />
-            <circle
-              className="text-slate-600"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-              strokeDasharray="100"
-              strokeDashoffset="75"
-            />
-          </svg>
-          Generating your app...
-        </h1>
-        <p className="mt-4 text-slate-600 max-w-md">
-          Watch the chat on the left for updates that might need your attention
-          to finish generating
-        </p>
-        <p className="mt-4 hidden max-w-md">{exampleFromServer}</p>
+    <Layout>
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Main Feed */}
+          <div className="lg:col-span-8">
+            {/* Stories */}
+            <div className="mb-6">
+              <Stories />
+            </div>
+
+            {/* Create Post */}
+            <CreatePost />
+
+            {/* Posts Feed */}
+            <div className="space-y-6">
+              {samplePosts.map((post) => (
+                <Post key={post.id} {...post} />
+              ))}
+            </div>
+
+            {/* Load More */}
+            <div className="flex justify-center mt-8">
+              <Button variant="outline" className="px-8">
+                Load More Posts
+              </Button>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Suggested Users */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-foreground">Suggested for you</h3>
+                  <Button variant="link" size="sm" className="text-xs p-0 h-auto">
+                    See All
+                  </Button>
+                </div>
+                <div className="space-y-3">
+                  {suggestedUsers.map((user) => (
+                    <div key={user.username} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-10 h-10">
+                          <AvatarImage src="/placeholder.svg" />
+                          <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-sm">{user.name}</p>
+                          <p className="text-xs text-muted-foreground">@{user.username}</p>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant={user.isFollowing ? "outline" : "default"}
+                        className="text-xs px-4"
+                      >
+                        {user.isFollowing ? "Following" : "Follow"}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Trending Topics */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <TrendingUp className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-foreground">Trending</h3>
+                </div>
+                <div className="space-y-3">
+                  {trendingTopics.map((topic) => (
+                    <div key={topic.tag} className="cursor-pointer hover:bg-accent rounded-lg p-2 -m-2 transition-colors">
+                      <p className="font-medium text-sm text-primary">{topic.tag}</p>
+                      <p className="text-xs text-muted-foreground">{topic.posts}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Stats */}
+            <Card>
+              <CardContent className="p-4">
+                <h3 className="font-semibold text-foreground mb-4">Your Activity</h3>
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <p className="text-2xl font-bold text-primary">127</p>
+                    <p className="text-xs text-muted-foreground">Posts</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-primary">2.4k</p>
+                    <p className="text-xs text-muted-foreground">Followers</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-primary">1.8k</p>
+                    <p className="text-xs text-muted-foreground">Following</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-primary">12.5k</p>
+                    <p className="text-xs text-muted-foreground">Likes</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
