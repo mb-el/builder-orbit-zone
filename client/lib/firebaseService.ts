@@ -1,4 +1,4 @@
-import { storage, db } from "./firebase";
+import { storage, db, areFirebaseServicesAvailable } from "./firebase";
 import {
   ref,
   uploadBytes,
@@ -113,6 +113,25 @@ export const uploadFileToStorage = (
   onProgress?: (progress: number) => void,
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
+    // Check if Firebase Storage is available
+    if (!areFirebaseServicesAvailable() || !storage) {
+      console.warn('Firebase Storage not available, returning mock URL');
+      // Simulate upload progress
+      const simulateProgress = () => {
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 20;
+          onProgress?.(progress);
+          if (progress >= 100) {
+            clearInterval(interval);
+            resolve(`https://via.placeholder.com/400x300?text=${encodeURIComponent(file.name)}`);
+          }
+        }, 100);
+      };
+      simulateProgress();
+      return;
+    }
+
     const fileId = uuidv4();
     const fileName = `${fileId}_${file.name}`;
     const storageRef = ref(storage, `${path}/${fileName}`);
@@ -166,6 +185,12 @@ export const createPost = async (
   postData: Omit<PostData, "createdAt" | "likes" | "comments" | "shares">,
 ): Promise<string> => {
   try {
+    // Check if Firestore is available
+    if (!areFirebaseServicesAvailable() || !db) {
+      console.warn('Firestore not available, returning mock post ID');
+      return 'demo-post-' + Date.now();
+    }
+
     const docRef = await addDoc(collection(db, "posts"), {
       ...postData,
       createdAt: serverTimestamp(),
