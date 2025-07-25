@@ -14,6 +14,8 @@ import Reels from "./pages/Reels";
 import Notifications from "./pages/Notifications";
 import Create from "./pages/Create";
 import Profile from "./pages/Profile";
+import Camera from "./pages/Camera";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
