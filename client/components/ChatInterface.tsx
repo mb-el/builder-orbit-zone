@@ -271,44 +271,12 @@ const ChatInterface = ({ className = "" }: ChatInterfaceProps) => {
     }
   };
 
-  const copyMessage = async (content: string) => {
-    try {
-      await navigator.clipboard.writeText(content);
-      toast({
-        description: "Message copied to clipboard! 📋",
-        duration: 2000,
-      });
-      
-      // Haptic feedback
-      if ('vibrate' in navigator) {
-        navigator.vibrate([50, 50, 50]);
-      }
-    } catch (err) {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = content;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      
-      try {
-        document.execCommand('copy');
-        toast({
-          description: "Message copied to clipboard! 📋",
-          duration: 2000,
-        });
-      } catch (err) {
-        toast({
-          description: "Failed to copy message",
-          duration: 2000,
-        });
-      }
-      
-      document.body.removeChild(textArea);
-    }
+  const handleCopyMessage = async (content: string) => {
+    const success = await copyMessage(content);
+    toast({
+      description: success ? "Message copied to clipboard! 📋" : "Failed to copy message",
+      duration: 2000,
+    });
   };
 
   const addReaction = (messageId: string, emoji: string) => {
