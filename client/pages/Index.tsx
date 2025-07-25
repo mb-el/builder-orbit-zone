@@ -2,15 +2,18 @@ import Layout from "@/components/Layout";
 import Stories from "@/components/Stories";
 import CreatePost from "@/components/CreatePost";
 import Post from "@/components/Post";
+import NotificationPanel from "@/components/NotificationPanel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Dot, Users, TrendingUp } from "lucide-react";
+import { Dot, Users, TrendingUp, Bell } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function Index() {
   const { t } = useTranslation();
+  const [showNotifications, setShowNotifications] = useState(false);
   const samplePosts = [
     {
       id: 1,
@@ -108,6 +111,22 @@ export default function Index() {
 
           {/* Sidebar */}
           <div className="lg:col-span-4 space-y-6">
+            {/* Notifications Panel */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <Button
+                  variant={showNotifications ? "default" : "outline"}
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="gap-2"
+                >
+                  <Bell className="w-4 h-4" />
+                  {t('notifications')}
+                </Button>
+              </div>
+              {showNotifications && (
+                <NotificationPanel className="animate-in slide-in-from-top-2 duration-200" />
+              )}
+            </div>
             {/* Suggested Users */}
             <Card>
               <CardContent className="p-4">
