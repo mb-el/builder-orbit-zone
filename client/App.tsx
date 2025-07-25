@@ -16,9 +16,46 @@ import Create from "./pages/Create";
 import Profile from "./pages/Profile";
 import Camera from "./pages/Camera";
 import Settings from "./pages/Settings";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import { useAuthState } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
+
+const AppContent = () => {
+  const { user, loading } = useAuthState();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      </div>
+    );
+  }
+
+  // If no user is authenticated, show auth page
+  if (!user) {
+    return <Auth />;
+  }
+
+  // If user is authenticated, show main app
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/messages" element={<Messages />} />
+      <Route path="/reels" element={<Reels />} />
+      <Route path="/notifications" element={<Notifications />} />
+      <Route path="/create" element={<Create />} />
+      <Route path="/camera" element={<Camera />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/auth" element={<Auth />} />
+      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -26,19 +63,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/reels" element={<Reels />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/create" element={<Create />} />
-          <Route path="/camera" element={<Camera />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/profile" element={<Profile />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppContent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
