@@ -1,0 +1,15 @@
+Create a super app that combines the core features of TikTok, WhatsApp, Facebook, and Instagram.
+
+Activate all app icons such as camera, send, like, share, settings, and language switcher.
+
+Add full multilingual support (Arabic, English, French, etc.).
+
+Integrate video support allowing users to upload and watch videos.
+
+Enable image upload and viewing in posts and messages.
+
+Use libraries like react-i18next for language support, react-native-video (or similar) for video playback, and Image component for image display.
+
+Ensure real-time messaging, user profiles, posts, notifications, and live interaction features.
+
+Design with a modern, high-quality UI inspired by TikTok, Instagram, WhatsApp, and Facebook.
