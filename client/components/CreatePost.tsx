@@ -285,12 +285,8 @@ const CreatePost = ({ onPostCreated, className }: CreatePostProps) => {
     setUploadProgress(0);
 
     try {
-      // Mock user data - in a real app, get from auth context
-      const userData = {
-        authorId: 'user123',
-        authorName: 'John Doe',
-        authorAvatar: '/placeholder.svg'
-      };
+      // Get current user data (real or mock for development)
+      const userData = getCurrentUser(user);
 
       const postId = await uploadPostWithMedia(
         content,
