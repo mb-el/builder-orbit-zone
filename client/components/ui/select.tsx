@@ -37,12 +37,17 @@ const SelectScrollUpButton = React.forwardRef<
   <SelectPrimitive.ScrollUpButton
     ref={ref}
     className={cn(
-      "hidden", // Hide scroll up button
+      "flex cursor-default items-center justify-center py-1 relative group overflow-hidden",
+      "bg-gradient-to-b from-primary/10 to-transparent hover:from-primary/20",
+      "transition-all duration-200 hover:scale-105",
       className,
     )}
     {...props}
   >
-    {/* <ChevronUp className="h-4 w-4" /> */}
+    <div className="relative z-10">
+      <ChevronUp className="h-4 w-4 text-primary drop-shadow-sm" />
+    </div>
+    <div className="absolute inset-0 bg-gradient-to-t from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
   </SelectPrimitive.ScrollUpButton>
 ));
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
@@ -54,12 +59,17 @@ const SelectScrollDownButton = React.forwardRef<
   <SelectPrimitive.ScrollDownButton
     ref={ref}
     className={cn(
-      "hidden", // Hide scroll down button
+      "flex cursor-default items-center justify-center py-1 relative group overflow-hidden",
+      "bg-gradient-to-t from-primary/10 to-transparent hover:from-primary/20",
+      "transition-all duration-200 hover:scale-105",
       className,
     )}
     {...props}
   >
-    {/* <ChevronDown className="h-4 w-4" /> */}
+    <div className="relative z-10">
+      <ChevronDown className="h-4 w-4 text-primary drop-shadow-sm" />
+    </div>
+    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
   </SelectPrimitive.ScrollDownButton>
 ));
 SelectScrollDownButton.displayName =
