@@ -5,6 +5,7 @@ import Post from "@/components/Post";
 import NotificationPanel from "@/components/NotificationPanel";
 import VRARInterface from "@/components/VRARInterface";
 import SpatialPostViewer from "@/components/SpatialPostViewer";
+import SocialScrollIndicators from "@/components/SocialScrollIndicators";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -332,6 +333,11 @@ export default function Index() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Custom Scroll Indicators - Only show in regular mode */}
+        {!showVRInterface && !currentSession.active && (
+          <SocialScrollIndicators theme="gradient" />
         )}
       </VRARInterface>
     </Layout>
