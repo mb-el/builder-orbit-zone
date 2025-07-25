@@ -122,4 +122,90 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Mobile-specific optimizations */
+  @media (max-width: 768px) {
+    /* Improve touch targets */
+    button, input, select, textarea {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Prevent zoom on input focus */
+    input, textarea, select {
+      font-size: 16px;
+    }
+
+    /* Smooth scrolling for mobile */
+    * {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Prevent text selection on long press for UI elements */
+    .no-select {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    /* Allow text selection for message content */
+    .selectable-text {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+
+    /* Improve button tap targets */
+    .mobile-button {
+      padding: 12px;
+      margin: 4px;
+    }
+
+    /* Optimize keyboard behavior */
+    .keyboard-input {
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+  }
+
+  /* Haptic feedback simulation */
+  .haptic-light {
+    transition: transform 0.1s ease;
+  }
+
+  .haptic-light:active {
+    transform: scale(0.95);
+  }
+
+  /* Message bubble animations */
+  .message-bubble {
+    transition: all 0.2s ease;
+  }
+
+  .message-bubble:active {
+    transform: scale(0.98);
+  }
+
+  /* Keyboard-aware layout */
+  .keyboard-adjusted {
+    transition: padding-bottom 0.3s ease;
+  }
+
+  .keyboard-open .keyboard-adjusted {
+    padding-bottom: env(keyboard-inset-height, 0px);
+  }
+
+  /* Copy feedback animation */
+  @keyframes copy-flash {
+    0% { background-color: transparent; }
+    50% { background-color: var(--primary); }
+    100% { background-color: transparent; }
+  }
+
+  .copy-flash {
+    animation: copy-flash 0.3s ease;
+  }
 }
