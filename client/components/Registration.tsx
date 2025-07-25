@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from '@/hooks/use-toast';
+import FirebaseNotice from './FirebaseNotice';
 
 interface FormData {
   email: string;
@@ -265,6 +266,7 @@ const Registration: React.FC = () => {
         </CardHeader>
 
         <CardContent>
+          <FirebaseNotice />
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signup">{t('registration.signup')}</TabsTrigger>
