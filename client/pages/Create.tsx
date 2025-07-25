@@ -1,11 +1,14 @@
 import PlaceholderPage from "@/components/PlaceholderPage";
 import { PlusSquare } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Create() {
+  const { t } = useTranslation();
+
   return (
     <PlaceholderPage
-      title="Create Content"
-      description="Share your moments with posts, stories, reels, and live streams. Use powerful editing tools, filters, and effects to bring your content to life."
+      title={`${t('create')} Content`}
+      description={t('create_content_desc')}
       icon={<PlusSquare className="w-12 h-12 text-purple-500" />}
     />
   );
