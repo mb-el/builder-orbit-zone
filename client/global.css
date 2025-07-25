@@ -157,6 +157,306 @@ html {
   }
 }
 
+/* Hide all scroll indicators globally */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Remove scroll up/down buttons from all components */
+[data-radix-scroll-up-button],
+[data-radix-scroll-down-button],
+.scroll-up-button,
+.scroll-down-button {
+  display: none !important;
+}
+
+/* VR/AR Immersive Styles */
+.vrar-interface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.vrar-canvas {
+  transition: all 0.5s ease-in-out;
+}
+
+.vrar-canvas.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: transparent;
+}
+
+.vrar-overlay {
+  pointer-events: none;
+}
+
+.vrar-overlay > * {
+  pointer-events: auto;
+}
+
+/* Spatial Post Viewer Styles */
+.spatial-post-viewer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.spatial-post-viewer.vr-mode,
+.spatial-post-viewer.ar-mode {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.spatial-post {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center center;
+}
+
+.spatial-post.immersive {
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+}
+
+.spatial-post.selected {
+  transform: scale(1.1) translateZ(50px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 2px solid hsl(var(--primary));
+}
+
+.posts-container.spatial-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+  transform-style: preserve-3d;
+}
+
+/* VR/AR Specific Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotateY(5deg);
+  }
+}
+
+@keyframes spatial-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(var(--primary-rgb), 0.6);
+  }
+}
+
+.spatial-post.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+.spatial-post.interactive:hover {
+  animation: spatial-pulse 2s ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* WebXR Session Active States */
+body.xr-session-active {
+  overflow: hidden;
+}
+
+body.xr-session-active .vrar-interface {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+}
+
+/* Hide native browser scroll indicators in XR mode */
+body.xr-session-active::-webkit-scrollbar {
+  display: none;
+}
+
+body.xr-session-active {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Spatial Audio Indicators */
+.spatial-audio-active {
+  position: relative;
+}
+
+.spatial-audio-active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00f, #0ff, #00f);
+  border-radius: inherit;
+  z-index: -1;
+  animation: spatial-audio-pulse 2s ease-in-out infinite;
+}
+
+@keyframes spatial-audio-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+/* Hand Tracking Cursor for VR */
+.vr-hand-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  pointer-events: none;
+  z-index: 10001;
+  transition: all 0.1s ease-out;
+}
+
+.vr-hand-cursor.selecting {
+  background: radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0.2) 100%);
+  border-color: rgba(0,255,255,0.8);
+  transform: scale(1.5);
+}
+
+/* AR Spatial Anchors */
+.ar-spatial-anchor {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255,255,255,0.8);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(5px);
+  animation: anchor-pulse 2s ease-in-out infinite;
+}
+
+@keyframes anchor-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Responsive VR/AR Adjustments */
+@media (max-width: 768px) {
+  .spatial-post {
+    margin: 1rem;
+    max-width: 300px;
+  }
+
+  .posts-container.spatial-layout {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
+
+/* High contrast mode for VR accessibility */
+@media (prefers-contrast: high) {
+  .spatial-post {
+    border: 3px solid currentColor;
+  }
+
+  .spatial-post.selected {
+    border-width: 5px;
+  }
+}
+
+/* Hide any remaining scroll arrows or indicators */
+.scroll-area-scrollbar,
+.scroll-area-thumb,
+[role="scrollbar"],
+.scrollbar-thumb,
+.scrollbar-track {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Ensure smooth scrolling without visible indicators */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Remove focus indicators that might look like scroll buttons */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Additional scroll indicator removal */
+.chevron-up,
+.chevron-down,
+[aria-label*="scroll"],
+[title*="scroll"],
+.scroll-indicator,
+.scroll-arrow {
+  display: none !important;
+}
+
+/* WebXR compatibility styles */
+@media (display-mode: immersive-vr), (display-mode: immersive-ar) {
+  * {
+    scroll-behavior: auto !important;
+  }
+
+  body {
+    touch-action: none;
+    user-select: none;
+  }
+}
+
+/* Final cleanup for any remaining scroll elements */
+button[aria-label*="up"],
+button[aria-label*="down"],
+button[title*="up"],
+button[title*="down"],
+.up-arrow,
+.down-arrow,
+.scroll-up,
+.scroll-down {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
 @layer base {
   /**
    * Tailwind CSS theme
