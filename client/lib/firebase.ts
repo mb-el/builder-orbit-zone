@@ -1,19 +1,20 @@
 // client/lib/firebase.ts
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 
-// إعدادات مشروع Firebase
+// إعدادات Firebase الخاصة بك
 const firebaseConfig = {
-  apiKey: "ضع هنا API KEY",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  projectId: "PROJECT_ID",
-  storageBucket: "PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
-// تهيئة التطبيق
 const app = initializeApp(firebaseConfig);
 
-// تصدير وحدة المصادقة
-export const auth = getAuth(app);
+export const storage = getStorage(app);
+export const db = getFirestore(app);
+
