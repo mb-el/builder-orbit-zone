@@ -1,11 +1,14 @@
 import PlaceholderPage from "@/components/PlaceholderPage";
 import { User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
+  const { t } = useTranslation();
+
   return (
     <PlaceholderPage
-      title="Your Profile"
-      description="Manage your profile, view your posts and activity, customize your settings, and see your follower analytics. Your personal space on SocialFusion."
+      title={`Your ${t('profile')}`}
+      description={t('profile_desc')}
       icon={<User className="w-12 h-12 text-orange-500" />}
     />
   );
