@@ -46,6 +46,7 @@ interface CreatePostProps {
 
 const CreatePost = ({ onPostCreated, className }: CreatePostProps) => {
   const { t } = useTranslation();
+  const { user } = useAuthState();
   
   // Basic state
   const [content, setContent] = useState("");
