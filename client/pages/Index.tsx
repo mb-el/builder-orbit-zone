@@ -171,8 +171,8 @@ export default function Index() {
                 </div>
                 <div className="space-y-3">
                   {trendingTopics.map((topic) => (
-                    <div key={topic.tag} className="cursor-pointer hover:bg-accent rounded-lg p-2 -m-2 transition-colors">
-                      <p className="font-medium text-sm text-primary">{topic.tag}</p>
+                    <div key={topic.tag} className="cursor-pointer hover:bg-accent rounded-lg p-2 -m-2 transition-all hover:scale-105 hover:shadow-sm">
+                      <p className="font-medium text-sm text-primary hover:underline">{topic.tag}</p>
                       <p className="text-xs text-muted-foreground">{topic.posts}</p>
                     </div>
                   ))}
@@ -185,19 +185,19 @@ export default function Index() {
               <CardContent className="p-4">
                 <h3 className="font-semibold text-foreground mb-4">{t('your_activity')}</h3>
                 <div className="grid grid-cols-2 gap-4 text-center">
-                  <div>
+                  <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">127</p>
                     <p className="text-xs text-muted-foreground">{t('posts')}</p>
                   </div>
-                  <div>
+                  <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">2.4k</p>
                     <p className="text-xs text-muted-foreground">{t('followers')}</p>
                   </div>
-                  <div>
+                  <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">1.8k</p>
                     <p className="text-xs text-muted-foreground">{t('following_stat')}</p>
                   </div>
-                  <div>
+                  <div className="cursor-pointer hover:bg-accent rounded-lg p-2 transition-all hover:scale-105">
                     <p className="text-2xl font-bold text-primary">12.5k</p>
                     <p className="text-xs text-muted-foreground">{t('likes')}</p>
                   </div>
