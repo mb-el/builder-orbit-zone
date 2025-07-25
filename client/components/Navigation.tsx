@@ -57,25 +57,27 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { name: t("home"), icon: Home, path: "/", mobile: true },
-    { name: t("search"), icon: Search, path: "/search", mobile: true },
-    { name: t("reels"), icon: Video, path: "/reels", mobile: true },
-    {
-      name: t("messages"),
-      icon: MessageCircle,
-      path: "/messages",
-      mobile: true,
-    },
+    { name: t("home"), icon: Home, path: "/", mobile: true, priority: 1 },
+    { name: t("search"), icon: Search, path: "/search", mobile: true, priority: 2 },
+    { name: t("create"), icon: PlusSquare, path: "/create", mobile: true, priority: 3 },
+    { name: t("reels"), icon: Video, path: "/reels", mobile: true, priority: 4 },
     {
       name: t("notifications"),
       icon: Heart,
       path: "/notifications",
-      mobile: false,
+      mobile: true,
+      priority: 5,
     },
-    { name: t("create"), icon: PlusSquare, path: "/create", mobile: false },
-    { name: t("camera"), icon: Camera, path: "/camera", mobile: false },
-    { name: t("settings"), icon: Settings, path: "/settings", mobile: false },
-    { name: t("profile"), icon: User, path: "/profile", mobile: true },
+    {
+      name: t("messages"),
+      icon: MessageCircle,
+      path: "/messages",
+      mobile: false, // Moved to top bar
+      priority: 6,
+    },
+    { name: t("camera"), icon: Camera, path: "/camera", mobile: false, priority: 7 },
+    { name: t("settings"), icon: Settings, path: "/settings", mobile: false, priority: 8 },
+    { name: t("profile"), icon: User, path: "/profile", mobile: false, priority: 9 }, // Moved to dropdown
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -142,117 +144,134 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-card border-b border-border z-50 px-4 py-3">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-card border-b border-border z-50">
+        <div className="flex items-center justify-between px-3 py-2.5">
+          {/* Logo - Optimized for small screens */}
+          <Link to="/" className="flex items-center gap-1.5 min-w-0 flex-shrink">
+            <div className="w-7 h-7 bg-primary rounded-md flex items-center justify-center flex-shrink-0">
+              <span className="text-primary-foreground font-bold text-xs">
                 S
               </span>
             </div>
-            <span className="text-xl font-bold text-foreground">
+            <span className="text-lg font-bold text-foreground truncate hidden xs:block">
               SocialFusion
+            </span>
+            <span className="text-lg font-bold text-foreground truncate xs:hidden">
+              SF
             </span>
           </Link>
 
-          <div className="flex items-center gap-2">
+          {/* Action Icons - Essential actions visible */}
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {/* Messages with notification badge */}
             <Button
               variant="ghost"
               size="icon"
-              className="w-8 h-8"
+              className="w-9 h-9 relative"
+              onClick={() => navigate("/messages")}
+              title={t("messages")}
+            >
+              <MessageCircle className="w-4 h-4" />
+              {notificationCount > 0 && (
+                <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-[10px] text-white font-bold">
+                    {notificationCount > 9 ? '9+' : notificationCount}
+                  </span>
+                </div>
+              )}
+            </Button>
+
+            {/* Camera */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-9 h-9"
               onClick={() => navigate("/camera")}
               title={t("camera")}
             >
               <Camera className="w-4 h-4" />
             </Button>
+
+            {/* Profile with Avatar */}
             <Button
               variant="ghost"
               size="icon"
-              className="w-8 h-8 relative"
-              onClick={() => navigate("/messages")}
-              title={t("send")}
+              className="w-9 h-9 p-0"
+              onClick={() => navigate("/profile")}
+              title={t("profile")}
             >
-              <Send className="w-4 h-4" />
-              {notificationCount > 0 && (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-bold">
-                    {notificationCount}
-                  </span>
-                </div>
-              )}
+              <Avatar className="w-6 h-6">
+                <AvatarImage src="/placeholder.svg" />
+                <AvatarFallback className="text-xs">JD</AvatarFallback>
+              </Avatar>
             </Button>
-            <LanguageSwitcher />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleDarkMode}
-              className="w-8 h-8"
-            >
-              {isDark ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </Button>
+
+            {/* More Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="w-8 h-8">
+                <Button variant="ghost" size="icon" className="w-9 h-9">
                   <Menu className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem onClick={() => navigate("/notifications")}>
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2">
-                      {hasNotifications ? (
-                        <BellRing className="w-4 h-4" />
-                      ) : (
-                        <Bell className="w-4 h-4" />
-                      )}
-                      <span>{t("notifications")}</span>
-                    </div>
-                    {notificationCount > 0 && (
-                      <span className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-                        {notificationCount}
-                      </span>
-                    )}
+              <DropdownMenuContent align="end" className="w-64">
+                {/* Settings & Theme */}
+                <DropdownMenuItem onClick={() => navigate("/settings")}>
+                  <Settings className="w-4 h-4 mr-3" />
+                  <span>{t("settings")}</span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem onClick={toggleDarkMode}>
+                  {isDark ? (
+                    <>
+                      <Sun className="w-4 h-4 mr-3" />
+                      <span>Light Mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="w-4 h-4 mr-3" />
+                      <span>Dark Mode</span>
+                    </>
+                  )}
+                </DropdownMenuItem>
+
+                <div className="px-2 py-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Language:</span>
+                    <LanguageSwitcher />
                   </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/create")}>
-                  <PlusSquare className="w-4 h-4 mr-2" />
-                  <span>{t("create")}</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/profile")}>
-                  <User className="w-4 h-4 mr-2" />
-                  <span>{t("profile")}</span>
-                </DropdownMenuItem>
+                </div>
+
                 <DropdownMenuSeparator />
+
+                {/* Social Features */}
                 <DropdownMenuItem>
-                  <BookmarkPlus className="w-4 h-4 mr-2" />
+                  <BookmarkPlus className="w-4 h-4 mr-3" />
                   <span>Saved Posts</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Users className="w-4 h-4 mr-2" />
+                  <Users className="w-4 h-4 mr-3" />
                   <span>Friends</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Archive className="w-4 h-4 mr-2" />
+                  <Archive className="w-4 h-4 mr-3" />
                   <span>Archive</span>
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/settings")}>
-                  <Settings className="w-4 h-4 mr-2" />
-                  <span>{t("settings")}</span>
-                </DropdownMenuItem>
+
+                {/* Help & Support */}
                 <DropdownMenuItem>
-                  <HelpCircle className="w-4 h-4 mr-2" />
+                  <HelpCircle className="w-4 h-4 mr-3" />
                   <span>Help & Support</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Shield className="w-4 h-4 mr-2" />
+                  <Shield className="w-4 h-4 mr-3" />
                   <span>Privacy & Safety</span>
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
+
+                {/* Logout */}
                 <DropdownMenuItem
                   className="text-red-600 cursor-pointer"
                   onClick={async () => {
@@ -273,7 +292,7 @@ const Navigation = () => {
                     }
                   }}
                 >
-                  <LogOut className="w-4 h-4 mr-2" />
+                  <LogOut className="w-4 h-4 mr-3" />
                   <span>{t('registration.logout')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -282,24 +301,48 @@ const Navigation = () => {
         </div>
       </div>
 
-      {/* Mobile Bottom Bar */}
+      {/* Mobile Bottom Bar - Enhanced with all essential navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
-        <div className="flex items-center justify-around py-2">
+        <div className="flex items-center justify-around py-1.5 px-1">
           {navItems
             .filter((item) => item.mobile)
-            .map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
-                  isActive(item.path) ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                <item.icon className="w-6 h-6" />
-                <span className="text-xs font-medium">{item.name}</span>
-              </Link>
-            ))}
+            .sort((a, b) => a.priority - b.priority)
+            .map((item) => {
+              const isItemActive = isActive(item.path);
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg transition-all duration-200 relative min-w-0 flex-1 ${
+                    isItemActive
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                  }`}
+                >
+                  <div className="relative">
+                    <item.icon className={`w-5 h-5 transition-transform ${
+                      isItemActive ? "scale-110" : ""
+                    }`} />
+                    {/* Notification badge for notifications tab */}
+                    {item.path === '/notifications' && hasNotifications && (
+                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                    )}
+                    {/* Active indicator */}
+                    {isItemActive && (
+                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
+                    )}
+                  </div>
+                  <span className={`text-[10px] font-medium truncate max-w-full ${
+                    isItemActive ? "text-primary" : ""
+                  }`}>
+                    {item.name}
+                  </span>
+                </Link>
+              );
+            })}
         </div>
+        {/* Safe area for devices with home indicator */}
+        <div className="h-safe-area-inset-bottom bg-card"></div>
       </div>
     </>
   );
