@@ -23,7 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   signInAnonymous: async () => {},
   signInWithEmail: async () => {},
-  signUpWithEmail: async () => ({} as User),
+  signUpWithEmail: async () => ({}) as User,
   signOut: async () => {},
 });
 
@@ -42,22 +42,24 @@ export const useAuthState = () => {
   useEffect(() => {
     // Check if Firebase services are available
     if (!areFirebaseServicesAvailable() || !auth) {
-      console.warn('Firebase not properly configured, using mock authentication');
+      console.warn(
+        "Firebase not properly configured, using mock authentication",
+      );
       // For development, create a mock user to prevent blocking the app
       const mockUser = {
-        uid: 'demo-user-123',
-        email: 'demo@example.com',
-        displayName: 'Demo User',
-        photoURL: '/placeholder.svg',
+        uid: "demo-user-123",
+        email: "demo@example.com",
+        displayName: "Demo User",
+        photoURL: "/placeholder.svg",
         emailVerified: false,
         isAnonymous: false,
         metadata: {},
         providerData: [],
-        refreshToken: '',
+        refreshToken: "",
         tenantId: null,
         delete: async () => {},
-        getIdToken: async () => 'demo-token',
-        getIdTokenResult: async () => ({} as any),
+        getIdToken: async () => "demo-token",
+        getIdTokenResult: async () => ({}) as any,
         reload: async () => {},
         toJSON: () => ({}),
       } as User;
@@ -77,7 +79,7 @@ export const useAuthState = () => {
 
   const signInAnonymous = async () => {
     if (!auth || !areFirebaseServicesAvailable()) {
-      console.warn('Firebase not available, skipping anonymous sign-in');
+      console.warn("Firebase not available, skipping anonymous sign-in");
       return;
     }
 
@@ -92,7 +94,7 @@ export const useAuthState = () => {
   const signInWithEmail = async (email: string, password: string) => {
     if (!auth || !areFirebaseServicesAvailable()) {
       // For development without Firebase, simulate successful login
-      console.warn('Firebase not available, simulating login');
+      console.warn("Firebase not available, simulating login");
       return;
     }
 
@@ -101,8 +103,10 @@ export const useAuthState = () => {
     } catch (error) {
       console.error("Email sign-in failed:", error);
       // Check for network errors and provide better error messages
-      if (error.code === 'auth/network-request-failed') {
-        throw new Error('Network connection failed. Please check your internet connection and Firebase configuration.');
+      if (error.code === "auth/network-request-failed") {
+        throw new Error(
+          "Network connection failed. Please check your internet connection and Firebase configuration.",
+        );
       }
       throw error;
     }
@@ -111,9 +115,9 @@ export const useAuthState = () => {
   const signUpWithEmail = async (email: string, password: string) => {
     if (!auth || !areFirebaseServicesAvailable()) {
       // For development without Firebase, simulate successful signup
-      console.warn('Firebase not available, simulating signup');
+      console.warn("Firebase not available, simulating signup");
       return {
-        uid: 'demo-user-' + Date.now(),
+        uid: "demo-user-" + Date.now(),
         email,
         displayName: null,
         photoURL: null,
@@ -121,13 +125,19 @@ export const useAuthState = () => {
     }
 
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       return result.user;
     } catch (error) {
       console.error("Email sign-up failed:", error);
       // Check for network errors and provide better error messages
-      if (error.code === 'auth/network-request-failed') {
-        throw new Error('Network connection failed. Please check your internet connection and Firebase configuration.');
+      if (error.code === "auth/network-request-failed") {
+        throw new Error(
+          "Network connection failed. Please check your internet connection and Firebase configuration.",
+        );
       }
       throw error;
     }
@@ -135,7 +145,7 @@ export const useAuthState = () => {
 
   const signOut = async () => {
     if (!auth || !areFirebaseServicesAvailable()) {
-      console.warn('Firebase not available, simulating sign out');
+      console.warn("Firebase not available, simulating sign out");
       return;
     }
 

@@ -1,31 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Glasses, 
-  Eye, 
-  Monitor, 
-  Smartphone, 
-  Wifi, 
-  WifiOff, 
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Glasses,
+  Eye,
+  Monitor,
+  Smartphone,
+  Wifi,
+  WifiOff,
   Settings,
   Play,
   Pause,
   RotateCcw,
   Maximize,
-} from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import useVRAR from '@/hooks/useVRMR';
-import { toast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import useVRAR from "@/hooks/useVRMR";
+import { toast } from "@/hooks/use-toast";
 
 interface VRARInterfaceProps {
   children?: React.ReactNode;
   className?: string;
 }
 
-const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' }) => {
+const VRARInterface: React.FC<VRARInterfaceProps> = ({
+  children,
+  className = "",
+}) => {
   const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [immersiveMode, setImmersiveMode] = useState(false);
@@ -48,10 +51,10 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
-    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-    
+    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+
     if (!gl) {
-      console.warn('WebGL not supported');
+      console.warn("WebGL not supported");
       return;
     }
 
@@ -64,7 +67,7 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
     const setupVRScene = () => {
       // This would contain the 3D scene setup for VR/AR
       // In a real implementation, you'd use Three.js or similar
-      console.log('VR/AR scene initialized');
+      console.log("VR/AR scene initialized");
     };
 
     setupVRScene();
@@ -84,7 +87,8 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
     } catch (err) {
       toast({
         title: "VR Error",
-        description: "Failed to start VR session. Check your headset connection.",
+        description:
+          "Failed to start VR session. Check your headset connection.",
         variant: "destructive",
       });
     }
@@ -99,7 +103,8 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
         setSpatialView(true);
         toast({
           title: "AR Mode Activated",
-          description: "Social content is now overlaid in your real environment!",
+          description:
+            "Social content is now overlaid in your real environment!",
         });
       }
     } catch (err) {
@@ -122,7 +127,7 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
         description: "Returned to standard view mode.",
       });
     } catch (err) {
-      console.warn('Error ending session:', err);
+      console.warn("Error ending session:", err);
     }
   };
 
@@ -131,7 +136,8 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
       <Alert className="mb-4">
         <Monitor className="h-4 w-4" />
         <AlertDescription>
-          VR/AR not supported in this browser. Use Chrome, Firefox, or Edge with WebXR support.
+          VR/AR not supported in this browser. Use Chrome, Firefox, or Edge with
+          WebXR support.
         </AlertDescription>
       </Alert>
     );
@@ -147,7 +153,9 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
             Immersive Experience
             {currentSession.active && (
               <Badge variant="secondary" className="ml-2">
-                {currentSession.mode === 'immersive-vr' ? 'VR Active' : 'AR Active'}
+                {currentSession.mode === "immersive-vr"
+                  ? "VR Active"
+                  : "AR Active"}
               </Badge>
             )}
           </CardTitle>
@@ -159,8 +167,11 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
               <h4 className="text-sm font-medium">Available Devices</h4>
               {availableDevices.length > 0 ? (
                 availableDevices.map((device) => (
-                  <div key={device.id} className="flex items-center gap-2 p-2 border rounded">
-                    {device.type === 'vr' ? (
+                  <div
+                    key={device.id}
+                    className="flex items-center gap-2 p-2 border rounded"
+                  >
+                    {device.type === "vr" ? (
                       <Glasses className="w-4 h-4" />
                     ) : (
                       <Eye className="w-4 h-4" />
@@ -174,19 +185,17 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground">No VR/AR devices detected</p>
+                <p className="text-sm text-muted-foreground">
+                  No VR/AR devices detected
+                </p>
               )}
             </div>
 
             <div className="space-y-2">
               <h4 className="text-sm font-medium">Capabilities</h4>
               <div className="flex flex-wrap gap-1">
-                {isVRSupported && (
-                  <Badge variant="outline">VR Ready</Badge>
-                )}
-                {isARSupported && (
-                  <Badge variant="outline">AR Ready</Badge>
-                )}
+                {isVRSupported && <Badge variant="outline">VR Ready</Badge>}
+                {isARSupported && <Badge variant="outline">AR Ready</Badge>}
                 <Badge variant="outline">6DOF Tracking</Badge>
                 <Badge variant="outline">Hand Tracking</Badge>
                 <Badge variant="outline">Spatial Audio</Badge>
@@ -223,10 +232,10 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
                 className="flex items-center gap-2"
               >
                 <RotateCcw className="w-4 h-4" />
-                Exit {currentSession.mode === 'immersive-vr' ? 'VR' : 'AR'}
+                Exit {currentSession.mode === "immersive-vr" ? "VR" : "AR"}
               </Button>
             )}
-            
+
             <Button variant="ghost" size="icon">
               <Settings className="w-4 h-4" />
             </Button>
@@ -242,7 +251,9 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
                 </div>
                 <div>
                   <span className="font-medium">Input Sources:</span>
-                  <span className="ml-2">{currentSession.inputSources.length}</span>
+                  <span className="ml-2">
+                    {currentSession.inputSources.length}
+                  </span>
                 </div>
               </div>
             </div>
@@ -260,17 +271,17 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
       {/* 3D Canvas for VR/AR rendering */}
       <canvas
         ref={canvasRef}
-        className={`vrar-canvas ${currentSession.active ? 'active' : 'hidden'}`}
+        className={`vrar-canvas ${currentSession.active ? "active" : "hidden"}`}
         width={1920}
         height={1080}
         style={{
-          position: currentSession.active ? 'fixed' : 'relative',
+          position: currentSession.active ? "fixed" : "relative",
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: currentSession.active ? 9999 : 'auto',
-          background: 'transparent',
+          width: "100%",
+          height: "100%",
+          zIndex: currentSession.active ? 9999 : "auto",
+          background: "transparent",
         }}
       />
 
@@ -285,7 +296,7 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
               size="sm"
               className="bg-black/70 text-white hover:bg-black/80"
             >
-              Exit {currentSession.mode === 'immersive-vr' ? 'VR' : 'AR'}
+              Exit {currentSession.mode === "immersive-vr" ? "VR" : "AR"}
             </Button>
           </div>
 
@@ -302,7 +313,9 @@ const VRARInterface: React.FC<VRARInterfaceProps> = ({ children, className = '' 
       )}
 
       {/* Regular content container */}
-      <div className={`content-container ${currentSession.active ? 'vrar-active' : ''}`}>
+      <div
+        className={`content-container ${currentSession.active ? "vrar-active" : ""}`}
+      >
         {children}
       </div>
     </div>

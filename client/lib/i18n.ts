@@ -132,19 +132,22 @@ const resources = {
 
         // Success messages
         successTitle: "Account Created!",
-        successMessage: "Welcome to SocialFusion! You can now start connecting with friends.",
+        successMessage:
+          "Welcome to SocialFusion! You can now start connecting with friends.",
         loginSuccessTitle: "Welcome Back!",
         loginSuccessMessage: "You've successfully signed in to your account.",
 
         // Error messages
         errorRequired: "Please fill in all required fields",
         errorInvalidEmail: "Please enter a valid email address",
-        errorWeakPassword: "Password must be at least 8 characters with uppercase, lowercase, and number",
+        errorWeakPassword:
+          "Password must be at least 8 characters with uppercase, lowercase, and number",
         errorPasswordMismatch: "Passwords do not match",
         errorShortName: "Name must be at least 2 characters long",
         errorEmailExists: "An account with this email already exists",
         errorInvalidCredentials: "Invalid email or password",
-        errorTooManyAttempts: "Too many failed attempts. Please try again later",
+        errorTooManyAttempts:
+          "Too many failed attempts. Please try again later",
         errorGeneral: "Something went wrong. Please try again",
       },
     },
@@ -277,14 +280,16 @@ const resources = {
 
         // Success messages
         successTitle: "تم إنشاء الحساب!",
-        successMessage: "مرحباً بك في سوشيال فيوجن! يمكنك الآن البدء في التواصل مع الأصدقاء.",
+        successMessage:
+          "مرحباً بك في سوشيال فيوجن! يمكنك الآن البدء في التواصل مع الأصدقاء.",
         loginSuccessTitle: "مرحباً بعودتك!",
         loginSuccessMessage: "تم تسجيل دخولك بنجاح إلى حسابك.",
 
         // Error messages
         errorRequired: "يرجى ملء جميع الحقول المطلوبة",
         errorInvalidEmail: "يرجى إدخال عنوان بريد إلكتروني صحيح",
-        errorWeakPassword: "يجب أن تكون كلمة المرور 8 أحرف على الأقل مع حرف كبير و��غير ورقم",
+        errorWeakPassword:
+          "يجب أن تكون كلمة المرور 8 أحرف على الأقل مع حرف كبير و��غير ورقم",
         errorPasswordMismatch: "كلمات المرور غير متطابقة",
         errorShortName: "يجب أن يكون الاسم حرفين على الأقل",
         errorEmailExists: "حساب بهذا البريد الإلكتروني موجود بالفعل",
@@ -424,19 +429,23 @@ const resources = {
 
         // Success messages
         successTitle: "Compte créé !",
-        successMessage: "Bienvenue sur SocialFusion ! Vous pouvez maintenant commencer à vous connecter avec des amis.",
+        successMessage:
+          "Bienvenue sur SocialFusion ! Vous pouvez maintenant commencer à vous connecter avec des amis.",
         loginSuccessTitle: "Bon retour !",
-        loginSuccessMessage: "Vous vous êtes connecté avec succès à votre compte.",
+        loginSuccessMessage:
+          "Vous vous êtes connecté avec succès à votre compte.",
 
         // Error messages
         errorRequired: "Veuillez remplir tous les champs requis",
         errorInvalidEmail: "Veuillez entrer une adresse email valide",
-        errorWeakPassword: "Le mot de passe doit contenir au moins 8 caractères avec majuscule, minuscule et chiffre",
+        errorWeakPassword:
+          "Le mot de passe doit contenir au moins 8 caractères avec majuscule, minuscule et chiffre",
         errorPasswordMismatch: "Les mots de passe ne correspondent pas",
         errorShortName: "Le nom doit contenir au moins 2 caractères",
         errorEmailExists: "Un compte avec cet email existe déjà",
         errorInvalidCredentials: "Email ou mot de passe invalide",
-        errorTooManyAttempts: "Trop de tentatives échouées. Veuillez réessayer plus tard",
+        errorTooManyAttempts:
+          "Trop de tentatives échouées. Veuillez réessayer plus tard",
         errorGeneral: "Quelque chose s'est mal passé. Veuillez réessayer",
       },
     },

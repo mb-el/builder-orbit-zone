@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Heart, 
+import React, { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  TrendingUp,
+  TrendingDown,
+  Heart,
   MessageCircle,
   Share,
   Bookmark,
@@ -11,23 +11,23 @@ import {
   ArrowDown,
   Sparkles,
   Zap,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SocialScrollIndicatorsProps {
   className?: string;
-  theme?: 'gradient' | 'neon' | 'glassmorphism' | 'minimal';
+  theme?: "gradient" | "neon" | "glassmorphism" | "minimal";
 }
 
 const SocialScrollIndicators: React.FC<SocialScrollIndicatorsProps> = ({
-  className = '',
-  theme = 'gradient',
+  className = "",
+  theme = "gradient",
 }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [activeButton, setActiveButton] = useState<'up' | 'down' | null>(null);
+  const [activeButton, setActiveButton] = useState<"up" | "down" | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,21 +45,21 @@ const SocialScrollIndicators: React.FC<SocialScrollIndicatorsProps> = ({
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToTop = () => {
-    setActiveButton('up');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setActiveButton("up");
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => setActiveButton(null), 1000);
   };
 
   const scrollToBottom = () => {
-    setActiveButton('down');
-    window.scrollTo({ 
-      top: document.documentElement.scrollHeight, 
-      behavior: 'smooth' 
+    setActiveButton("down");
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
     });
     setTimeout(() => setActiveButton(null), 1000);
   };
@@ -68,35 +68,43 @@ const SocialScrollIndicators: React.FC<SocialScrollIndicatorsProps> = ({
 
   const themes = {
     gradient: {
-      container: 'bg-gradient-to-b from-pink-500/20 via-purple-500/20 to-blue-500/20',
-      upButton: 'bg-gradient-to-br from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400',
-      downButton: 'bg-gradient-to-br from-purple-500 to-blue-500 hover:from-purple-400 hover:to-blue-400',
-      progress: 'bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400',
+      container:
+        "bg-gradient-to-b from-pink-500/20 via-purple-500/20 to-blue-500/20",
+      upButton:
+        "bg-gradient-to-br from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400",
+      downButton:
+        "bg-gradient-to-br from-purple-500 to-blue-500 hover:from-purple-400 hover:to-blue-400",
+      progress: "bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400",
     },
     neon: {
-      container: 'bg-black/40 border border-cyan-400/30',
-      upButton: 'bg-cyan-500/20 border border-cyan-400 text-cyan-400 hover:bg-cyan-500/30 hover:shadow-cyan-400/50',
-      downButton: 'bg-purple-500/20 border border-purple-400 text-purple-400 hover:bg-purple-500/30 hover:shadow-purple-400/50',
-      progress: 'bg-gradient-to-r from-cyan-400 to-purple-400',
+      container: "bg-black/40 border border-cyan-400/30",
+      upButton:
+        "bg-cyan-500/20 border border-cyan-400 text-cyan-400 hover:bg-cyan-500/30 hover:shadow-cyan-400/50",
+      downButton:
+        "bg-purple-500/20 border border-purple-400 text-purple-400 hover:bg-purple-500/30 hover:shadow-purple-400/50",
+      progress: "bg-gradient-to-r from-cyan-400 to-purple-400",
     },
     glassmorphism: {
-      container: 'bg-white/10 backdrop-blur-md border border-white/20',
-      upButton: 'bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30',
-      downButton: 'bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30',
-      progress: 'bg-white/60',
+      container: "bg-white/10 backdrop-blur-md border border-white/20",
+      upButton:
+        "bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30",
+      downButton:
+        "bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30",
+      progress: "bg-white/60",
     },
     minimal: {
-      container: 'bg-card/95 border border-border',
-      upButton: 'bg-primary text-primary-foreground hover:bg-primary/90',
-      downButton: 'bg-secondary text-secondary-foreground hover:bg-secondary/90',
-      progress: 'bg-primary',
+      container: "bg-card/95 border border-border",
+      upButton: "bg-primary text-primary-foreground hover:bg-primary/90",
+      downButton:
+        "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+      progress: "bg-primary",
     },
   };
 
   const currentTheme = themes[theme];
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`
         fixed right-6 top-1/2 transform -translate-y-1/2 z-50 
@@ -122,36 +130,30 @@ const SocialScrollIndicators: React.FC<SocialScrollIndicatorsProps> = ({
           className={`
             relative w-12 h-12 rounded-xl p-0 overflow-hidden
             ${currentTheme.upButton}
-            ${activeButton === 'up' ? 'animate-pulse scale-110' : ''}
+            ${activeButton === "up" ? "animate-pulse scale-110" : ""}
             transition-all duration-300 group
-            ${theme === 'neon' ? 'shadow-lg' : ''}
+            ${theme === "neon" ? "shadow-lg" : ""}
           `}
           variant="ghost"
           title="Scroll to top"
         >
           <div className="relative z-10 flex items-center justify-center">
-            {theme === 'gradient' && (
+            {theme === "gradient" && (
               <TrendingUp className="w-6 h-6 text-white drop-shadow-sm" />
             )}
-            {theme === 'neon' && (
-              <ArrowUp className="w-5 h-5 animate-pulse" />
-            )}
-            {theme === 'glassmorphism' && (
-              <Sparkles className="w-5 h-5" />
-            )}
-            {theme === 'minimal' && (
-              <ArrowUp className="w-5 h-5" />
-            )}
+            {theme === "neon" && <ArrowUp className="w-5 h-5 animate-pulse" />}
+            {theme === "glassmorphism" && <Sparkles className="w-5 h-5" />}
+            {theme === "minimal" && <ArrowUp className="w-5 h-5" />}
           </div>
-          
+
           {/* Animated Background Effects */}
           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          
-          {theme === 'gradient' && (
+
+          {theme === "gradient" && (
             <div className="absolute top-1 right-1 w-2 h-2 bg-yellow-300 rounded-full animate-ping" />
           )}
-          
-          {theme === 'neon' && (
+
+          {theme === "neon" && (
             <div className="absolute inset-0 bg-cyan-400/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
           )}
         </Button>
@@ -159,25 +161,25 @@ const SocialScrollIndicators: React.FC<SocialScrollIndicatorsProps> = ({
 
       {/* Scroll Progress Indicator */}
       <div className="relative w-2 h-24 bg-white/20 rounded-full overflow-hidden">
-        <div 
+        <div
           className={`
             w-full ${currentTheme.progress} rounded-full transition-all duration-300
-            ${theme === 'neon' ? 'shadow-lg animate-pulse' : ''}
+            ${theme === "neon" ? "shadow-lg animate-pulse" : ""}
           `}
-          style={{ 
+          style={{
             height: `${Math.min(100, scrollProgress)}%`,
-            transform: 'translateY(0)',
+            transform: "translateY(0)",
           }}
         />
-        
+
         {/* Progress Indicator Dot */}
-        <div 
+        <div
           className="absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rounded-full shadow-lg transition-all duration-300"
-          style={{ 
+          style={{
             top: `${Math.min(88, scrollProgress)}%`,
           }}
         >
-          {theme === 'gradient' && (
+          {theme === "gradient" && (
             <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full animate-spin" />
           )}
         </div>
@@ -190,47 +192,43 @@ const SocialScrollIndicators: React.FC<SocialScrollIndicatorsProps> = ({
           className={`
             relative w-12 h-12 rounded-xl p-0 overflow-hidden
             ${currentTheme.downButton}
-            ${activeButton === 'down' ? 'animate-pulse scale-110' : ''}
+            ${activeButton === "down" ? "animate-pulse scale-110" : ""}
             transition-all duration-300 group
-            ${theme === 'neon' ? 'shadow-lg' : ''}
+            ${theme === "neon" ? "shadow-lg" : ""}
           `}
           variant="ghost"
           title="Scroll to bottom"
         >
           <div className="relative z-10 flex items-center justify-center">
-            {theme === 'gradient' && (
+            {theme === "gradient" && (
               <TrendingDown className="w-6 h-6 text-white drop-shadow-sm" />
             )}
-            {theme === 'neon' && (
+            {theme === "neon" && (
               <ArrowDown className="w-5 h-5 animate-pulse" />
             )}
-            {theme === 'glassmorphism' && (
-              <Zap className="w-5 h-5" />
-            )}
-            {theme === 'minimal' && (
-              <ArrowDown className="w-5 h-5" />
-            )}
+            {theme === "glassmorphism" && <Zap className="w-5 h-5" />}
+            {theme === "minimal" && <ArrowDown className="w-5 h-5" />}
           </div>
-          
+
           {/* Animated Background Effects */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          
-          {theme === 'gradient' && (
+
+          {theme === "gradient" && (
             <div className="absolute bottom-1 left-1 w-2 h-2 bg-green-300 rounded-full animate-ping delay-200" />
           )}
-          
-          {theme === 'neon' && (
+
+          {theme === "neon" && (
             <div className="absolute inset-0 bg-purple-400/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
           )}
         </Button>
       )}
 
       {/* Ambient Glow Effect */}
-      {theme === 'gradient' && (
+      {theme === "gradient" && (
         <div className="absolute -inset-4 bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-blue-500/10 rounded-3xl blur-xl opacity-50 animate-pulse" />
       )}
-      
-      {theme === 'neon' && (
+
+      {theme === "neon" && (
         <div className="absolute -inset-2 bg-cyan-400/5 rounded-2xl blur-md animate-pulse" />
       )}
     </div>

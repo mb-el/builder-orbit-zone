@@ -1,13 +1,13 @@
-import React from 'react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { ExternalLink, Info, Settings } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { areFirebaseServicesAvailable } from '@/lib/firebase';
+import React from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { ExternalLink, Info, Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { areFirebaseServicesAvailable } from "@/lib/firebase";
 
 const FirebaseNotice: React.FC = () => {
   const { t } = useTranslation();
-  
+
   if (areFirebaseServicesAvailable()) {
     return null; // Don't show notice if Firebase is properly configured
   }
@@ -18,14 +18,17 @@ const FirebaseNotice: React.FC = () => {
       <AlertTitle className="text-amber-800">Demo Mode Active</AlertTitle>
       <AlertDescription className="text-amber-700 space-y-2">
         <p>
-          Firebase is not configured yet. The app is running in demo mode with simulated authentication.
+          Firebase is not configured yet. The app is running in demo mode with
+          simulated authentication.
         </p>
         <div className="flex flex-col sm:flex-row gap-2 mt-3">
           <Button
             variant="outline"
             size="sm"
             className="text-amber-700 border-amber-300 hover:bg-amber-100"
-            onClick={() => window.open('https://console.firebase.google.com', '_blank')}
+            onClick={() =>
+              window.open("https://console.firebase.google.com", "_blank")
+            }
           >
             <ExternalLink className="w-4 h-4 mr-2" />
             Set up Firebase
@@ -35,8 +38,8 @@ const FirebaseNotice: React.FC = () => {
             size="sm"
             className="text-amber-700 border-amber-300 hover:bg-amber-100"
             onClick={() => {
-              const docUrl = window.location.origin + '/FIREBASE_SETUP.md';
-              window.open(docUrl, '_blank');
+              const docUrl = window.location.origin + "/FIREBASE_SETUP.md";
+              window.open(docUrl, "_blank");
             }}
           >
             <Settings className="w-4 h-4 mr-2" />

@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Maximize, 
-  Minimize, 
-  RotateCw, 
-  Move3D, 
-  Eye, 
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Maximize,
+  Minimize,
+  RotateCw,
+  Move3D,
+  Eye,
   Volume2,
   VolumeX,
   Share,
   Heart,
   MessageCircle,
   Bookmark,
-} from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface SpatialPost {
   id: string;
@@ -25,7 +25,7 @@ interface SpatialPost {
     avatar: string;
   };
   media: {
-    type: 'image' | 'video' | '360-image' | '360-video' | '3d-model';
+    type: "image" | "video" | "360-image" | "360-video" | "3d-model";
     url: string;
     spatialData?: {
       position: [number, number, number];
@@ -70,16 +70,17 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
   // Mock spatial posts data
   const mockSpatialPosts: SpatialPost[] = [
     {
-      id: '1',
-      content: 'Amazing sunset in 360° VR! Experience the beauty of nature like never before.',
+      id: "1",
+      content:
+        "Amazing sunset in 360° VR! Experience the beauty of nature like never before.",
       author: {
-        name: 'John Doe',
-        avatar: '/placeholder.svg',
+        name: "John Doe",
+        avatar: "/placeholder.svg",
       },
       media: [
         {
-          type: '360-image',
-          url: '/placeholder.svg',
+          type: "360-image",
+          url: "/placeholder.svg",
           spatialData: {
             position: [0, 1.5, -3],
             rotation: [0, 0, 0],
@@ -102,16 +103,17 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
       },
     },
     {
-      id: '2',
-      content: 'Check out this 3D sculpture I created! Rotate and zoom to see all angles.',
+      id: "2",
+      content:
+        "Check out this 3D sculpture I created! Rotate and zoom to see all angles.",
       author: {
-        name: 'Alice Artist',
-        avatar: '/placeholder.svg',
+        name: "Alice Artist",
+        avatar: "/placeholder.svg",
       },
       media: [
         {
-          type: '3d-model',
-          url: '/placeholder.svg',
+          type: "3d-model",
+          url: "/placeholder.svg",
           spatialData: {
             position: [2, 0.5, -2],
             rotation: [0, 45, 0],
@@ -140,34 +142,35 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
   // Handle post selection in VR/AR space
   const handlePostSelect = (postId: string) => {
     setSelectedPost(postId);
-    onPostInteraction(postId, 'select');
+    onPostInteraction(postId, "select");
   };
 
   // Handle spatial interactions
   const handleSpatialInteraction = (postId: string, action: string) => {
     onPostInteraction(postId, action);
-    
+
     // Add haptic feedback for VR controllers
-    if (isVRMode && 'vibrate' in navigator) {
+    if (isVRMode && "vibrate" in navigator) {
       navigator.vibrate(50);
     }
   };
 
   const renderSpatialPost = (post: SpatialPost, index: number) => {
     const isSelected = selectedPost === post.id;
-    
+
     return (
       <Card
         key={post.id}
-        className={`spatial-post ${isSelected ? 'selected' : ''} ${
-          isVRMode || isARMode ? 'immersive' : 'standard'
+        className={`spatial-post ${isSelected ? "selected" : ""} ${
+          isVRMode || isARMode ? "immersive" : "standard"
         }`}
         style={{
-          transform: isVRMode || isARMode 
-            ? `translate3d(${index * 300}px, ${Math.sin(index) * 50}px, ${post.spatialProperties.depth * 100}px)` 
-            : 'none',
-          transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-          transformStyle: 'preserve-3d',
+          transform:
+            isVRMode || isARMode
+              ? `translate3d(${index * 300}px, ${Math.sin(index) * 50}px, ${post.spatialProperties.depth * 100}px)`
+              : "none",
+          transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+          transformStyle: "preserve-3d",
         }}
         onClick={() => handlePostSelect(post.id)}
       >
@@ -210,16 +213,16 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
                 className="relative bg-muted rounded-lg p-4 text-center"
               >
                 <div className="text-4xl mb-2">
-                  {media.type === '360-image' && '🌐'}
-                  {media.type === '360-video' && '📹'}
-                  {media.type === '3d-model' && '🎨'}
-                  {media.type === 'image' && '🖼️'}
-                  {media.type === 'video' && '▶️'}
+                  {media.type === "360-image" && "🌐"}
+                  {media.type === "360-video" && "📹"}
+                  {media.type === "3d-model" && "🎨"}
+                  {media.type === "image" && "🖼️"}
+                  {media.type === "video" && "▶️"}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {media.type.replace('-', ' ').toUpperCase()}
+                  {media.type.replace("-", " ").toUpperCase()}
                 </p>
-                
+
                 {/* VR/AR specific controls */}
                 {(isVRMode || isARMode) && (
                   <div className="flex justify-center gap-2 mt-2">
@@ -229,7 +232,7 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
                     <Button size="sm" variant="ghost">
                       <RotateCw className="w-3 h-3" />
                     </Button>
-                    {media.type.includes('3d') && (
+                    {media.type.includes("3d") && (
                       <Button size="sm" variant="ghost">
                         <Move3D className="w-3 h-3" />
                       </Button>
@@ -246,34 +249,36 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
               <Button
                 size="sm"
                 variant="ghost"
-                className={post.interactions.liked ? 'text-red-500' : ''}
+                className={post.interactions.liked ? "text-red-500" : ""}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleSpatialInteraction(post.id, 'like');
+                  handleSpatialInteraction(post.id, "like");
                 }}
               >
                 <Heart className="w-4 h-4" />
                 <span className="ml-1 text-xs">{post.interactions.likes}</span>
               </Button>
-              
+
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleSpatialInteraction(post.id, 'comment');
+                  handleSpatialInteraction(post.id, "comment");
                 }}
               >
                 <MessageCircle className="w-4 h-4" />
-                <span className="ml-1 text-xs">{post.interactions.comments}</span>
+                <span className="ml-1 text-xs">
+                  {post.interactions.comments}
+                </span>
               </Button>
-              
+
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleSpatialInteraction(post.id, 'share');
+                  handleSpatialInteraction(post.id, "share");
                 }}
               >
                 <Share className="w-4 h-4" />
@@ -284,10 +289,10 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
             <Button
               size="sm"
               variant="ghost"
-              className={post.interactions.bookmarked ? 'text-blue-500' : ''}
+              className={post.interactions.bookmarked ? "text-blue-500" : ""}
               onClick={(e) => {
                 e.stopPropagation();
-                handleSpatialInteraction(post.id, 'bookmark');
+                handleSpatialInteraction(post.id, "bookmark");
               }}
             >
               <Bookmark className="w-4 h-4" />
@@ -320,10 +325,10 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`spatial-post-viewer ${isVRMode ? 'vr-mode' : ''} ${isARMode ? 'ar-mode' : ''}`}
+      className={`spatial-post-viewer ${isVRMode ? "vr-mode" : ""} ${isARMode ? "ar-mode" : ""}`}
       style={{
-        perspective: isVRMode || isARMode ? '1000px' : 'none',
-        transformStyle: 'preserve-3d',
+        perspective: isVRMode || isARMode ? "1000px" : "none",
+        transformStyle: "preserve-3d",
       }}
     >
       {/* Spatial Navigation Controls */}
@@ -343,7 +348,7 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
               )}
             </Button>
             <span className="text-white text-xs">
-              {isVRMode ? 'VR Mode' : 'AR Mode'}
+              {isVRMode ? "VR Mode" : "AR Mode"}
             </span>
           </div>
         </div>
@@ -352,13 +357,13 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
       {/* Posts Container */}
       <div
         className={`posts-container ${
-          isVRMode || isARMode 
-            ? 'spatial-layout' 
-            : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+          isVRMode || isARMode
+            ? "spatial-layout"
+            : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         }`}
         style={{
-          transform: isVRMode || isARMode ? 'translateZ(0)' : 'none',
-          transformStyle: 'preserve-3d',
+          transform: isVRMode || isARMode ? "translateZ(0)" : "none",
+          transformStyle: "preserve-3d",
         }}
       >
         {activePosts.map(renderSpatialPost)}
@@ -368,10 +373,9 @@ const SpatialPostViewer: React.FC<SpatialPostViewerProps> = ({
       {(isVRMode || isARMode) && (
         <div className="spatial-instructions fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-black/70 backdrop-blur-sm rounded-lg p-3 text-white text-center">
           <p className="text-sm">
-            {isVRMode 
-              ? 'Use your VR controllers to point and select posts. Walk around to explore in 3D!'
-              : 'Move your device to explore AR content in your space. Tap to interact!'
-            }
+            {isVRMode
+              ? "Use your VR controllers to point and select posts. Walk around to explore in 3D!"
+              : "Move your device to explore AR content in your space. Tap to interact!"}
           </p>
         </div>
       )}

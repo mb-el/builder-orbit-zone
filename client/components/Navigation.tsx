@@ -58,9 +58,27 @@ const Navigation = () => {
 
   const navItems = [
     { name: t("home"), icon: Home, path: "/", mobile: true, priority: 1 },
-    { name: t("search"), icon: Search, path: "/search", mobile: true, priority: 2 },
-    { name: t("create"), icon: PlusSquare, path: "/create", mobile: true, priority: 3 },
-    { name: t("reels"), icon: Video, path: "/reels", mobile: true, priority: 4 },
+    {
+      name: t("search"),
+      icon: Search,
+      path: "/search",
+      mobile: true,
+      priority: 2,
+    },
+    {
+      name: t("create"),
+      icon: PlusSquare,
+      path: "/create",
+      mobile: true,
+      priority: 3,
+    },
+    {
+      name: t("reels"),
+      icon: Video,
+      path: "/reels",
+      mobile: true,
+      priority: 4,
+    },
     {
       name: t("notifications"),
       icon: Heart,
@@ -75,9 +93,27 @@ const Navigation = () => {
       mobile: false, // Moved to top bar
       priority: 6,
     },
-    { name: t("camera"), icon: Camera, path: "/camera", mobile: false, priority: 7 },
-    { name: t("settings"), icon: Settings, path: "/settings", mobile: false, priority: 8 },
-    { name: t("profile"), icon: User, path: "/profile", mobile: false, priority: 9 }, // Moved to dropdown
+    {
+      name: t("camera"),
+      icon: Camera,
+      path: "/camera",
+      mobile: false,
+      priority: 7,
+    },
+    {
+      name: t("settings"),
+      icon: Settings,
+      path: "/settings",
+      mobile: false,
+      priority: 8,
+    },
+    {
+      name: t("profile"),
+      icon: User,
+      path: "/profile",
+      mobile: false,
+      priority: 9,
+    }, // Moved to dropdown
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -147,7 +183,10 @@ const Navigation = () => {
       <div className="md:hidden fixed top-0 left-0 right-0 bg-card border-b border-border z-50 no-scroll-x">
         <div className="flex items-center justify-between px-2 mobile-xs:px-3 py-2 mobile-sm:py-2.5">
           {/* Logo - Optimized for small screens */}
-          <Link to="/" className="flex items-center gap-1 mobile-sm:gap-1.5 min-w-0 flex-shrink">
+          <Link
+            to="/"
+            className="flex items-center gap-1 mobile-sm:gap-1.5 min-w-0 flex-shrink"
+          >
             <div className="w-6 h-6 mobile-sm:w-7 mobile-sm:h-7 bg-primary rounded-md flex items-center justify-center flex-shrink-0">
               <span className="text-primary-foreground font-bold text-[10px] mobile-sm:text-xs">
                 S
@@ -175,7 +214,7 @@ const Navigation = () => {
               {notificationCount > 0 && (
                 <div className="absolute -top-0.5 -right-0.5 w-3 h-3 mobile-sm:w-3.5 mobile-sm:h-3.5 bg-red-500 rounded-full flex items-center justify-center">
                   <span className="text-[8px] mobile-sm:text-[10px] text-white font-bold leading-none">
-                    {notificationCount > 9 ? '9+' : notificationCount}
+                    {notificationCount > 9 ? "9+" : notificationCount}
                   </span>
                 </div>
               )}
@@ -202,14 +241,20 @@ const Navigation = () => {
             >
               <Avatar className="w-5 h-5 mobile-sm:w-6 mobile-sm:h-6">
                 <AvatarImage src="/placeholder.svg" />
-                <AvatarFallback className="text-[10px] mobile-sm:text-xs">JD</AvatarFallback>
+                <AvatarFallback className="text-[10px] mobile-sm:text-xs">
+                  JD
+                </AvatarFallback>
               </Avatar>
             </Button>
 
             {/* More Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="w-8 h-8 mobile-sm:w-9 mobile-sm:h-9 touch-target-optimized">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-8 h-8 mobile-sm:w-9 mobile-sm:h-9 touch-target-optimized"
+                >
                   <Menu className="w-3.5 h-3.5 mobile-sm:w-4 mobile-sm:h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -236,7 +281,9 @@ const Navigation = () => {
 
                 <div className="px-2 py-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">Language:</span>
+                    <span className="text-sm text-muted-foreground">
+                      Language:
+                    </span>
                     <LanguageSwitcher />
                   </div>
                 </div>
@@ -278,12 +325,12 @@ const Navigation = () => {
                     try {
                       await signOut();
                       toast({
-                        title: t('registration.logout'),
+                        title: t("registration.logout"),
                         description: "You have been signed out successfully.",
                       });
-                      navigate('/auth');
+                      navigate("/auth");
                     } catch (error) {
-                      console.error('Logout error:', error);
+                      console.error("Logout error:", error);
                       toast({
                         title: "Error",
                         description: "Failed to sign out. Please try again.",
@@ -293,7 +340,7 @@ const Navigation = () => {
                   }}
                 >
                   <LogOut className="w-4 h-4 mr-3" />
-                  <span>{t('registration.logout')}</span>
+                  <span>{t("registration.logout")}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -320,11 +367,13 @@ const Navigation = () => {
                   }`}
                 >
                   <div className="relative">
-                    <item.icon className={`w-4 h-4 mobile-sm:w-5 mobile-sm:h-5 transition-transform ${
-                      isItemActive ? "scale-110" : ""
-                    }`} />
+                    <item.icon
+                      className={`w-4 h-4 mobile-sm:w-5 mobile-sm:h-5 transition-transform ${
+                        isItemActive ? "scale-110" : ""
+                      }`}
+                    />
                     {/* Notification badge for notifications tab */}
-                    {item.path === '/notifications' && hasNotifications && (
+                    {item.path === "/notifications" && hasNotifications && (
                       <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 mobile-sm:w-2 mobile-sm:h-2 bg-red-500 rounded-full"></div>
                     )}
                     {/* Active indicator */}
@@ -332,9 +381,11 @@ const Navigation = () => {
                       <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-0.5 mobile-sm:h-1 bg-primary rounded-full"></div>
                     )}
                   </div>
-                  <span className={`text-[9px] mobile-sm:text-[10px] font-medium truncate max-w-full leading-tight ${
-                    isItemActive ? "text-primary" : ""
-                  }`}>
+                  <span
+                    className={`text-[9px] mobile-sm:text-[10px] font-medium truncate max-w-full leading-tight ${
+                      isItemActive ? "text-primary" : ""
+                    }`}
+                  >
                     {item.name}
                   </span>
                 </Link>

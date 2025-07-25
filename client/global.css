@@ -26,7 +26,9 @@
 @media (max-width: 768px) {
   body {
     padding-top: 60px; /* Top navigation height */
-    padding-bottom: calc(70px + env(safe-area-inset-bottom)); /* Bottom navigation + safe area */
+    padding-bottom: calc(
+      70px + env(safe-area-inset-bottom)
+    ); /* Bottom navigation + safe area */
   }
 }
 
@@ -48,7 +50,8 @@
 
 /* Touch target optimization for better mobile usability */
 @media (hover: none) and (pointer: coarse) {
-  button, a {
+  button,
+  a {
     min-height: 44px; /* iOS/Android recommended minimum touch target */
   }
 
@@ -145,7 +148,9 @@ html {
   }
 
   /* Prevent iOS zoom on input focus */
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     font-size: 16px;
   }
 
@@ -164,12 +169,22 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: linear-gradient(45deg, hsl(var(--background)) 0%, hsl(var(--muted)) 50%, hsl(var(--background)) 100%);
+  background: linear-gradient(
+    45deg,
+    hsl(var(--background)) 0%,
+    hsl(var(--muted)) 50%,
+    hsl(var(--background)) 100%
+  );
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary))/80 50%, hsl(var(--primary))/60 100%);
+  background: linear-gradient(
+    135deg,
+    hsl(var(--primary)) 0%,
+    hsl(var(--primary)) / 80 50%,
+    hsl(var(--primary)) / 60 100%
+  );
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -177,8 +192,13 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary))/90 50%, hsl(var(--primary))/70 100%);
-  box-shadow: 0 0 10px hsl(var(--primary))/30;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--primary)) 0%,
+    hsl(var(--primary)) / 90 50%,
+    hsl(var(--primary)) / 70 100%
+  );
+  box-shadow: 0 0 10px hsl(var(--primary)) / 30;
 }
 
 ::-webkit-scrollbar-corner {
@@ -267,7 +287,8 @@ html {
 
 /* VR/AR Specific Animations */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotateY(0deg);
   }
   50% {
@@ -276,7 +297,8 @@ html {
 }
 
 @keyframes spatial-pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.3);
   }
   50% {
@@ -323,7 +345,7 @@ body.xr-session-active {
 }
 
 .spatial-audio-active::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -2px;
   left: -2px;
@@ -336,7 +358,8 @@ body.xr-session-active {
 }
 
 @keyframes spatial-audio-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -351,17 +374,25 @@ body.xr-session-active {
   position: fixed;
   width: 20px;
   height: 20px;
-  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.6);
+  border: 2px solid rgba(255, 255, 255, 0.6);
   pointer-events: none;
   z-index: 10001;
   transition: all 0.1s ease-out;
 }
 
 .vr-hand-cursor.selecting {
-  background: radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0.2) 100%);
-  border-color: rgba(0,255,255,0.8);
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.8) 0%,
+    rgba(0, 255, 255, 0.2) 100%
+  );
+  border-color: rgba(0, 255, 255, 0.8);
   transform: scale(1.5);
 }
 
@@ -370,15 +401,16 @@ body.xr-session-active {
   position: absolute;
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
   animation: anchor-pulse 2s ease-in-out infinite;
 }
 
 @keyframes anchor-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.7;
   }

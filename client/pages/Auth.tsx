@@ -1,4 +1,4 @@
-import Registration from '@/components/Registration';
+import Registration from "@/components/Registration";
 
 const Auth = () => {
   return <Registration />;

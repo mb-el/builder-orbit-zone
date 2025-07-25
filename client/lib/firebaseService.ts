@@ -115,7 +115,7 @@ export const uploadFileToStorage = (
   return new Promise((resolve, reject) => {
     // Check if Firebase Storage is available
     if (!areFirebaseServicesAvailable() || !storage) {
-      console.warn('Firebase Storage not available, returning mock URL');
+      console.warn("Firebase Storage not available, returning mock URL");
       // Simulate upload progress
       const simulateProgress = () => {
         let progress = 0;
@@ -124,7 +124,9 @@ export const uploadFileToStorage = (
           onProgress?.(progress);
           if (progress >= 100) {
             clearInterval(interval);
-            resolve(`https://via.placeholder.com/400x300?text=${encodeURIComponent(file.name)}`);
+            resolve(
+              `https://via.placeholder.com/400x300?text=${encodeURIComponent(file.name)}`,
+            );
           }
         }, 100);
       };
@@ -187,8 +189,8 @@ export const createPost = async (
   try {
     // Check if Firestore is available
     if (!areFirebaseServicesAvailable() || !db) {
-      console.warn('Firestore not available, returning mock post ID');
-      return 'demo-post-' + Date.now();
+      console.warn("Firestore not available, returning mock post ID");
+      return "demo-post-" + Date.now();
     }
 
     const docRef = await addDoc(collection(db, "posts"), {

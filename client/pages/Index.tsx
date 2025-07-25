@@ -96,22 +96,31 @@ export default function Index() {
   };
 
   // Convert regular posts to spatial posts for VR/AR
-  const spatialPosts = samplePosts.map(post => ({
+  const spatialPosts = samplePosts.map((post) => ({
     id: post.id.toString(),
     content: post.content,
     author: {
       name: post.username,
       avatar: post.avatar,
     },
-    media: [{
-      type: post.media?.type === 'video' ? '360-video' as const : '360-image' as const,
-      url: post.media?.url || '/placeholder.svg',
-      spatialData: {
-        position: [Math.random() * 4 - 2, Math.random() * 2, -3 - Math.random() * 2] as [number, number, number],
-        rotation: [0, Math.random() * 360, 0] as [number, number, number],
-        scale: [1, 1, 1] as [number, number, number],
+    media: [
+      {
+        type:
+          post.media?.type === "video"
+            ? ("360-video" as const)
+            : ("360-image" as const),
+        url: post.media?.url || "/placeholder.svg",
+        spatialData: {
+          position: [
+            Math.random() * 4 - 2,
+            Math.random() * 2,
+            -3 - Math.random() * 2,
+          ] as [number, number, number],
+          rotation: [0, Math.random() * 360, 0] as [number, number, number],
+          scale: [1, 1, 1] as [number, number, number],
+        },
       },
-    }],
+    ],
     spatialProperties: {
       floating: Math.random() > 0.5,
       interactive: true,
@@ -132,16 +141,16 @@ export default function Index() {
       <VRARInterface>
         {/* VR/AR Toggle Button */}
         <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">{t('home')}</h1>
+          <h1 className="text-2xl font-bold">{t("home")}</h1>
           <div className="flex items-center gap-2">
             <Button
-              variant={showVRInterface ? 'default' : 'outline'}
+              variant={showVRInterface ? "default" : "outline"}
               size="sm"
               onClick={() => setShowVRInterface(!showVRInterface)}
               className="flex items-center gap-2"
             >
               {currentSession.active ? (
-                currentSession.mode === 'immersive-vr' ? (
+                currentSession.mode === "immersive-vr" ? (
                   <>
                     <Glasses className="w-4 h-4" />
                     VR Active
@@ -155,7 +164,7 @@ export default function Index() {
               ) : (
                 <>
                   <Glasses className="w-4 h-4" />
-                  {showVRInterface ? 'Hide VR/AR' : 'Enable VR/AR'}
+                  {showVRInterface ? "Hide VR/AR" : "Enable VR/AR"}
                 </>
               )}
             </Button>
@@ -167,8 +176,8 @@ export default function Index() {
           <div className="vr-ar-content">
             <SpatialPostViewer
               posts={spatialPosts}
-              isVRMode={currentSession.mode === 'immersive-vr'}
-              isARMode={currentSession.mode === 'immersive-ar'}
+              isVRMode={currentSession.mode === "immersive-vr"}
+              isARMode={currentSession.mode === "immersive-ar"}
               onPostInteraction={handlePostInteraction}
             />
           </div>

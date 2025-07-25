@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, db, areFirebaseServicesAvailable } from '@/lib/firebase';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, User, Phone, Calendar } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { toast } from '@/hooks/use-toast';
-import FirebaseNotice from './FirebaseNotice';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db, areFirebaseServicesAvailable } from "@/lib/firebase";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Eye, EyeOff, Mail, Lock, User, Phone, Calendar } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { toast } from "@/hooks/use-toast";
+import FirebaseNotice from "./FirebaseNotice";
 
 interface FormData {
   email: string;
@@ -31,24 +41,24 @@ interface LoginData {
 const Registration: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('signup');
+  const [activeTab, setActiveTab] = useState("signup");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [signupData, setSignupData] = useState<FormData>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    displayName: '',
-    phoneNumber: '',
-    dateOfBirth: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    displayName: "",
+    phoneNumber: "",
+    dateOfBirth: "",
   });
 
   const [loginData, setLoginData] = useState<LoginData>({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const validateEmail = (email: string) => {
@@ -58,33 +68,34 @@ const Registration: React.FC = () => {
 
   const validatePassword = (password: string) => {
     // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
   };
 
   const validateSignupForm = () => {
     if (!signupData.email || !signupData.password || !signupData.displayName) {
-      setError(t('registration.errorRequired'));
+      setError(t("registration.errorRequired"));
       return false;
     }
 
     if (!validateEmail(signupData.email)) {
-      setError(t('registration.errorInvalidEmail'));
+      setError(t("registration.errorInvalidEmail"));
       return false;
     }
 
     if (!validatePassword(signupData.password)) {
-      setError(t('registration.errorWeakPassword'));
+      setError(t("registration.errorWeakPassword"));
       return false;
     }
 
     if (signupData.password !== signupData.confirmPassword) {
-      setError(t('registration.errorPasswordMismatch'));
+      setError(t("registration.errorPasswordMismatch"));
       return false;
     }
 
     if (signupData.displayName.length < 2) {
-      setError(t('registration.errorShortName'));
+      setError(t("registration.errorShortName"));
       return false;
     }
 
@@ -93,12 +104,12 @@ const Registration: React.FC = () => {
 
   const validateLoginForm = () => {
     if (!loginData.email || !loginData.password) {
-      setError(t('registration.errorRequired'));
+      setError(t("registration.errorRequired"));
       return false;
     }
 
     if (!validateEmail(loginData.email)) {
-      setError(t('registration.errorInvalidEmail'));
+      setError(t("registration.errorInvalidEmail"));
       return false;
     }
 
@@ -107,7 +118,7 @@ const Registration: React.FC = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!validateSignupForm()) return;
 
@@ -118,10 +129,10 @@ const Registration: React.FC = () => {
       if (!areFirebaseServicesAvailable() || !auth || !db) {
         // Demo mode - simulate successful registration
         toast({
-          title: t('registration.successTitle'),
-          description: t('registration.successMessage') + ' (Demo Mode)',
+          title: t("registration.successTitle"),
+          description: t("registration.successMessage") + " (Demo Mode)",
         });
-        navigate('/');
+        navigate("/");
         return;
       }
 
@@ -129,7 +140,7 @@ const Registration: React.FC = () => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         signupData.email,
-        signupData.password
+        signupData.password,
       );
 
       // Update user profile
@@ -138,7 +149,7 @@ const Registration: React.FC = () => {
       });
 
       // Create user document in Firestore
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
+      await setDoc(doc(db, "users", userCredential.user.uid), {
         email: signupData.email,
         displayName: signupData.displayName,
         phoneNumber: signupData.phoneNumber,
@@ -148,40 +159,44 @@ const Registration: React.FC = () => {
         followers: 0,
         following: 0,
         posts: 0,
-        bio: '',
-        location: '',
-        website: '',
+        bio: "",
+        location: "",
+        website: "",
         verified: false,
       });
 
       toast({
-        title: t('registration.successTitle'),
-        description: t('registration.successMessage'),
+        title: t("registration.successTitle"),
+        description: t("registration.successMessage"),
       });
 
-      navigate('/');
+      navigate("/");
     } catch (error: any) {
-      console.error('Signup error:', error);
+      console.error("Signup error:", error);
 
       // Handle specific Firebase errors
-      if (error.message?.includes('Network connection failed')) {
-        setError('Network connection failed. Please check your internet connection and try again.');
+      if (error.message?.includes("Network connection failed")) {
+        setError(
+          "Network connection failed. Please check your internet connection and try again.",
+        );
       } else {
         switch (error.code) {
-          case 'auth/email-already-in-use':
-            setError(t('registration.errorEmailExists'));
+          case "auth/email-already-in-use":
+            setError(t("registration.errorEmailExists"));
             break;
-          case 'auth/weak-password':
-            setError(t('registration.errorWeakPassword'));
+          case "auth/weak-password":
+            setError(t("registration.errorWeakPassword"));
             break;
-          case 'auth/invalid-email':
-            setError(t('registration.errorInvalidEmail'));
+          case "auth/invalid-email":
+            setError(t("registration.errorInvalidEmail"));
             break;
-          case 'auth/network-request-failed':
-            setError('Network connection failed. Please check your internet connection and Firebase configuration.');
+          case "auth/network-request-failed":
+            setError(
+              "Network connection failed. Please check your internet connection and Firebase configuration.",
+            );
             break;
           default:
-            setError(t('registration.errorGeneral'));
+            setError(t("registration.errorGeneral"));
         }
       }
     } finally {
@@ -191,7 +206,7 @@ const Registration: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!validateLoginForm()) return;
 
@@ -202,42 +217,50 @@ const Registration: React.FC = () => {
       if (!areFirebaseServicesAvailable() || !auth) {
         // Demo mode - simulate successful login
         toast({
-          title: t('registration.loginSuccessTitle'),
-          description: t('registration.loginSuccessMessage') + ' (Demo Mode)',
+          title: t("registration.loginSuccessTitle"),
+          description: t("registration.loginSuccessMessage") + " (Demo Mode)",
         });
-        navigate('/');
+        navigate("/");
         return;
       }
 
-      await signInWithEmailAndPassword(auth, loginData.email, loginData.password);
+      await signInWithEmailAndPassword(
+        auth,
+        loginData.email,
+        loginData.password,
+      );
 
       toast({
-        title: t('registration.loginSuccessTitle'),
-        description: t('registration.loginSuccessMessage'),
+        title: t("registration.loginSuccessTitle"),
+        description: t("registration.loginSuccessMessage"),
       });
 
-      navigate('/');
+      navigate("/");
     } catch (error: any) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
 
       // Handle specific Firebase errors
-      if (error.message?.includes('Network connection failed')) {
-        setError('Network connection failed. Please check your internet connection and try again.');
+      if (error.message?.includes("Network connection failed")) {
+        setError(
+          "Network connection failed. Please check your internet connection and try again.",
+        );
       } else {
         switch (error.code) {
-          case 'auth/user-not-found':
-          case 'auth/wrong-password':
-          case 'auth/invalid-credential':
-            setError(t('registration.errorInvalidCredentials'));
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+          case "auth/invalid-credential":
+            setError(t("registration.errorInvalidCredentials"));
             break;
-          case 'auth/too-many-requests':
-            setError(t('registration.errorTooManyAttempts'));
+          case "auth/too-many-requests":
+            setError(t("registration.errorTooManyAttempts"));
             break;
-          case 'auth/network-request-failed':
-            setError('Network connection failed. Please check your internet connection and Firebase configuration.');
+          case "auth/network-request-failed":
+            setError(
+              "Network connection failed. Please check your internet connection and Firebase configuration.",
+            );
             break;
           default:
-            setError(t('registration.errorGeneral'));
+            setError(t("registration.errorGeneral"));
         }
       }
     } finally {
@@ -246,13 +269,13 @@ const Registration: React.FC = () => {
   };
 
   const handleSignupInputChange = (field: keyof FormData, value: string) => {
-    setSignupData(prev => ({ ...prev, [field]: value }));
-    if (error) setError('');
+    setSignupData((prev) => ({ ...prev, [field]: value }));
+    if (error) setError("");
   };
 
   const handleLoginInputChange = (field: keyof LoginData, value: string) => {
-    setLoginData(prev => ({ ...prev, [field]: value }));
-    if (error) setError('');
+    setLoginData((prev) => ({ ...prev, [field]: value }));
+    if (error) setError("");
   };
 
   return (
@@ -260,17 +283,19 @@ const Registration: React.FC = () => {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            {t('registration.welcome')}
+            {t("registration.welcome")}
           </CardTitle>
-          <CardDescription>{t('registration.subtitle')}</CardDescription>
+          <CardDescription>{t("registration.subtitle")}</CardDescription>
         </CardHeader>
 
         <CardContent>
           <FirebaseNotice />
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signup">{t('registration.signup')}</TabsTrigger>
-              <TabsTrigger value="login">{t('registration.login')}</TabsTrigger>
+              <TabsTrigger value="signup">
+                {t("registration.signup")}
+              </TabsTrigger>
+              <TabsTrigger value="login">{t("registration.login")}</TabsTrigger>
             </TabsList>
 
             {error && (
@@ -282,15 +307,19 @@ const Registration: React.FC = () => {
             <TabsContent value="signup" className="space-y-4 mt-4">
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="displayName">{t('registration.fullName')}</Label>
+                  <Label htmlFor="displayName">
+                    {t("registration.fullName")}
+                  </Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="displayName"
                       type="text"
-                      placeholder={t('registration.enterFullName')}
+                      placeholder={t("registration.enterFullName")}
                       value={signupData.displayName}
-                      onChange={(e) => handleSignupInputChange('displayName', e.target.value)}
+                      onChange={(e) =>
+                        handleSignupInputChange("displayName", e.target.value)
+                      }
                       className="pl-10"
                       disabled={loading}
                     />
@@ -298,15 +327,17 @@ const Registration: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t('registration.email')}</Label>
+                  <Label htmlFor="email">{t("registration.email")}</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="email"
                       type="email"
-                      placeholder={t('registration.enterEmail')}
+                      placeholder={t("registration.enterEmail")}
                       value={signupData.email}
-                      onChange={(e) => handleSignupInputChange('email', e.target.value)}
+                      onChange={(e) =>
+                        handleSignupInputChange("email", e.target.value)
+                      }
                       className="pl-10"
                       disabled={loading}
                     />
@@ -314,15 +345,19 @@ const Registration: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phoneNumber">{t('registration.phoneNumber')}</Label>
+                  <Label htmlFor="phoneNumber">
+                    {t("registration.phoneNumber")}
+                  </Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="phoneNumber"
                       type="tel"
-                      placeholder={t('registration.enterPhoneNumber')}
+                      placeholder={t("registration.enterPhoneNumber")}
                       value={signupData.phoneNumber}
-                      onChange={(e) => handleSignupInputChange('phoneNumber', e.target.value)}
+                      onChange={(e) =>
+                        handleSignupInputChange("phoneNumber", e.target.value)
+                      }
                       className="pl-10"
                       disabled={loading}
                     />
@@ -330,14 +365,18 @@ const Registration: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="dateOfBirth">{t('registration.dateOfBirth')}</Label>
+                  <Label htmlFor="dateOfBirth">
+                    {t("registration.dateOfBirth")}
+                  </Label>
                   <div className="relative">
                     <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="dateOfBirth"
                       type="date"
                       value={signupData.dateOfBirth}
-                      onChange={(e) => handleSignupInputChange('dateOfBirth', e.target.value)}
+                      onChange={(e) =>
+                        handleSignupInputChange("dateOfBirth", e.target.value)
+                      }
                       className="pl-10"
                       disabled={loading}
                     />
@@ -345,15 +384,17 @@ const Registration: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password">{t('registration.password')}</Label>
+                  <Label htmlFor="password">{t("registration.password")}</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="password"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder={t('registration.enterPassword')}
+                      type={showPassword ? "text" : "password"}
+                      placeholder={t("registration.enterPassword")}
                       value={signupData.password}
-                      onChange={(e) => handleSignupInputChange('password', e.target.value)}
+                      onChange={(e) =>
+                        handleSignupInputChange("password", e.target.value)
+                      }
                       className="pl-10 pr-10"
                       disabled={loading}
                     />
@@ -370,25 +411,36 @@ const Registration: React.FC = () => {
                       )}
                     </button>
                   </div>
-                  <p className="text-xs text-gray-500">{t('registration.passwordRequirements')}</p>
+                  <p className="text-xs text-gray-500">
+                    {t("registration.passwordRequirements")}
+                  </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">{t('registration.confirmPassword')}</Label>
+                  <Label htmlFor="confirmPassword">
+                    {t("registration.confirmPassword")}
+                  </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="confirmPassword"
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      placeholder={t('registration.confirmPasswordPlaceholder')}
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder={t("registration.confirmPasswordPlaceholder")}
                       value={signupData.confirmPassword}
-                      onChange={(e) => handleSignupInputChange('confirmPassword', e.target.value)}
+                      onChange={(e) =>
+                        handleSignupInputChange(
+                          "confirmPassword",
+                          e.target.value,
+                        )
+                      }
                       className="pl-10 pr-10"
                       disabled={loading}
                     />
                     <button
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       className="absolute right-3 top-1/2 transform -translate-y-1/2"
                       disabled={loading}
                     >
@@ -402,7 +454,9 @@ const Registration: React.FC = () => {
                 </div>
 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? t('registration.creatingAccount') : t('registration.createAccount')}
+                  {loading
+                    ? t("registration.creatingAccount")
+                    : t("registration.createAccount")}
                 </Button>
               </form>
             </TabsContent>
@@ -410,15 +464,17 @@ const Registration: React.FC = () => {
             <TabsContent value="login" className="space-y-4 mt-4">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="loginEmail">{t('registration.email')}</Label>
+                  <Label htmlFor="loginEmail">{t("registration.email")}</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="loginEmail"
                       type="email"
-                      placeholder={t('registration.enterEmail')}
+                      placeholder={t("registration.enterEmail")}
                       value={loginData.email}
-                      onChange={(e) => handleLoginInputChange('email', e.target.value)}
+                      onChange={(e) =>
+                        handleLoginInputChange("email", e.target.value)
+                      }
                       className="pl-10"
                       disabled={loading}
                     />
@@ -426,15 +482,19 @@ const Registration: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="loginPassword">{t('registration.password')}</Label>
+                  <Label htmlFor="loginPassword">
+                    {t("registration.password")}
+                  </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="loginPassword"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder={t('registration.enterPassword')}
+                      type={showPassword ? "text" : "password"}
+                      placeholder={t("registration.enterPassword")}
                       value={loginData.password}
-                      onChange={(e) => handleLoginInputChange('password', e.target.value)}
+                      onChange={(e) =>
+                        handleLoginInputChange("password", e.target.value)
+                      }
                       className="pl-10 pr-10"
                       disabled={loading}
                     />
@@ -454,7 +514,9 @@ const Registration: React.FC = () => {
                 </div>
 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? t('registration.signingIn') : t('registration.signIn')}
+                  {loading
+                    ? t("registration.signingIn")
+                    : t("registration.signIn")}
                 </Button>
               </form>
             </TabsContent>

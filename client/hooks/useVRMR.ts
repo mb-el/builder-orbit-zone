@@ -1,16 +1,16 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from "react";
 
 export interface VRARDevice {
   id: string;
   name: string;
-  type: 'vr' | 'ar';
+  type: "vr" | "ar";
   connected: boolean;
   capabilities: string[];
 }
 
 export interface VRARSession {
   active: boolean;
-  mode: 'immersive-vr' | 'immersive-ar' | 'inline' | null;
+  mode: "immersive-vr" | "immersive-ar" | "inline" | null;
   referenceSpace: XRReferenceSpace | null;
   inputSources: XRInputSource[];
 }
@@ -27,55 +27,57 @@ export const useVRAR = () => {
     inputSources: [],
   });
   const [error, setError] = useState<string | null>(null);
-  
+
   const sessionRef = useRef<XRSession | null>(null);
   const rendererRef = useRef<any>(null);
 
   // Check WebXR support
   useEffect(() => {
     const checkSupport = async () => {
-      if ('xr' in navigator) {
+      if ("xr" in navigator) {
         setIsSupported(true);
-        
+
         try {
           // Check VR support
-          const vrSupported = await navigator.xr.isSessionSupported('immersive-vr');
+          const vrSupported =
+            await navigator.xr.isSessionSupported("immersive-vr");
           setIsVRSupported(vrSupported);
-          
+
           // Check AR support
-          const arSupported = await navigator.xr.isSessionSupported('immersive-ar');
+          const arSupported =
+            await navigator.xr.isSessionSupported("immersive-ar");
           setIsARSupported(arSupported);
-          
+
           // Mock device detection (real implementation would use WebXR Device API)
           const devices: VRARDevice[] = [];
-          
+
           if (vrSupported) {
             devices.push({
-              id: 'vr-headset-1',
-              name: 'VR Headset',
-              type: 'vr',
+              id: "vr-headset-1",
+              name: "VR Headset",
+              type: "vr",
               connected: true,
-              capabilities: ['6dof', 'hand-tracking', 'eye-tracking'],
+              capabilities: ["6dof", "hand-tracking", "eye-tracking"],
             });
           }
-          
+
           if (arSupported) {
             devices.push({
-              id: 'ar-device-1',
-              name: 'AR Device',
-              type: 'ar',
+              id: "ar-device-1",
+              name: "AR Device",
+              type: "ar",
               connected: true,
-              capabilities: ['plane-detection', 'hit-test', 'occlusion'],
+              capabilities: ["plane-detection", "hit-test", "occlusion"],
             });
           }
-          
+
           setAvailableDevices(devices);
         } catch (err) {
-          console.warn('WebXR feature detection failed:', err);
+          console.warn("WebXR feature detection failed:", err);
         }
       } else {
         setIsSupported(false);
-        console.warn('WebXR not supported in this browser');
+        console.warn("WebXR not supported in this browser");
       }
     };
 
@@ -85,30 +87,30 @@ export const useVRAR = () => {
   // Start VR session
   const startVRSession = useCallback(async () => {
     if (!isVRSupported) {
-      setError('VR not supported');
+      setError("VR not supported");
       return false;
     }
 
     try {
-      const session = await navigator.xr.requestSession('immersive-vr', {
-        requiredFeatures: ['local-floor'],
-        optionalFeatures: ['hand-tracking', 'eye-tracking'],
+      const session = await navigator.xr.requestSession("immersive-vr", {
+        requiredFeatures: ["local-floor"],
+        optionalFeatures: ["hand-tracking", "eye-tracking"],
       });
 
       sessionRef.current = session;
-      
+
       // Get reference space
-      const referenceSpace = await session.requestReferenceSpace('local-floor');
-      
+      const referenceSpace = await session.requestReferenceSpace("local-floor");
+
       setCurrentSession({
         active: true,
-        mode: 'immersive-vr',
+        mode: "immersive-vr",
         referenceSpace,
         inputSources: [],
       });
 
       // Handle session end
-      session.addEventListener('end', () => {
+      session.addEventListener("end", () => {
         setCurrentSession({
           active: false,
           mode: null,
@@ -119,8 +121,8 @@ export const useVRAR = () => {
       });
 
       // Handle input sources
-      session.addEventListener('inputsourceschange', (event) => {
-        setCurrentSession(prev => ({
+      session.addEventListener("inputsourceschange", (event) => {
+        setCurrentSession((prev) => ({
           ...prev,
           inputSources: Array.from(session.inputSources),
         }));
@@ -137,31 +139,31 @@ export const useVRAR = () => {
   // Start AR session
   const startARSession = useCallback(async () => {
     if (!isARSupported) {
-      setError('AR not supported');
+      setError("AR not supported");
       return false;
     }
 
     try {
-      const session = await navigator.xr.requestSession('immersive-ar', {
-        requiredFeatures: ['local-floor'],
-        optionalFeatures: ['plane-detection', 'hit-test', 'dom-overlay'],
+      const session = await navigator.xr.requestSession("immersive-ar", {
+        requiredFeatures: ["local-floor"],
+        optionalFeatures: ["plane-detection", "hit-test", "dom-overlay"],
         domOverlay: { root: document.body },
       });
 
       sessionRef.current = session;
-      
+
       // Get reference space
-      const referenceSpace = await session.requestReferenceSpace('local-floor');
-      
+      const referenceSpace = await session.requestReferenceSpace("local-floor");
+
       setCurrentSession({
         active: true,
-        mode: 'immersive-ar',
+        mode: "immersive-ar",
         referenceSpace,
         inputSources: [],
       });
 
       // Handle session end
-      session.addEventListener('end', () => {
+      session.addEventListener("end", () => {
         setCurrentSession({
           active: false,
           mode: null,
@@ -172,8 +174,8 @@ export const useVRAR = () => {
       });
 
       // Handle input sources
-      session.addEventListener('inputsourceschange', (event) => {
-        setCurrentSession(prev => ({
+      session.addEventListener("inputsourceschange", (event) => {
+        setCurrentSession((prev) => ({
           ...prev,
           inputSources: Array.from(session.inputSources),
         }));
@@ -193,14 +195,14 @@ export const useVRAR = () => {
       try {
         await sessionRef.current.end();
       } catch (err) {
-        console.warn('Error ending XR session:', err);
+        console.warn("Error ending XR session:", err);
       }
     }
   }, []);
 
   // Toggle VR mode
   const toggleVR = useCallback(async () => {
-    if (currentSession.active && currentSession.mode === 'immersive-vr') {
+    if (currentSession.active && currentSession.mode === "immersive-vr") {
       await endSession();
     } else {
       return await startVRSession();
@@ -209,7 +211,7 @@ export const useVRAR = () => {
 
   // Toggle AR mode
   const toggleAR = useCallback(async () => {
-    if (currentSession.active && currentSession.mode === 'immersive-ar') {
+    if (currentSession.active && currentSession.mode === "immersive-ar") {
       await endSession();
     } else {
       return await startARSession();
@@ -224,13 +226,13 @@ export const useVRAR = () => {
     isSupported,
     isVRSupported,
     isARSupported,
-    
+
     // Device info
     availableDevices,
-    
+
     // Session state
     currentSession,
-    
+
     // Actions
     startVRSession,
     startARSession,
@@ -238,7 +240,7 @@ export const useVRAR = () => {
     toggleVR,
     toggleAR,
     getSession,
-    
+
     // Error handling
     error,
   };
