@@ -81,6 +81,14 @@ const CameraCapture = ({
         return;
       }
 
+      // Check HTTPS requirement
+      if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+        setError(
+          "Camera access requires HTTPS. Please access this site using HTTPS.",
+        );
+        return;
+      }
+
       // Check permission status
       if ("permissions" in navigator) {
         try {
@@ -97,19 +105,42 @@ const CameraCapture = ({
         }
       }
 
-      // Get available devices
+      // Get available devices with permission request first
       try {
+        // Request basic permission first to get device labels
+        const tempStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        tempStream.getTracks().forEach(track => track.stop());
+
+        // Now enumerate devices with labels
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter(
           (device) => device.kind === "videoinput",
         );
+
+        console.log('Available video devices:', videoDevices);
         setAvailableDevices(videoDevices as MediaDeviceInfo[]);
         setHasMultipleCameras(videoDevices.length > 1);
+
+        if (videoDevices.length === 0) {
+          setError("No camera devices found on this device.");
+        }
       } catch (err) {
-        console.log("Could not enumerate devices");
+        console.log("Could not enumerate devices or get permission:", err);
+        // Try to enumerate without permission (will have empty labels)
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const videoDevices = devices.filter(
+            (device) => device.kind === "videoinput",
+          );
+          setAvailableDevices(videoDevices as MediaDeviceInfo[]);
+          setHasMultipleCameras(videoDevices.length > 1);
+        } catch (enumErr) {
+          console.error("Device enumeration failed:", enumErr);
+        }
       }
     } catch (err) {
       console.error("Media support check failed:", err);
+      setError(`Media support check failed: ${err.message}`);
     }
   };
 
@@ -139,29 +170,36 @@ const CameraCapture = ({
   };
 
   const startCamera = useCallback(
-    async (retryWithBasicConstraints = false) => {
+    async (retryWithBasicConstraints = false, specificDeviceId?: string) => {
       try {
         setError(null);
         setIsLoading(true);
 
         // Progressive fallback constraints
-        let constraints;
+        let constraints: MediaStreamConstraints;
 
         if (retryWithBasicConstraints) {
-          // Basic constraints as fallback
+          // Most basic constraints as last resort
           constraints = {
-            video: true,
-            audio: true,
+            video: specificDeviceId ? { deviceId: { exact: specificDeviceId } } : true,
+            audio: false, // Try without audio first
           };
         } else {
           // Try advanced constraints first
+          const videoConstraints: MediaTrackConstraints = {
+            facingMode: { ideal: facingMode },
+            width: { ideal: 1280, min: 320 },
+            height: { ideal: 720, min: 240 },
+          };
+
+          // Add device ID if we have one
+          if (specificDeviceId) {
+            videoConstraints.deviceId = { ideal: specificDeviceId };
+          }
+
           constraints = {
-            video: {
-              facingMode: { ideal: facingMode },
-              width: { ideal: 1280, min: 640 },
-              height: { ideal: 720, min: 480 },
-            },
-            audio: true,
+            video: videoConstraints,
+            audio: false, // Start without audio to avoid permission issues
           };
         }
 
@@ -206,14 +244,23 @@ const CameraCapture = ({
         console.error("Camera error:", err);
         const errorMessage = getErrorMessage(err);
 
-        // Try fallback with basic constraints if advanced constraints failed
-        if (
-          !retryWithBasicConstraints &&
-          (err.name === "OverconstrainedError" ||
-            err.name === "ConstraintNotSatisfiedError")
-        ) {
-          console.log("Retrying with basic constraints...");
-          setTimeout(() => startCamera(true), 1000);
+        // Progressive fallback strategy
+        if (!retryWithBasicConstraints) {
+          if (
+            err.name === "OverconstrainedError" ||
+            err.name === "ConstraintNotSatisfiedError" ||
+            err.name === "NotFoundError" ||
+            err.name === "DevicesNotFoundError"
+          ) {
+            console.log("Retrying with basic constraints...");
+            setTimeout(() => startCamera(true), 1000);
+            return;
+          }
+        } else if (availableDevices.length > 0) {
+          // Try with first available device if basic constraints failed
+          const firstDevice = availableDevices[0];
+          console.log(`Trying with specific device: ${firstDevice.label}`);
+          setTimeout(() => startCamera(true, firstDevice.deviceId), 1000);
           return;
         }
 
@@ -225,7 +272,7 @@ const CameraCapture = ({
         setIsLoading(false);
       }
     },
-    [facingMode],
+    [facingMode, availableDevices],
   );
 
   const stopCamera = useCallback(() => {
