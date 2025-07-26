@@ -59,6 +59,7 @@ const CameraCapture = ({
     [],
   );
   const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
   const [permissionStatus, setPermissionStatus] = useState<
     "prompt" | "granted" | "denied" | "unknown"
   >("unknown");
@@ -146,26 +147,34 @@ const CameraCapture = ({
 
   const getErrorMessage = (error: any) => {
     const errorName = error.name || error.message || "";
+    const errorMessage = error.message || "";
 
     switch (errorName) {
       case "NotFoundError":
       case "DevicesNotFoundError":
-        return "No camera found. Please make sure a camera is connected to your device.";
+        return availableDevices.length === 0
+          ? "No camera devices found. Please connect a camera and refresh the page."
+          : "Requested camera device not found. Please try selecting a different camera.";
       case "NotReadableError":
       case "TrackStartError":
-        return "Camera is already in use by another application. Please close other apps using the camera.";
+        return "Camera is already in use by another application. Please close other camera apps and try again.";
       case "OverconstrainedError":
       case "ConstraintNotSatisfiedError":
-        return "Camera does not support the requested settings. Trying with basic settings...";
+        return "The camera doesn't support the requested settings. Trying with basic settings...";
       case "NotAllowedError":
       case "PermissionDeniedError":
-        return "Camera access denied. Please allow camera permissions in your browser settings.";
+        return "Camera access was denied. Please click the camera icon in your browser's address bar and allow camera access.";
       case "SecurityError":
-        return "Camera access blocked due to security restrictions. Please use HTTPS.";
+        return "Camera access is blocked due to security restrictions. Please ensure you're using HTTPS.";
       case "TypeError":
-        return "Camera is not supported in this browser.";
+        return "Camera is not supported in this browser. Please try Chrome, Firefox, or Safari.";
+      case "AbortError":
+        return "Camera access was interrupted. Please try again.";
       default:
-        return `Camera error: ${error.message || "Unknown error occurred"}`;
+        if (errorMessage.includes("Requested device not found")) {
+          return "The selected camera is not available. Please try a different camera or refresh the page.";
+        }
+        return `Camera error: ${errorMessage || "An unknown error occurred. Please try refreshing the page."}`;
     }
   };
 
@@ -417,10 +426,20 @@ const CameraCapture = ({
     if (isStreaming) {
       stopCamera();
       setTimeout(() => {
-        startCamera();
+        startCamera(false, selectedDeviceId || undefined);
       }, 500);
     }
-  }, [isStreaming, hasMultipleCameras, startCamera, stopCamera]);
+  }, [isStreaming, hasMultipleCameras, startCamera, stopCamera, selectedDeviceId]);
+
+  const handleDeviceChange = useCallback((deviceId: string) => {
+    setSelectedDeviceId(deviceId);
+    if (isStreaming) {
+      stopCamera();
+      setTimeout(() => {
+        startCamera(false, deviceId);
+      }, 500);
+    }
+  }, [isStreaming, startCamera, stopCamera]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
