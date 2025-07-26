@@ -466,7 +466,17 @@ const CameraCapture = ({
 
   const retryCamera = () => {
     setError(null);
-    startCamera();
+    // Reset device selection and try again
+    setSelectedDeviceId(null);
+    checkMediaSupport().then(() => {
+      setTimeout(() => startCamera(), 500);
+    });
+  };
+
+  const tryWithSpecificDevice = (deviceId: string) => {
+    setError(null);
+    setSelectedDeviceId(deviceId);
+    startCamera(false, deviceId);
   };
 
   // Show captured media preview
@@ -549,9 +559,27 @@ const CameraCapture = ({
                 className="bg-black/50 hover:bg-black/70 text-white disabled:opacity-50"
                 onClick={toggleFacingMode}
                 disabled={!hasMultipleCameras}
+                title="Switch Camera"
               >
                 <FlipHorizontal className="w-5 h-5" />
               </Button>
+
+              {/* Device Selector */}
+              {availableDevices.length > 1 && (
+                <select
+                  value={selectedDeviceId || ''}
+                  onChange={(e) => handleDeviceChange(e.target.value)}
+                  className="bg-black/50 text-white text-sm px-2 py-1 rounded border border-white/20 focus:border-white/50 outline-none"
+                  title="Select Camera"
+                >
+                  <option value="">Auto</option>
+                  {availableDevices.map((device) => (
+                    <option key={device.deviceId} value={device.deviceId}>
+                      {device.label || `Camera ${device.deviceId.slice(0, 8)}...`}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           )}
 
@@ -592,22 +620,44 @@ const CameraCapture = ({
                         {error}
                       </AlertDescription>
                     </Alert>
-                    <div className="flex gap-2 justify-center">
-                      <Button
-                        onClick={retryCamera}
-                        className="gap-2"
-                        variant="outline"
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                        Try Again
-                      </Button>
-                      {permissionStatus === "denied" && (
+                    <div className="space-y-3">
+                      <div className="flex gap-2 justify-center">
                         <Button
-                          onClick={() => window.location.reload()}
+                          onClick={retryCamera}
                           className="gap-2"
+                          variant="outline"
                         >
-                          Reload Page
+                          <RefreshCw className="w-4 h-4" />
+                          Try Again
                         </Button>
+                        {permissionStatus === "denied" && (
+                          <Button
+                            onClick={() => window.location.reload()}
+                            className="gap-2"
+                          >
+                            Reload Page
+                          </Button>
+                        )}
+                      </div>
+
+                      {/* Device Selection for Troubleshooting */}
+                      {availableDevices.length > 0 && (
+                        <div className="space-y-2">
+                          <p className="text-sm text-gray-300">Try a specific camera:</p>
+                          <div className="flex flex-wrap gap-2 justify-center">
+                            {availableDevices.map((device, index) => (
+                              <Button
+                                key={device.deviceId}
+                                onClick={() => tryWithSpecificDevice(device.deviceId)}
+                                variant="ghost"
+                                size="sm"
+                                className="text-xs bg-white/10 hover:bg-white/20"
+                              >
+                                {device.label || `Camera ${index + 1}`}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
                       )}
                     </div>
                   </>
@@ -615,10 +665,25 @@ const CameraCapture = ({
                   <>
                     <Camera className="w-16 h-16 mx-auto mb-4 opacity-50" />
                     <p className="text-lg mb-4">Camera Ready</p>
-                    <Button onClick={() => startCamera()} className="gap-2">
-                      <Camera className="w-4 h-4" />
-                      Start Camera
-                    </Button>
+                    <div className="space-y-3">
+                      <Button onClick={() => startCamera()} className="gap-2" size="lg">
+                        <Camera className="w-4 h-4" />
+                        Start Camera
+                      </Button>
+
+                      {availableDevices.length > 1 && (
+                        <div className="space-y-2">
+                          <p className="text-sm text-gray-400">Available cameras:</p>
+                          <div className="text-xs text-gray-500 space-y-1">
+                            {availableDevices.map((device, index) => (
+                              <div key={device.deviceId}>
+                                {device.label || `Camera ${index + 1}`}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </>
                 )}
               </div>
